@@ -159,6 +159,59 @@ impl VerificationOtp {
     }
 }
 
+/// Typed representation of the `VerificationResponse` API schema.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct VerificationResponse {
+    /// The type of the verification object.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub object: Option<String>,
+    /// The ID of the verification. Pass this to attempt_verification.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// The status of the verification (unverified, verified, expired, or failed).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// The verification strategy (email_code or phone_code).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub strategy: Option<String>,
+    /// The number of attempts made against this verification.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        with = "crate::client::double_option"
+    )]
+    pub attempts: Option<Option<i64>>,
+    /// Unix timestamp (milliseconds) at which the code expires.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        with = "crate::client::double_option"
+    )]
+    pub expire_at: Option<Option<i64>>,
+    /// The channel the code was sent over (phone numbers only).
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        with = "crate::client::double_option"
+    )]
+    pub channel: Option<Option<String>>,
+}
+
+impl VerificationResponse {
+    #[allow(clippy::new_without_default)]
+    pub fn new() -> Self {
+        Self {
+            object: None,
+            id: None,
+            status: None,
+            strategy: None,
+            attempts: None,
+            expire_at: None,
+            channel: None,
+        }
+    }
+}
+
 /// Optional enumerated value serialized in the `object` wire field.
 #[derive(Debug, Clone, PartialEq, Default, serde::Serialize, serde::Deserialize)]
 pub enum VerificationSamlObjectEnum {
@@ -411,51 +464,6 @@ impl<'de> serde::Deserialize<'de> for VerificationScimStatusEnum {
 }
 
 impl std::fmt::Display for VerificationScimStatusEnum {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(self.as_str())
-    }
-}
-
-/// Required enumerated value serialized in the `strategy` wire field.
-#[derive(Debug, Clone, PartialEq, Default)]
-pub enum VerificationScimStrategyEnum {
-    #[default]
-    Scim,
-    Unknown(String),
-}
-
-impl VerificationScimStrategyEnum {
-    pub fn as_str(&self) -> &str {
-        match self {
-            Self::Scim => "scim",
-            Self::Unknown(value) => value.as_str(),
-        }
-    }
-}
-
-impl serde::Serialize for VerificationScimStrategyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
-    }
-}
-
-impl<'de> serde::Deserialize<'de> for VerificationScimStrategyEnum {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        let value = <String as serde::Deserialize>::deserialize(deserializer)?;
-        Ok(match value.as_str() {
-            "scim" => Self::Scim,
-            _ => Self::Unknown(value),
-        })
-    }
-}
-
-impl std::fmt::Display for VerificationScimStrategyEnum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str(self.as_str())
     }

@@ -168,10 +168,7 @@ impl EmailAddressesNamespace {
         &self,
         email_address_id: String,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<
-        crate::methods::email_addresses::AttemptEmailAddressVerificationResponse,
-        crate::errors::SdkError,
-    > {
+    ) -> Result<VerificationResponse, crate::errors::SdkError> {
         crate::methods::email_addresses::prepare_email_address_verification(
             &self.config,
             email_address_id,
@@ -185,10 +182,7 @@ impl EmailAddressesNamespace {
         verification_id: String,
         code: String,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<
-        crate::methods::email_addresses::AttemptEmailAddressVerificationResponse,
-        crate::errors::SdkError,
-    > {
+    ) -> Result<VerificationResponse, crate::errors::SdkError> {
         crate::methods::email_addresses::attempt_email_address_verification(
             &self.config,
             email_address_id,
@@ -286,10 +280,7 @@ impl PhoneNumbersNamespace {
         &self,
         phone_number_id: String,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<
-        crate::methods::phone_numbers::AttemptEmailAddressVerificationResponse,
-        crate::errors::SdkError,
-    > {
+    ) -> Result<VerificationResponse, crate::errors::SdkError> {
         crate::methods::phone_numbers::prepare_phone_number_verification(
             &self.config,
             phone_number_id,
@@ -303,10 +294,7 @@ impl PhoneNumbersNamespace {
         verification_id: String,
         code: String,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<
-        crate::methods::phone_numbers::AttemptEmailAddressVerificationResponse,
-        crate::errors::SdkError,
-    > {
+    ) -> Result<VerificationResponse, crate::errors::SdkError> {
         crate::methods::phone_numbers::attempt_phone_number_verification(
             &self.config,
             phone_number_id,
@@ -884,8 +872,7 @@ impl UsersNamespace {
         &self,
         user_id: String,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<crate::methods::users::ListUserTrustedDevicesResponse, crate::errors::SdkError>
-    {
+    ) -> Result<TrustedDeviceList, crate::errors::SdkError> {
         crate::methods::users::list_user_trusted_devices(&self.config, user_id, options)
     }
     /// Revokes an active trusted device enrolled by the user.
@@ -911,8 +898,7 @@ impl UsersNamespace {
         &self,
         user_id: String,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<crate::methods::users::ListUserBiometricCredentialsResponse, crate::errors::SdkError>
-    {
+    ) -> Result<BiometricCredentialList, crate::errors::SdkError> {
         crate::methods::users::list_user_biometric_credentials(&self.config, user_id, options)
     }
     /// Revokes an active biometric credential enrolled by the user.
@@ -1046,8 +1032,7 @@ impl InvitationsNamespace {
         &self,
         invitation_id: String,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<crate::methods::invitations::RevokeInvitationResponse, crate::errors::SdkError>
-    {
+    ) -> Result<InvitationRevoked, crate::errors::SdkError> {
         crate::methods::invitations::revoke_invitation(&self.config, invitation_id, options)
     }
 }
@@ -1281,10 +1266,7 @@ impl BetaFeaturesNamespace {
         progressive_sign_up: Option<Option<bool>>,
         test_mode: Option<Option<bool>>,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<
-        crate::methods::beta_features::UpdateInstanceAuthConfigResponse,
-        crate::errors::SdkError,
-    > {
+    ) -> Result<InstanceSettings, crate::errors::SdkError> {
         crate::methods::beta_features::update_instance_auth_config(
             &self.config,
             restricted_to_allowlist,
@@ -1678,7 +1660,7 @@ impl MachinesNamespace {
         query: Option<String>,
         order_by: Option<String>,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<crate::methods::machines::ListMachinesResponse, crate::errors::SdkError> {
+    ) -> Result<MachineList, crate::errors::SdkError> {
         crate::methods::machines::list_machines(
             &self.config,
             limit,
@@ -1697,7 +1679,7 @@ impl MachinesNamespace {
         scoped_machines: Option<Vec<String>>,
         default_token_ttl: Option<i64>,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<crate::methods::machines::CreateMachineResponse, crate::errors::SdkError> {
+    ) -> Result<MachineCreated, crate::errors::SdkError> {
         crate::methods::machines::create_machine(
             &self.config,
             name,
@@ -1739,7 +1721,7 @@ impl MachinesNamespace {
         &self,
         machine_id: String,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<crate::methods::machines::DeleteMachineResponse, crate::errors::SdkError> {
+    ) -> Result<MachineDeleted, crate::errors::SdkError> {
         crate::methods::machines::delete_machine(&self.config, machine_id, options)
     }
     /// Retrieves the secret key for a machine. Use the `machine_id` to identify which machine's key you need.
@@ -1749,8 +1731,7 @@ impl MachinesNamespace {
         &self,
         machine_id: String,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<crate::methods::machines::GetMachineSecretKeyResponse, crate::errors::SdkError>
-    {
+    ) -> Result<MachineSecretKey, crate::errors::SdkError> {
         crate::methods::machines::get_machine_secret_key(&self.config, machine_id, options)
     }
     /// Rotates the machine's secret key. When the secret key is rotated, make sure to update it in your machine/application. The previous secret key will remain valid for the duration specified by the previous_token_ttl parameter.
@@ -1759,8 +1740,7 @@ impl MachinesNamespace {
         machine_id: String,
         previous_token_ttl: i64,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<crate::methods::machines::GetMachineSecretKeyResponse, crate::errors::SdkError>
-    {
+    ) -> Result<MachineSecretKey, crate::errors::SdkError> {
         crate::methods::machines::rotate_machine_secret_key(
             &self.config,
             machine_id,
@@ -1788,7 +1768,7 @@ impl MachinesNamespace {
         machine_id: String,
         other_machine_id: String,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<crate::methods::machines::DeleteMachineScopeResponse, crate::errors::SdkError> {
+    ) -> Result<MachineScopeDeleted, crate::errors::SdkError> {
         crate::methods::machines::delete_machine_scope(
             &self.config,
             machine_id,
@@ -2872,10 +2852,7 @@ impl WaitlistEntriesNamespace {
         &self,
         params: crate::methods::waitlist_entries::ListWaitlistEntriesParams,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<
-        crate::methods::waitlist_entries::ListWaitlistEntriesResponse,
-        crate::errors::SdkError,
-    > {
+    ) -> Result<WaitlistEntries, crate::errors::SdkError> {
         crate::methods::waitlist_entries::list_waitlist_entries(&self.config, params, options)
     }
     /// Creates a new waitlist entry for the given email address. If the email address is already on the waitlist, no new entry will be created and the existing waitlist entry will be returned.
@@ -3344,10 +3321,7 @@ impl ScimDirectoriesNamespace {
         limit: Option<i64>,
         offset: Option<i64>,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<
-        crate::methods::scim_directories::ListSCIMDirectoriesResponse,
-        crate::errors::SdkError,
-    > {
+    ) -> Result<SCIMDirectoryList, crate::errors::SdkError> {
         crate::methods::scim_directories::list_scim_directories(
             &self.config,
             limit,
@@ -3430,10 +3404,7 @@ impl ScimDirectoriesNamespace {
         &self,
         scim_directory_id: String,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<
-        crate::methods::scim_directories::ListSCIMGroupRoleMappingsResponse,
-        crate::errors::SdkError,
-    > {
+    ) -> Result<SCIMGroupRoleMappingList, crate::errors::SdkError> {
         crate::methods::scim_directories::list_scim_group_role_mappings(
             &self.config,
             scim_directory_id,
@@ -3464,10 +3435,7 @@ impl ScimDirectoriesNamespace {
         scim_directory_id: String,
         mappings: Vec<crate::methods::scim_directories::ReplaceSCIMGroupRoleMappingsMappingsItem>,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<
-        crate::methods::scim_directories::ListSCIMGroupRoleMappingsResponse,
-        crate::errors::SdkError,
-    > {
+    ) -> Result<SCIMGroupRoleMappingList, crate::errors::SdkError> {
         crate::methods::scim_directories::replace_scim_group_role_mappings(
             &self.config,
             scim_directory_id,
@@ -3481,10 +3449,7 @@ impl ScimDirectoriesNamespace {
         scim_directory_id: String,
         mapping_id: String,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<
-        crate::methods::scim_directories::DeleteSCIMGroupRoleMappingResponse,
-        crate::errors::SdkError,
-    > {
+    ) -> Result<SCIMGroupRoleMappingDeleted, crate::errors::SdkError> {
         crate::methods::scim_directories::delete_scim_group_role_mapping(
             &self.config,
             scim_directory_id,
@@ -3512,7 +3477,7 @@ impl DirectoriesNamespace {
         limit: Option<i64>,
         offset: Option<i64>,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<crate::methods::directories::ListDirectoriesResponse, crate::errors::SdkError> {
+    ) -> Result<DirectoryList, crate::errors::SdkError> {
         crate::methods::directories::list_directories(&self.config, limit, offset, options)
     }
     /// Creates a directory for provisioning users from an identity provider and associates it with an enterprise connection. Supply `enterprise_connection_id` and `provider`; optionally include a name and group-to-role mappings to create with the directory. The response includes the directory configuration and its API key.
@@ -3578,10 +3543,7 @@ impl DirectoriesNamespace {
         &self,
         directory_id: String,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<
-        crate::methods::directories::ListDirectoryGroupRoleMappingsResponse,
-        crate::errors::SdkError,
-    > {
+    ) -> Result<DirectoryGroupRoleMappingList, crate::errors::SdkError> {
         crate::methods::directories::list_directory_group_role_mappings(
             &self.config,
             directory_id,
@@ -3606,10 +3568,7 @@ impl DirectoriesNamespace {
         directory_id: String,
         mappings: Vec<crate::methods::directories::ReplaceDirectoryGroupRoleMappingsMappingsItem>,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<
-        crate::methods::directories::ListDirectoryGroupRoleMappingsResponse,
-        crate::errors::SdkError,
-    > {
+    ) -> Result<DirectoryGroupRoleMappingList, crate::errors::SdkError> {
         crate::methods::directories::replace_directory_group_role_mappings(
             &self.config,
             directory_id,
@@ -3623,10 +3582,7 @@ impl DirectoriesNamespace {
         directory_id: String,
         mapping_id: String,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<
-        crate::methods::directories::DeleteDirectoryGroupRoleMappingResponse,
-        crate::errors::SdkError,
-    > {
+    ) -> Result<DirectoryGroupRoleMappingDeleted, crate::errors::SdkError> {
         crate::methods::directories::delete_directory_group_role_mapping(
             &self.config,
             directory_id,
@@ -3860,10 +3816,7 @@ impl OAuthAccessTokensNamespace {
         access_token: Option<String>,
         secret: Option<String>,
         options: Option<&crate::client::RequestOptions>,
-    ) -> Result<
-        crate::methods::o_auth_access_tokens::VerifyOAuthAccessTokenResponse,
-        crate::errors::SdkError,
-    > {
+    ) -> Result<VerifyOAuthAccessTokenResponse, crate::errors::SdkError> {
         crate::methods::o_auth_access_tokens::verify_oauth_access_token(
             &self.config,
             access_token,

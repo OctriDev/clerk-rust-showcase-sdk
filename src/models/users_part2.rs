@@ -3,6 +3,114 @@
 
 // users domain models (part 2)
 
+/// Typed representation of the `EnterpriseAccountConnection` API schema.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct EnterpriseAccountConnection {
+    /// Required `string` value serialized in the `id` wire field.
+    pub id: String,
+    /// Required `string` value serialized in the `protocol` wire field.
+    pub protocol: String,
+    /// Required `string` value serialized in the `provider` wire field.
+    pub provider: String,
+    /// Required `string` value serialized in the `name` wire field.
+    pub name: String,
+    /// Required `string` value serialized in the `logo_public_url` wire field.
+    #[serde(deserialize_with = "Option::deserialize")]
+    pub logo_public_url: Option<String>,
+    /// Optional `string` value serialized in the `domain` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain: Option<String>,
+    /// Optional array value serialized in the `domains` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domains: Option<Vec<String>>,
+    /// Required `boolean` value serialized in the `active` wire field.
+    pub active: bool,
+    /// Required `boolean` value serialized in the `sync_user_attributes` wire field.
+    pub sync_user_attributes: bool,
+    /// Required `boolean` value serialized in the `allow_subdomains` wire field.
+    pub allow_subdomains: bool,
+    /// Required `boolean` value serialized in the `allow_idp_initiated` wire field.
+    pub allow_idp_initiated: bool,
+    /// Required `boolean` value serialized in the `disable_additional_identifications` wire field.
+    pub disable_additional_identifications: bool,
+    /// Unix timestamp of creation.
+    pub created_at: i64,
+    /// Unix timestamp of last update.
+    pub updated_at: i64,
+}
+
+impl EnterpriseAccountConnection {
+    #[allow(clippy::too_many_arguments)]
+    pub fn new(
+        id: String,
+        protocol: String,
+        provider: String,
+        name: String,
+        logo_public_url: Option<String>,
+        active: bool,
+        sync_user_attributes: bool,
+        allow_subdomains: bool,
+        allow_idp_initiated: bool,
+        disable_additional_identifications: bool,
+        created_at: i64,
+        updated_at: i64,
+    ) -> Self {
+        Self {
+            id,
+            protocol,
+            provider,
+            name,
+            logo_public_url,
+            domain: None,
+            domains: None,
+            active,
+            sync_user_attributes,
+            allow_subdomains,
+            allow_idp_initiated,
+            disable_additional_identifications,
+            created_at,
+            updated_at,
+        }
+    }
+}
+
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[serde(untagged)]
+pub enum EnterpriseAccountVerification {
+    VerificationTicket(Box<VerificationTicket>),
+    VerificationSaml(Box<VerificationSaml>),
+    VerificationOauth(Box<VerificationOauth>),
+    /// A member whose `object` names no branch this SDK knows, kept as received.
+    #[serde(deserialize_with = "EnterpriseAccountVerification::unknown_member")]
+    Unknown(serde_json::Value),
+}
+
+impl EnterpriseAccountVerification {
+    fn unknown_member<'de, D: serde::Deserializer<'de>>(
+        deserializer: D,
+    ) -> Result<serde_json::Value, D::Error> {
+        crate::client::unknown_union_member(
+            deserializer,
+            "object",
+            &[
+                "verification_ticket",
+                "verification_saml",
+                "verification_oauth",
+            ],
+        )
+    }
+}
+
+/// String representing the object's type. Objects of the same type share the same value.
+#[derive(Debug, Clone, PartialEq, Default)]
+pub enum ExternalAccountWithVerificationObjectEnum {
+    #[default]
+    ExternalAccount,
+    FacebookAccount,
+    GoogleAccount,
+    Unknown(String),
+}
+
 impl ExternalAccountWithVerificationObjectEnum {
     pub fn as_str(&self) -> &str {
         match self {
@@ -405,115 +513,5 @@ impl<'de> serde::Deserialize<'de> for SAMLAccountObjectEnum {
 impl std::fmt::Display for SAMLAccountObjectEnum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str(self.as_str())
-    }
-}
-
-/// Typed representation of the `SAMLAccount` API schema.
-#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
-pub struct SAMLAccount {
-    /// Required `string` value serialized in the `id` wire field.
-    pub id: String,
-    /// String representing the object's type. Objects of the same type share the same value.
-    pub object: SAMLAccountObjectEnum,
-    /// Required `string` value serialized in the `provider` wire field.
-    pub provider: String,
-    /// Required `boolean` value serialized in the `active` wire field.
-    pub active: bool,
-    /// Required `string` value serialized in the `email_address` wire field.
-    pub email_address: String,
-    /// Optional `string` value serialized in the `first_name` wire field.
-    #[serde(
-        skip_serializing_if = "Option::is_none",
-        default,
-        with = "crate::client::double_option"
-    )]
-    pub first_name: Option<Option<String>>,
-    /// Optional `string` value serialized in the `last_name` wire field.
-    #[serde(
-        skip_serializing_if = "Option::is_none",
-        default,
-        with = "crate::client::double_option"
-    )]
-    pub last_name: Option<Option<String>>,
-    /// Optional `string` value serialized in the `provider_user_id` wire field.
-    #[serde(
-        skip_serializing_if = "Option::is_none",
-        default,
-        with = "crate::client::double_option"
-    )]
-    pub provider_user_id: Option<Option<String>>,
-    /// Unix timestamp of last authentication.
-    #[serde(
-        skip_serializing_if = "Option::is_none",
-        default,
-        with = "crate::client::double_option"
-    )]
-    pub last_authenticated_at: Option<Option<i64>>,
-    /// Optional object value serialized in the `public_metadata` wire field.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub public_metadata: Option<std::collections::HashMap<String, serde_json::Value>>,
-    /// Required object value serialized in the `verification` wire field.
-    #[serde(deserialize_with = "Option::deserialize")]
-    pub verification: Option<SAMLAccountVerification>,
-    /// Optional object value serialized in the `saml_connection` wire field.
-    #[serde(
-        skip_serializing_if = "Option::is_none",
-        default,
-        with = "crate::client::double_option"
-    )]
-    pub saml_connection: Option<Option<SAMLAccountConnection>>,
-}
-
-impl SAMLAccount {
-    pub fn new(
-        id: String,
-        object: SAMLAccountObjectEnum,
-        provider: String,
-        active: bool,
-        email_address: String,
-        verification: Option<SAMLAccountVerification>,
-    ) -> Self {
-        Self {
-            id,
-            object,
-            provider,
-            active,
-            email_address,
-            first_name: None,
-            last_name: None,
-            provider_user_id: None,
-            last_authenticated_at: None,
-            public_metadata: None,
-            verification,
-            saml_connection: None,
-        }
-    }
-}
-
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-#[serde(untagged)]
-pub enum SAMLAccountConnection {
-    Value(serde_json::Value),
-}
-
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-#[serde(untagged)]
-pub enum SAMLAccountVerification {
-    VerificationSaml(Box<VerificationSaml>),
-    VerificationTicket(Box<VerificationTicket>),
-    /// A member whose `object` names no branch this SDK knows, kept as received.
-    #[serde(deserialize_with = "SAMLAccountVerification::unknown_member")]
-    Unknown(serde_json::Value),
-}
-
-impl SAMLAccountVerification {
-    fn unknown_member<'de, D: serde::Deserializer<'de>>(
-        deserializer: D,
-    ) -> Result<serde_json::Value, D::Error> {
-        crate::client::unknown_union_member(
-            deserializer,
-            "object",
-            &["verification_saml", "verification_ticket"],
-        )
     }
 }

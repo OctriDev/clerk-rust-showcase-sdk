@@ -187,13 +187,13 @@ pub struct CommercePlan {
     pub id: String,
     /// The name of the plan.
     pub name: String,
-    /// Required API value serialized in the `fee` wire field.
+    /// Required object value serialized in the `fee` wire field.
     #[serde(deserialize_with = "Option::deserialize")]
     pub fee: Option<CommerceMoneyResponse>,
-    /// Required API value serialized in the `annual_monthly_fee` wire field.
+    /// Required object value serialized in the `annual_monthly_fee` wire field.
     #[serde(deserialize_with = "Option::deserialize")]
     pub annual_monthly_fee: Option<CommerceMoneyResponse>,
-    /// Required API value serialized in the `annual_fee` wire field.
+    /// Required object value serialized in the `annual_fee` wire field.
     #[serde(deserialize_with = "Option::deserialize")]
     pub annual_fee: Option<CommerceMoneyResponse>,
     /// The description of the plan.

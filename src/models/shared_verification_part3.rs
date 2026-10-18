@@ -3,6 +3,51 @@
 
 // shared_verification domain models (part 3)
 
+/// Required enumerated value serialized in the `strategy` wire field.
+#[derive(Debug, Clone, PartialEq, Default)]
+pub enum VerificationScimStrategyEnum {
+    #[default]
+    Scim,
+    Unknown(String),
+}
+
+impl VerificationScimStrategyEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            Self::Scim => "scim",
+            Self::Unknown(value) => value.as_str(),
+        }
+    }
+}
+
+impl serde::Serialize for VerificationScimStrategyEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.as_str())
+    }
+}
+
+impl<'de> serde::Deserialize<'de> for VerificationScimStrategyEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = <String as serde::Deserialize>::deserialize(deserializer)?;
+        Ok(match value.as_str() {
+            "scim" => Self::Scim,
+            _ => Self::Unknown(value),
+        })
+    }
+}
+
+impl std::fmt::Display for VerificationScimStrategyEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
 /// Typed representation of the `VerificationScim` API schema.
 #[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct VerificationScim {

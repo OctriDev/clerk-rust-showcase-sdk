@@ -444,14 +444,14 @@ pub struct CommerceTotalsResponse {
     /// Optional array value serialized in the `per_unit_totals` wire field.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub per_unit_totals: Option<Vec<CommercePerUnitTotal>>,
-    /// Optional API value serialized in the `credits` wire field.
+    /// Optional object value serialized in the `credits` wire field.
     #[serde(
         skip_serializing_if = "Option::is_none",
         default,
         with = "crate::client::double_option"
     )]
     pub credits: Option<Option<CommerceCreditsResponse>>,
-    /// Optional API value serialized in the `discounts` wire field.
+    /// Optional object value serialized in the `discounts` wire field.
     #[serde(
         skip_serializing_if = "Option::is_none",
         default,
@@ -493,7 +493,7 @@ pub struct CommerceTotalsResponse2 {
     /// Optional array value serialized in the `per_unit_totals` wire field.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub per_unit_totals: Option<Vec<CommercePerUnitTotal2>>,
-    /// Optional API value serialized in the `credits` wire field.
+    /// Optional object value serialized in the `credits` wire field.
     #[serde(
         skip_serializing_if = "Option::is_none",
         default,

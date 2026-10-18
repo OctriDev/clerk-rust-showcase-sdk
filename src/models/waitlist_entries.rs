@@ -3,6 +3,21 @@
 
 // waitlist_entries domain models
 
+/// Typed representation of the `WaitlistEntries` API schema.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct WaitlistEntries {
+    /// Required array value serialized in the `data` wire field.
+    pub data: Vec<WaitlistEntry>,
+    /// Total number of waitlist entries
+    pub total_count: i64,
+}
+
+impl WaitlistEntries {
+    pub fn new(data: Vec<WaitlistEntry>, total_count: i64) -> Self {
+        Self { data, total_count }
+    }
+}
+
 /// Required enumerated value serialized in the `object` wire field.
 #[derive(Debug, Clone, PartialEq, Default)]
 pub enum WaitlistEntryObjectEnum {

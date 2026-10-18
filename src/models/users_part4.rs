@@ -3,6 +3,136 @@
 
 // users domain models (part 4)
 
+/// Typed representation of the `TrustedDevice` API schema.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct TrustedDevice {
+    /// String representing the object's type.
+    pub object: TrustedDeviceObjectEnum,
+    /// Required `string` value serialized in the `id` wire field.
+    pub id: String,
+    /// Required enumerated value serialized in the `platform` wire field.
+    pub platform: TrustedDevicePlatformEnum,
+    /// Required `string` value serialized in the `app_identifier` wire field.
+    pub app_identifier: String,
+    /// Optional `string` value serialized in the `name` wire field.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        with = "crate::client::double_option"
+    )]
+    pub name: Option<Option<String>>,
+    /// Required enumerated value serialized in the `algorithm` wire field.
+    pub algorithm: TrustedDeviceAlgorithmEnum,
+    /// Required enumerated value serialized in the `status` wire field.
+    pub status: TrustedDeviceStatusEnum,
+    /// Unix timestamp of creation in milliseconds.
+    pub created_at: i64,
+    /// Unix timestamp of the last update in milliseconds.
+    pub updated_at: i64,
+    /// Unix timestamp of the last use in milliseconds.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        with = "crate::client::double_option"
+    )]
+    pub last_used_at: Option<Option<i64>>,
+    /// Unix timestamp of revocation in milliseconds.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        with = "crate::client::double_option"
+    )]
+    pub revoked_at: Option<Option<i64>>,
+}
+
+impl TrustedDevice {
+    #[allow(clippy::too_many_arguments)]
+    pub fn new(
+        object: TrustedDeviceObjectEnum,
+        id: String,
+        platform: TrustedDevicePlatformEnum,
+        app_identifier: String,
+        algorithm: TrustedDeviceAlgorithmEnum,
+        status: TrustedDeviceStatusEnum,
+        created_at: i64,
+        updated_at: i64,
+    ) -> Self {
+        Self {
+            object,
+            id,
+            platform,
+            app_identifier,
+            name: None,
+            algorithm,
+            status,
+            created_at,
+            updated_at,
+            last_used_at: None,
+            revoked_at: None,
+        }
+    }
+}
+
+/// Typed representation of the `TrustedDeviceList` API schema.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct TrustedDeviceList {
+    /// Required array value serialized in the `data` wire field.
+    pub data: Vec<TrustedDevice>,
+    /// Total number of trusted devices
+    pub total_count: i64,
+}
+
+impl TrustedDeviceList {
+    pub fn new(data: Vec<TrustedDevice>, total_count: i64) -> Self {
+        Self { data, total_count }
+    }
+}
+
+/// String representing the object's type. Objects of the same type share the same value.
+#[derive(Debug, Clone, PartialEq, Default)]
+pub enum UserObjectEnum {
+    #[default]
+    User,
+    Unknown(String),
+}
+
+impl UserObjectEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            Self::User => "user",
+            Self::Unknown(value) => value.as_str(),
+        }
+    }
+}
+
+impl serde::Serialize for UserObjectEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.as_str())
+    }
+}
+
+impl<'de> serde::Deserialize<'de> for UserObjectEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = <String as serde::Deserialize>::deserialize(deserializer)?;
+        Ok(match value.as_str() {
+            "user" => Self::User,
+            _ => Self::Unknown(value),
+        })
+    }
+}
+
+impl std::fmt::Display for UserObjectEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
 /// Typed representation of the `User` API schema.
 #[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct User {
@@ -365,138 +495,6 @@ impl<'de> serde::Deserialize<'de> for VerificationGoogleOneTapStrategyEnum {
 }
 
 impl std::fmt::Display for VerificationGoogleOneTapStrategyEnum {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(self.as_str())
-    }
-}
-
-/// Typed representation of the `VerificationGoogleOneTap` API schema.
-#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
-pub struct VerificationGoogleOneTap {
-    /// Optional enumerated value serialized in the `object` wire field.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub object: Option<VerificationGoogleOneTapObjectEnum>,
-    /// Required enumerated value serialized in the `status` wire field.
-    pub status: VerificationGoogleOneTapStatusEnum,
-    /// Required enumerated value serialized in the `strategy` wire field.
-    pub strategy: VerificationGoogleOneTapStrategyEnum,
-    /// Required `integer` value serialized in the `expire_at` wire field.
-    #[serde(deserialize_with = "Option::deserialize")]
-    pub expire_at: Option<i64>,
-    /// Required `integer` value serialized in the `attempts` wire field.
-    #[serde(deserialize_with = "Option::deserialize")]
-    pub attempts: Option<i64>,
-    /// Optional `string` value serialized in the `verified_at_client` wire field.
-    #[serde(
-        skip_serializing_if = "Option::is_none",
-        default,
-        with = "crate::client::double_option"
-    )]
-    pub verified_at_client: Option<Option<String>>,
-    /// Optional object value serialized in the `error` wire field.
-    #[serde(
-        skip_serializing_if = "Option::is_none",
-        default,
-        with = "crate::client::double_option"
-    )]
-    pub error: Option<Option<ClerkError>>,
-}
-
-impl VerificationGoogleOneTap {
-    pub fn new(
-        status: VerificationGoogleOneTapStatusEnum,
-        strategy: VerificationGoogleOneTapStrategyEnum,
-        expire_at: Option<i64>,
-        attempts: Option<i64>,
-    ) -> Self {
-        Self {
-            object: None,
-            status,
-            strategy,
-            expire_at,
-            attempts,
-            verified_at_client: None,
-            error: None,
-        }
-    }
-}
-
-/// Optional enumerated value serialized in the `object` wire field.
-#[derive(Debug, Clone, PartialEq, Default, serde::Serialize, serde::Deserialize)]
-pub enum VerificationOauthObjectEnum {
-    #[serde(rename = "verification_oauth")]
-    #[default]
-    VerificationOauth,
-}
-
-impl VerificationOauthObjectEnum {
-    pub fn as_str(&self) -> &str {
-        match self {
-            Self::VerificationOauth => "verification_oauth",
-        }
-    }
-}
-
-impl std::fmt::Display for VerificationOauthObjectEnum {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            VerificationOauthObjectEnum::VerificationOauth => f.write_str("verification_oauth"),
-        }
-    }
-}
-
-/// Required enumerated value serialized in the `status` wire field.
-#[derive(Debug, Clone, PartialEq, Default)]
-pub enum VerificationOauthStatusEnum {
-    #[default]
-    Unverified,
-    Verified,
-    Failed,
-    Expired,
-    Transferable,
-    Unknown(String),
-}
-
-impl VerificationOauthStatusEnum {
-    pub fn as_str(&self) -> &str {
-        match self {
-            Self::Unverified => "unverified",
-            Self::Verified => "verified",
-            Self::Failed => "failed",
-            Self::Expired => "expired",
-            Self::Transferable => "transferable",
-            Self::Unknown(value) => value.as_str(),
-        }
-    }
-}
-
-impl serde::Serialize for VerificationOauthStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
-    }
-}
-
-impl<'de> serde::Deserialize<'de> for VerificationOauthStatusEnum {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        let value = <String as serde::Deserialize>::deserialize(deserializer)?;
-        Ok(match value.as_str() {
-            "unverified" => Self::Unverified,
-            "verified" => Self::Verified,
-            "failed" => Self::Failed,
-            "expired" => Self::Expired,
-            "transferable" => Self::Transferable,
-            _ => Self::Unknown(value),
-        })
-    }
-}
-
-impl std::fmt::Display for VerificationOauthStatusEnum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str(self.as_str())
     }
