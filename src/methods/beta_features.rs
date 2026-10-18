@@ -4,83 +4,7 @@
 use crate::client::ClientConfig;
 use crate::client::{sdk_request, RequestOptions, RequestOpts};
 use crate::errors::{SdkError, SdkNetworkError};
-
-/// String representing the object's type. Objects of the same type share the same value.
-#[derive(Debug, Clone, PartialEq, Default)]
-pub enum UpdateInstanceAuthConfigResponseObjectEnum {
-    #[default]
-    InstanceSettings,
-    Unknown(String),
-}
-
-impl UpdateInstanceAuthConfigResponseObjectEnum {
-    pub fn as_str(&self) -> &str {
-        match self {
-            Self::InstanceSettings => "instance_settings",
-            Self::Unknown(value) => value.as_str(),
-        }
-    }
-}
-
-impl serde::Serialize for UpdateInstanceAuthConfigResponseObjectEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
-    }
-}
-
-impl<'de> serde::Deserialize<'de> for UpdateInstanceAuthConfigResponseObjectEnum {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        let value = <String as serde::Deserialize>::deserialize(deserializer)?;
-        Ok(match value.as_str() {
-            "instance_settings" => Self::InstanceSettings,
-            _ => Self::Unknown(value),
-        })
-    }
-}
-
-impl std::fmt::Display for UpdateInstanceAuthConfigResponseObjectEnum {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(self.as_str())
-    }
-}
-
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct UpdateInstanceAuthConfigResponse {
-    /// String representing the object's type. Objects of the same type share the same value.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub object: Option<UpdateInstanceAuthConfigResponseObjectEnum>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub id: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub restricted_to_allowlist: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub from_email_address: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub progressive_sign_up: Option<bool>,
-    /// Deprecated. This setting is retired and no longer affects email delivery; all email is sent through the instance's configured email sending domain. The field is preserved for API compatibility only and will be removed in a future version.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub enhanced_email_deliverability: Option<bool>,
-}
-
-impl UpdateInstanceAuthConfigResponse {
-    #[allow(clippy::new_without_default)]
-    pub fn new() -> Self {
-        Self {
-            object: None,
-            id: None,
-            restricted_to_allowlist: None,
-            from_email_address: None,
-            progressive_sign_up: None,
-            enhanced_email_deliverability: None,
-        }
-    }
-}
+use crate::types::InstanceSettings;
 
 /// Updates instance authentication settings, including allowlist restrictions, the sender address for authentication emails, progressive sign-up, and test mode. Set `from_email_address` to an alphanumeric local part only; `restricted_to_allowlist` defaults to false when omitted, and test mode defaults to true for development instances.
 ///
@@ -106,7 +30,7 @@ pub fn update_instance_auth_config(
     progressive_sign_up: Option<Option<bool>>,
     test_mode: Option<Option<bool>>,
     options: Option<&RequestOptions>,
-) -> Result<UpdateInstanceAuthConfigResponse, SdkError> {
+) -> Result<InstanceSettings, SdkError> {
     let mut __body_map = serde_json::Map::new();
     if let Some(ref value) = restricted_to_allowlist {
         __body_map.insert(
@@ -154,7 +78,7 @@ pub fn update_instance_auth_config(
     }
     let __body = serde_json::Value::Object(__body_map);
 
-    Ok(sdk_request::<UpdateInstanceAuthConfigResponse>(
+    Ok(sdk_request::<InstanceSettings>(
         "PATCH",
         "/beta_features/instance_settings",
         config,

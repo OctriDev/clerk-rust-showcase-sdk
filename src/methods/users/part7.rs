@@ -5,7 +5,10 @@ use super::*;
 use crate::client::ClientConfig;
 use crate::client::{sdk_request, RequestOptions, RequestOpts};
 use crate::errors::{SdkError, SdkNetworkError};
-use crate::types::{BiometricCredential, DeletedObject, TrustedDevice, User};
+use crate::types::{
+    BiometricCredential, BiometricCredentialList, DeletedObject, TrustedDevice, TrustedDeviceList,
+    User,
+};
 
 /// Verify that the provided TOTP or backup code is valid for the user. Verifying a backup code will result it in being consumed (i.e. it will become invalid). Useful for custom auth flows and re-verification.
 ///
@@ -156,8 +159,8 @@ pub fn list_user_trusted_devices(
     config: &ClientConfig,
     user_id: String,
     options: Option<&RequestOptions>,
-) -> Result<ListUserTrustedDevicesResponse, SdkError> {
-    Ok(sdk_request::<ListUserTrustedDevicesResponse>(
+) -> Result<TrustedDeviceList, SdkError> {
+    Ok(sdk_request::<TrustedDeviceList>(
         "GET",
         &format!(
             "/users/{}/trusted_devices",
@@ -227,8 +230,8 @@ pub fn list_user_biometric_credentials(
     config: &ClientConfig,
     user_id: String,
     options: Option<&RequestOptions>,
-) -> Result<ListUserBiometricCredentialsResponse, SdkError> {
-    Ok(sdk_request::<ListUserBiometricCredentialsResponse>(
+) -> Result<BiometricCredentialList, SdkError> {
+    Ok(sdk_request::<BiometricCredentialList>(
         "GET",
         &format!(
             "/users/{}/biometric_credentials",

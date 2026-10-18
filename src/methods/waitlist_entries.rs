@@ -4,21 +4,8 @@
 use crate::client::ClientConfig;
 use crate::client::{sdk_request, RequestOptions, RequestOpts};
 use crate::errors::{SdkError, SdkNetworkError};
-use crate::types::{DeletedObject, WaitlistEntry};
+use crate::types::{DeletedObject, WaitlistEntries, WaitlistEntry};
 use crate::validation::{validate_items, validate_range, LengthOpts, RangeOpts};
-
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct ListWaitlistEntriesResponse {
-    pub data: Vec<WaitlistEntry>,
-    /// Total number of waitlist entries
-    pub total_count: i64,
-}
-
-impl ListWaitlistEntriesResponse {
-    pub fn new(data: Vec<WaitlistEntry>, total_count: i64) -> Self {
-        Self { data, total_count }
-    }
-}
 
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct CreateBulkWaitlistEntriesItem {
@@ -129,7 +116,7 @@ pub fn list_waitlist_entries(
     config: &ClientConfig,
     params: ListWaitlistEntriesParams,
     options: Option<&RequestOptions>,
-) -> Result<ListWaitlistEntriesResponse, SdkError> {
+) -> Result<WaitlistEntries, SdkError> {
     let ListWaitlistEntriesParams {
         limit,
         offset,
@@ -176,7 +163,7 @@ pub fn list_waitlist_entries(
         __query.push(("order_by", crate::client::query_value(v)));
     }
 
-    Ok(sdk_request::<ListWaitlistEntriesResponse>(
+    Ok(sdk_request::<WaitlistEntries>(
         "GET",
         "/waitlist_entries",
         config,

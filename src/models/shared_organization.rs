@@ -231,7 +231,175 @@ impl OrganizationInvitationsWithPublicOrganizationData {
     }
 }
 
-pub type OrganizationInvitationWithPublicOrganizationData = serde_json::Value;
+/// String representing the object's type. Objects of the same type share the same value.
+#[derive(Debug, Clone, PartialEq, Default)]
+pub enum OrganizationInvitationWithPublicOrganizationDataVariant0ObjectEnum {
+    #[default]
+    OrganizationInvitation,
+    Unknown(String),
+}
+
+impl OrganizationInvitationWithPublicOrganizationDataVariant0ObjectEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            Self::OrganizationInvitation => "organization_invitation",
+            Self::Unknown(value) => value.as_str(),
+        }
+    }
+}
+
+impl serde::Serialize for OrganizationInvitationWithPublicOrganizationDataVariant0ObjectEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.as_str())
+    }
+}
+
+impl<'de> serde::Deserialize<'de>
+    for OrganizationInvitationWithPublicOrganizationDataVariant0ObjectEnum
+{
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = <String as serde::Deserialize>::deserialize(deserializer)?;
+        Ok(match value.as_str() {
+            "organization_invitation" => Self::OrganizationInvitation,
+            _ => Self::Unknown(value),
+        })
+    }
+}
+
+impl std::fmt::Display for OrganizationInvitationWithPublicOrganizationDataVariant0ObjectEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+/// Required object value serialized in the `data[]` wire field.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct OrganizationInvitationWithPublicOrganizationDataVariant0 {
+    /// String representing the object's type. Objects of the same type share the same value.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub object: Option<OrganizationInvitationWithPublicOrganizationDataVariant0ObjectEnum>,
+    /// Optional `string` value serialized in the `id` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// Optional `string` value serialized in the `email_address` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email_address: Option<String>,
+    /// Optional `string` value serialized in the `role` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
+    /// Optional `string` value serialized in the `role_name` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_name: Option<String>,
+    /// Optional `string` value serialized in the `organization_id` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_id: Option<String>,
+    /// Optional `string` value serialized in the `inviter_id` wire field.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        with = "crate::client::double_option"
+    )]
+    pub inviter_id: Option<Option<String>>,
+    /// An organization inviter's public user data
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        with = "crate::client::double_option"
+    )]
+    pub public_inviter_data: Option<Option<OrganizationInvitationPublicUserData>>,
+    /// Optional `string` value serialized in the `status` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// Optional object value serialized in the `public_metadata` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub public_metadata: Option<std::collections::HashMap<String, serde_json::Value>>,
+    /// Optional object value serialized in the `private_metadata` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub private_metadata: Option<std::collections::HashMap<String, serde_json::Value>>,
+    /// Optional `string` value serialized in the `url` wire field.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        with = "crate::client::double_option"
+    )]
+    pub url: Option<Option<String>>,
+    /// Unix timestamp of expiration.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        with = "crate::client::double_option"
+    )]
+    pub expires_at: Option<Option<i64>>,
+    /// Unix timestamp of creation.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<i64>,
+    /// Unix timestamp of last update.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub updated_at: Option<i64>,
+}
+
+impl OrganizationInvitationWithPublicOrganizationDataVariant0 {
+    #[allow(clippy::new_without_default)]
+    pub fn new() -> Self {
+        Self {
+            object: None,
+            id: None,
+            email_address: None,
+            role: None,
+            role_name: None,
+            organization_id: None,
+            inviter_id: None,
+            public_inviter_data: None,
+            status: None,
+            public_metadata: None,
+            private_metadata: None,
+            url: None,
+            expires_at: None,
+            created_at: None,
+            updated_at: None,
+        }
+    }
+}
+
+/// Required object value serialized in the `data[]` wire field.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct OrganizationInvitationWithPublicOrganizationDataVariant1 {
+    /// Optional object value serialized in the `public_organization_data` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub public_organization_data: Option<OrganizationInvitationPublicOrganizationData>,
+}
+
+impl OrganizationInvitationWithPublicOrganizationDataVariant1 {
+    #[allow(clippy::new_without_default)]
+    pub fn new() -> Self {
+        Self {
+            public_organization_data: None,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct OrganizationInvitationWithPublicOrganizationData {
+    #[serde(flatten)]
+    pub member_0: OrganizationInvitationWithPublicOrganizationDataVariant0,
+    #[serde(flatten)]
+    pub member_1: OrganizationInvitationWithPublicOrganizationDataVariant1,
+}
+
+impl OrganizationInvitationWithPublicOrganizationData {
+    pub fn new(
+        member_0: OrganizationInvitationWithPublicOrganizationDataVariant0,
+        member_1: OrganizationInvitationWithPublicOrganizationDataVariant1,
+    ) -> Self {
+        Self { member_0, member_1 }
+    }
+}
 
 /// String representing the object's type. Objects of the same type share the same value.
 #[derive(Debug, Clone, PartialEq, Default)]
@@ -333,84 +501,5 @@ impl OrganizationMembership {
             created_at,
             updated_at,
         }
-    }
-}
-
-/// An organization membership with public user data populated
-#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
-pub struct OrganizationMembershipPublicUserData {
-    /// Required `string` value serialized in the `user_id` wire field.
-    pub user_id: String,
-    /// Required `string` value serialized in the `first_name` wire field.
-    #[serde(deserialize_with = "Option::deserialize")]
-    pub first_name: Option<String>,
-    /// Required `string` value serialized in the `last_name` wire field.
-    #[serde(deserialize_with = "Option::deserialize")]
-    pub last_name: Option<String>,
-    /// Required `string` value serialized in the `profile_image_url` wire field.
-    #[serde(deserialize_with = "Option::deserialize")]
-    pub profile_image_url: Option<String>,
-    /// Required `string` value serialized in the `image_url` wire field.
-    pub image_url: String,
-    /// Required `boolean` value serialized in the `has_image` wire field.
-    pub has_image: bool,
-    /// Optional `string` value serialized in the `identifier` wire field.
-    #[serde(
-        skip_serializing_if = "Option::is_none",
-        default,
-        with = "crate::client::double_option"
-    )]
-    pub identifier: Option<Option<String>>,
-    /// Optional `string` value serialized in the `username` wire field.
-    #[serde(
-        skip_serializing_if = "Option::is_none",
-        default,
-        with = "crate::client::double_option"
-    )]
-    pub username: Option<Option<String>>,
-    /// Optional `boolean` value serialized in the `banned` wire field.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub banned: Option<bool>,
-    /// Optional `boolean` value serialized in the `deprovisioned` wire field.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub deprovisioned: Option<bool>,
-}
-
-impl OrganizationMembershipPublicUserData {
-    pub fn new(
-        user_id: String,
-        first_name: Option<String>,
-        last_name: Option<String>,
-        profile_image_url: Option<String>,
-        image_url: String,
-        has_image: bool,
-    ) -> Self {
-        Self {
-            user_id,
-            first_name,
-            last_name,
-            profile_image_url,
-            image_url,
-            has_image,
-            identifier: None,
-            username: None,
-            banned: None,
-            deprovisioned: None,
-        }
-    }
-}
-
-/// Typed representation of the `OrganizationMemberships` API schema.
-#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
-pub struct OrganizationMemberships {
-    /// Required array value serialized in the `data` wire field.
-    pub data: Vec<OrganizationMembership>,
-    /// Total number of organization memberships
-    pub total_count: i64,
-}
-
-impl OrganizationMemberships {
-    pub fn new(data: Vec<OrganizationMembership>, total_count: i64) -> Self {
-        Self { data, total_count }
     }
 }

@@ -521,7 +521,7 @@ impl JWKSEd25519PublicKey {
     }
 }
 
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, serde::Serialize)]
 #[serde(untagged)]
 pub enum JWKSKeysItem {
     JWKSEd25519PublicKey(Box<JWKSEd25519PublicKey>),
@@ -531,12 +531,4 @@ pub enum JWKSKeysItem {
     JWKSEcdsaPrivateKey(Box<JWKSEcdsaPrivateKey>),
     JWKSRsaPrivateKey(Box<JWKSRsaPrivateKey>),
     JWKSSymmetricKey(Box<JWKSSymmetricKey>),
-}
-
-/// Required enumerated value serialized in the `kty` wire field.
-#[derive(Debug, Clone, PartialEq, Default)]
-pub enum JWKSRsaPrivateKeyKtyEnum {
-    #[default]
-    Rsa,
-    Unknown(String),
 }

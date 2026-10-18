@@ -4,59 +4,7 @@
 use crate::client::ClientConfig;
 use crate::client::{sdk_request, RequestOptions, RequestOpts};
 use crate::errors::{SdkError, SdkNetworkError};
-use crate::types::{DeletedObject, PhoneNumber};
-
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct AttemptEmailAddressVerificationResponse {
-    /// The type of the verification object.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub object: Option<String>,
-    /// The ID of the verification. Pass this to attempt_verification.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub id: Option<String>,
-    /// The status of the verification (unverified, verified, expired, or failed).
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
-    /// The verification strategy (email_code or phone_code).
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub strategy: Option<String>,
-    /// The number of attempts made against this verification.
-    #[serde(
-        skip_serializing_if = "Option::is_none",
-        default,
-        with = "crate::client::double_option"
-    )]
-    pub attempts: Option<Option<i64>>,
-    /// Unix timestamp (milliseconds) at which the code expires.
-    #[serde(
-        skip_serializing_if = "Option::is_none",
-        default,
-        with = "crate::client::double_option"
-    )]
-    pub expire_at: Option<Option<i64>>,
-    /// The channel the code was sent over (phone numbers only).
-    #[serde(
-        skip_serializing_if = "Option::is_none",
-        default,
-        with = "crate::client::double_option"
-    )]
-    pub channel: Option<Option<String>>,
-}
-
-impl AttemptEmailAddressVerificationResponse {
-    #[allow(clippy::new_without_default)]
-    pub fn new() -> Self {
-        Self {
-            object: None,
-            id: None,
-            status: None,
-            strategy: None,
-            attempts: None,
-            expire_at: None,
-            channel: None,
-        }
-    }
-}
+use crate::types::{DeletedObject, PhoneNumber, VerificationResponse};
 
 #[derive(Debug, Clone, PartialEq, Default)]
 pub enum ReplaceUserPhoneNumberIdentificationStatusEnum {
@@ -383,8 +331,8 @@ pub fn prepare_phone_number_verification(
     config: &ClientConfig,
     phone_number_id: String,
     options: Option<&RequestOptions>,
-) -> Result<AttemptEmailAddressVerificationResponse, SdkError> {
-    Ok(sdk_request::<AttemptEmailAddressVerificationResponse>(
+) -> Result<VerificationResponse, SdkError> {
+    Ok(sdk_request::<VerificationResponse>(
         "POST",
         &format!(
             "/phone_numbers/{}/prepare_verification",
@@ -424,7 +372,7 @@ pub fn attempt_phone_number_verification(
     verification_id: String,
     code: String,
     options: Option<&RequestOptions>,
-) -> Result<AttemptEmailAddressVerificationResponse, SdkError> {
+) -> Result<VerificationResponse, SdkError> {
     let mut __body_map = serde_json::Map::new();
     __body_map.insert(
         "verification_id".to_string(),
@@ -446,7 +394,7 @@ pub fn attempt_phone_number_verification(
     );
     let __body = serde_json::Value::Object(__body_map);
 
-    Ok(sdk_request::<AttemptEmailAddressVerificationResponse>(
+    Ok(sdk_request::<VerificationResponse>(
         "POST",
         &format!(
             "/phone_numbers/{}/attempt_verification",

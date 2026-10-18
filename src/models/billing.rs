@@ -341,10 +341,10 @@ pub struct BillingPriceResponse {
     pub amount: i64,
     /// The monthly amount in cents when billed annually.
     pub annual_monthly_amount: i64,
-    /// Required API value serialized in the `fee` wire field.
+    /// Required object value serialized in the `fee` wire field.
     #[serde(deserialize_with = "Option::deserialize")]
     pub fee: Option<CommerceMoneyResponse>,
-    /// Required API value serialized in the `annual_monthly_fee` wire field.
+    /// Required object value serialized in the `annual_monthly_fee` wire field.
     #[serde(deserialize_with = "Option::deserialize")]
     pub annual_monthly_fee: Option<CommerceMoneyResponse>,
     /// The description of the price.

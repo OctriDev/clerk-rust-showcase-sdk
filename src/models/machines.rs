@@ -3,6 +3,7 @@
 
 // machines domain models
 
+/// Required object value serialized in the `data[]` wire field.
 #[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct MachineVariant1 {
     /// Array of machines this machine has access to.
@@ -26,6 +27,113 @@ pub struct Machine {
 impl Machine {
     pub fn new(member_0: MachineWithoutScopedMachines, member_1: MachineVariant1) -> Self {
         Self { member_0, member_1 }
+    }
+}
+
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct MachineCreatedVariant1 {
+    /// The secret key for the machine, only returned upon creation.
+    pub secret_key: String,
+}
+
+impl MachineCreatedVariant1 {
+    pub fn new(secret_key: String) -> Self {
+        Self { secret_key }
+    }
+}
+
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct MachineCreated {
+    #[serde(flatten)]
+    pub member_0: Machine,
+    #[serde(flatten)]
+    pub member_1: MachineCreatedVariant1,
+}
+
+impl MachineCreated {
+    pub fn new(member_0: Machine, member_1: MachineCreatedVariant1) -> Self {
+        Self { member_0, member_1 }
+    }
+}
+
+/// String representing the object's type.
+#[derive(Debug, Clone, PartialEq, Default)]
+pub enum MachineDeletedObjectEnum {
+    #[default]
+    Machine,
+    Unknown(String),
+}
+
+impl MachineDeletedObjectEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            Self::Machine => "machine",
+            Self::Unknown(value) => value.as_str(),
+        }
+    }
+}
+
+impl serde::Serialize for MachineDeletedObjectEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.as_str())
+    }
+}
+
+impl<'de> serde::Deserialize<'de> for MachineDeletedObjectEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = <String as serde::Deserialize>::deserialize(deserializer)?;
+        Ok(match value.as_str() {
+            "machine" => Self::Machine,
+            _ => Self::Unknown(value),
+        })
+    }
+}
+
+impl std::fmt::Display for MachineDeletedObjectEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+/// Typed representation of the `MachineDeleted` API schema.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct MachineDeleted {
+    /// String representing the object's type.
+    pub object: MachineDeletedObjectEnum,
+    /// The ID of the deleted machine
+    pub id: String,
+    /// Whether the machine was successfully deleted
+    pub deleted: bool,
+}
+
+impl MachineDeleted {
+    pub fn new(object: MachineDeletedObjectEnum, id: String, deleted: bool) -> Self {
+        Self {
+            object,
+            id,
+            deleted,
+        }
+    }
+}
+
+/// Typed representation of the `MachineList` API schema.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct MachineList {
+    /// Required array value serialized in the `data` wire field.
+    pub data: Vec<Machine>,
+    /// Total number of machines
+    pub total_count: i64,
+}
+
+impl MachineList {
+    pub fn new(data: Vec<Machine>, total_count: i64) -> Self {
+        Self { data, total_count }
     }
 }
 
@@ -100,6 +208,140 @@ impl MachineScope {
             to_machine_id,
             created_at,
         }
+    }
+}
+
+/// String representing the object's type.
+#[derive(Debug, Clone, PartialEq, Default)]
+pub enum MachineScopeDeletedObjectEnum {
+    #[default]
+    MachineScope,
+    Unknown(String),
+}
+
+impl MachineScopeDeletedObjectEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            Self::MachineScope => "machine_scope",
+            Self::Unknown(value) => value.as_str(),
+        }
+    }
+}
+
+impl serde::Serialize for MachineScopeDeletedObjectEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.as_str())
+    }
+}
+
+impl<'de> serde::Deserialize<'de> for MachineScopeDeletedObjectEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = <String as serde::Deserialize>::deserialize(deserializer)?;
+        Ok(match value.as_str() {
+            "machine_scope" => Self::MachineScope,
+            _ => Self::Unknown(value),
+        })
+    }
+}
+
+impl std::fmt::Display for MachineScopeDeletedObjectEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+/// Typed representation of the `MachineScopeDeleted` API schema.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct MachineScopeDeleted {
+    /// String representing the object's type.
+    pub object: MachineScopeDeletedObjectEnum,
+    /// The ID of the machine that had access to the target machine
+    pub from_machine_id: String,
+    /// The ID of the machine that was being accessed
+    pub to_machine_id: String,
+    /// Whether the machine scope was successfully deleted
+    pub deleted: bool,
+}
+
+impl MachineScopeDeleted {
+    pub fn new(
+        object: MachineScopeDeletedObjectEnum,
+        from_machine_id: String,
+        to_machine_id: String,
+        deleted: bool,
+    ) -> Self {
+        Self {
+            object,
+            from_machine_id,
+            to_machine_id,
+            deleted,
+        }
+    }
+}
+
+/// String representing the object's type.
+#[derive(Debug, Clone, PartialEq, Default)]
+pub enum MachineSecretKeyObjectEnum {
+    #[default]
+    MachineSecretKey,
+    Unknown(String),
+}
+
+impl MachineSecretKeyObjectEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            Self::MachineSecretKey => "machine_secret_key",
+            Self::Unknown(value) => value.as_str(),
+        }
+    }
+}
+
+impl serde::Serialize for MachineSecretKeyObjectEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.as_str())
+    }
+}
+
+impl<'de> serde::Deserialize<'de> for MachineSecretKeyObjectEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = <String as serde::Deserialize>::deserialize(deserializer)?;
+        Ok(match value.as_str() {
+            "machine_secret_key" => Self::MachineSecretKey,
+            _ => Self::Unknown(value),
+        })
+    }
+}
+
+impl std::fmt::Display for MachineSecretKeyObjectEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+/// Typed representation of the `MachineSecretKey` API schema.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct MachineSecretKey {
+    /// String representing the object's type.
+    pub object: MachineSecretKeyObjectEnum,
+    /// The secret key for the machine.
+    pub secret: String,
+}
+
+impl MachineSecretKey {
+    pub fn new(object: MachineSecretKeyObjectEnum, secret: String) -> Self {
+        Self { object, secret }
     }
 }
 

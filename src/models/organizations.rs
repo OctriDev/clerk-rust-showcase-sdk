@@ -18,34 +18,101 @@ impl Organizations {
     }
 }
 
-#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
-pub struct OrganizationWithLogoVariant1 {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub logo_url: Option<String>,
-    pub image_url: String,
-    pub has_image: bool,
-}
-
-impl OrganizationWithLogoVariant1 {
-    pub fn new(image_url: String, has_image: bool) -> Self {
-        Self {
-            logo_url: None,
-            image_url,
-            has_image,
-        }
-    }
-}
-
+/// Typed representation of the `OrganizationWithLogo` API schema.
 #[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct OrganizationWithLogo {
-    #[serde(flatten)]
-    pub member_0: Organization,
-    #[serde(flatten)]
-    pub member_1: OrganizationWithLogoVariant1,
+    /// Required enumerated value serialized in the `object` wire field.
+    pub object: OrganizationObjectEnum,
+    /// Required `string` value serialized in the `id` wire field.
+    pub id: String,
+    /// Required `string` value serialized in the `name` wire field.
+    pub name: String,
+    /// Required `string` value serialized in the `slug` wire field.
+    pub slug: String,
+    pub image_url: String,
+    pub has_image: bool,
+    /// Optional `integer` value serialized in the `members_count` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub members_count: Option<i64>,
+    /// Optional `boolean` value serialized in the `missing_member_with_elevated_permissions` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub missing_member_with_elevated_permissions: Option<bool>,
+    /// Optional `integer` value serialized in the `pending_invitations_count` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_invitations_count: Option<i64>,
+    /// Required `integer` value serialized in the `max_allowed_memberships` wire field.
+    pub max_allowed_memberships: i64,
+    /// Required `boolean` value serialized in the `admin_delete_enabled` wire field.
+    pub admin_delete_enabled: bool,
+    /// Whether this organization can configure self-serve enterprise SSO.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub self_serve_sso_enabled: Option<bool>,
+    /// Whether this organization can configure self-serve Directory Sync (SCIM).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub self_serve_directory_sync_enabled: Option<bool>,
+    /// Required object value serialized in the `public_metadata` wire field.
+    pub public_metadata: std::collections::HashMap<String, serde_json::Value>,
+    /// Optional object value serialized in the `private_metadata` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub private_metadata: Option<std::collections::HashMap<String, serde_json::Value>>,
+    /// Optional `string` value serialized in the `created_by` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<String>,
+    /// Unix timestamp of creation.
+    pub created_at: i64,
+    /// Unix timestamp of last update.
+    pub updated_at: i64,
+    /// Unix timestamp of last activity.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_active_at: Option<i64>,
+    /// The key of the [role set](https://clerk.com/docs/guides/organizations/control-access/role-sets) assigned to this organization.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        with = "crate::client::double_option"
+    )]
+    pub role_set_key: Option<Option<String>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logo_url: Option<String>,
 }
 
 impl OrganizationWithLogo {
-    pub fn new(member_0: Organization, member_1: OrganizationWithLogoVariant1) -> Self {
-        Self { member_0, member_1 }
+    #[allow(clippy::too_many_arguments)]
+    pub fn new(
+        object: OrganizationObjectEnum,
+        id: String,
+        name: String,
+        slug: String,
+        image_url: String,
+        has_image: bool,
+        max_allowed_memberships: i64,
+        admin_delete_enabled: bool,
+        public_metadata: std::collections::HashMap<String, serde_json::Value>,
+        created_at: i64,
+        updated_at: i64,
+    ) -> Self {
+        Self {
+            object,
+            id,
+            name,
+            slug,
+            image_url,
+            has_image,
+            members_count: None,
+            missing_member_with_elevated_permissions: None,
+            pending_invitations_count: None,
+            max_allowed_memberships,
+            admin_delete_enabled,
+            self_serve_sso_enabled: None,
+            self_serve_directory_sync_enabled: None,
+            public_metadata,
+            private_metadata: None,
+            created_by: None,
+            created_at,
+            updated_at,
+            last_active_at: None,
+            role_set_key: None,
+            logo_url: None,
+        }
     }
 }

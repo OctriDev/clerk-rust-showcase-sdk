@@ -161,6 +161,21 @@ impl SCIMDirectory {
     }
 }
 
+/// Typed representation of the `SCIMDirectoryList` API schema.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct SCIMDirectoryList {
+    /// Required array value serialized in the `data` wire field.
+    pub data: SCIMDirectories,
+    /// Total number of directories.
+    pub total_count: i64,
+}
+
+impl SCIMDirectoryList {
+    pub fn new(data: SCIMDirectories, total_count: i64) -> Self {
+        Self { data, total_count }
+    }
+}
+
 /// String representing the object's type. Always "scim_group_role_mapping".
 #[derive(Debug, Clone, PartialEq, Default)]
 pub enum SCIMGroupRoleMappingObjectEnum {
@@ -265,6 +280,87 @@ impl SCIMGroupRoleMapping {
             created_at,
             updated_at,
         }
+    }
+}
+
+/// String representing the object's type.
+#[derive(Debug, Clone, PartialEq, Default)]
+pub enum SCIMGroupRoleMappingDeletedObjectEnum {
+    #[default]
+    ScimGroupRoleMapping,
+    Unknown(String),
+}
+
+impl SCIMGroupRoleMappingDeletedObjectEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            Self::ScimGroupRoleMapping => "scim_group_role_mapping",
+            Self::Unknown(value) => value.as_str(),
+        }
+    }
+}
+
+impl serde::Serialize for SCIMGroupRoleMappingDeletedObjectEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.as_str())
+    }
+}
+
+impl<'de> serde::Deserialize<'de> for SCIMGroupRoleMappingDeletedObjectEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = <String as serde::Deserialize>::deserialize(deserializer)?;
+        Ok(match value.as_str() {
+            "scim_group_role_mapping" => Self::ScimGroupRoleMapping,
+            _ => Self::Unknown(value),
+        })
+    }
+}
+
+impl std::fmt::Display for SCIMGroupRoleMappingDeletedObjectEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+/// Typed representation of the `SCIMGroupRoleMappingDeleted` API schema.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct SCIMGroupRoleMappingDeleted {
+    /// String representing the object's type.
+    pub object: SCIMGroupRoleMappingDeletedObjectEnum,
+    /// The ID of the deleted SCIM group role mapping.
+    pub id: String,
+    /// Whether the SCIM group role mapping was successfully deleted.
+    pub deleted: bool,
+}
+
+impl SCIMGroupRoleMappingDeleted {
+    pub fn new(object: SCIMGroupRoleMappingDeletedObjectEnum, id: String, deleted: bool) -> Self {
+        Self {
+            object,
+            id,
+            deleted,
+        }
+    }
+}
+
+/// Typed representation of the `SCIMGroupRoleMappingList` API schema.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct SCIMGroupRoleMappingList {
+    /// Required array value serialized in the `data` wire field.
+    pub data: SCIMGroupRoleMappings,
+    /// Total number of SCIM group role mappings in the directory.
+    pub total_count: i64,
+}
+
+impl SCIMGroupRoleMappingList {
+    pub fn new(data: SCIMGroupRoleMappings, total_count: i64) -> Self {
+        Self { data, total_count }
     }
 }
 

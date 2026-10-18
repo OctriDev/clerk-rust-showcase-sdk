@@ -268,4 +268,104 @@ impl DirectoryGroupRoleMapping {
     }
 }
 
+/// String representing the object's type.
+#[derive(Debug, Clone, PartialEq, Default)]
+pub enum DirectoryGroupRoleMappingDeletedObjectEnum {
+    #[default]
+    DirectoryGroupRoleMapping,
+    Unknown(String),
+}
+
+impl DirectoryGroupRoleMappingDeletedObjectEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            Self::DirectoryGroupRoleMapping => "directory_group_role_mapping",
+            Self::Unknown(value) => value.as_str(),
+        }
+    }
+}
+
+impl serde::Serialize for DirectoryGroupRoleMappingDeletedObjectEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.as_str())
+    }
+}
+
+impl<'de> serde::Deserialize<'de> for DirectoryGroupRoleMappingDeletedObjectEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = <String as serde::Deserialize>::deserialize(deserializer)?;
+        Ok(match value.as_str() {
+            "directory_group_role_mapping" => Self::DirectoryGroupRoleMapping,
+            _ => Self::Unknown(value),
+        })
+    }
+}
+
+impl std::fmt::Display for DirectoryGroupRoleMappingDeletedObjectEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+/// Typed representation of the `DirectoryGroupRoleMappingDeleted` API schema.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct DirectoryGroupRoleMappingDeleted {
+    /// String representing the object's type.
+    pub object: DirectoryGroupRoleMappingDeletedObjectEnum,
+    /// The ID of the deleted directory group role mapping.
+    pub id: String,
+    /// Whether the directory group role mapping was successfully deleted.
+    pub deleted: bool,
+}
+
+impl DirectoryGroupRoleMappingDeleted {
+    pub fn new(
+        object: DirectoryGroupRoleMappingDeletedObjectEnum,
+        id: String,
+        deleted: bool,
+    ) -> Self {
+        Self {
+            object,
+            id,
+            deleted,
+        }
+    }
+}
+
+/// Typed representation of the `DirectoryGroupRoleMappingList` API schema.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct DirectoryGroupRoleMappingList {
+    /// Required array value serialized in the `data` wire field.
+    pub data: DirectoryGroupRoleMappings,
+    /// Total number of directory group role mappings in the directory.
+    pub total_count: i64,
+}
+
+impl DirectoryGroupRoleMappingList {
+    pub fn new(data: DirectoryGroupRoleMappings, total_count: i64) -> Self {
+        Self { data, total_count }
+    }
+}
+
 pub type DirectoryGroupRoleMappings = Vec<DirectoryGroupRoleMapping>;
+
+/// Typed representation of the `DirectoryList` API schema.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct DirectoryList {
+    /// Required array value serialized in the `data` wire field.
+    pub data: Directories,
+    /// Total number of directories.
+    pub total_count: i64,
+}
+
+impl DirectoryList {
+    pub fn new(data: Directories, total_count: i64) -> Self {
+        Self { data, total_count }
+    }
+}

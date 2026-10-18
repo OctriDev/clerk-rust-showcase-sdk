@@ -3,6 +3,138 @@
 
 // users domain models (part 5)
 
+/// Typed representation of the `VerificationGoogleOneTap` API schema.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct VerificationGoogleOneTap {
+    /// Optional enumerated value serialized in the `object` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub object: Option<VerificationGoogleOneTapObjectEnum>,
+    /// Required enumerated value serialized in the `status` wire field.
+    pub status: VerificationGoogleOneTapStatusEnum,
+    /// Required enumerated value serialized in the `strategy` wire field.
+    pub strategy: VerificationGoogleOneTapStrategyEnum,
+    /// Required `integer` value serialized in the `expire_at` wire field.
+    #[serde(deserialize_with = "Option::deserialize")]
+    pub expire_at: Option<i64>,
+    /// Required `integer` value serialized in the `attempts` wire field.
+    #[serde(deserialize_with = "Option::deserialize")]
+    pub attempts: Option<i64>,
+    /// Optional `string` value serialized in the `verified_at_client` wire field.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        with = "crate::client::double_option"
+    )]
+    pub verified_at_client: Option<Option<String>>,
+    /// Optional object value serialized in the `error` wire field.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        with = "crate::client::double_option"
+    )]
+    pub error: Option<Option<ClerkError>>,
+}
+
+impl VerificationGoogleOneTap {
+    pub fn new(
+        status: VerificationGoogleOneTapStatusEnum,
+        strategy: VerificationGoogleOneTapStrategyEnum,
+        expire_at: Option<i64>,
+        attempts: Option<i64>,
+    ) -> Self {
+        Self {
+            object: None,
+            status,
+            strategy,
+            expire_at,
+            attempts,
+            verified_at_client: None,
+            error: None,
+        }
+    }
+}
+
+/// Optional enumerated value serialized in the `object` wire field.
+#[derive(Debug, Clone, PartialEq, Default, serde::Serialize, serde::Deserialize)]
+pub enum VerificationOauthObjectEnum {
+    #[serde(rename = "verification_oauth")]
+    #[default]
+    VerificationOauth,
+}
+
+impl VerificationOauthObjectEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            Self::VerificationOauth => "verification_oauth",
+        }
+    }
+}
+
+impl std::fmt::Display for VerificationOauthObjectEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            VerificationOauthObjectEnum::VerificationOauth => f.write_str("verification_oauth"),
+        }
+    }
+}
+
+/// Required enumerated value serialized in the `status` wire field.
+#[derive(Debug, Clone, PartialEq, Default)]
+pub enum VerificationOauthStatusEnum {
+    #[default]
+    Unverified,
+    Verified,
+    Failed,
+    Expired,
+    Transferable,
+    Unknown(String),
+}
+
+impl VerificationOauthStatusEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            Self::Unverified => "unverified",
+            Self::Verified => "verified",
+            Self::Failed => "failed",
+            Self::Expired => "expired",
+            Self::Transferable => "transferable",
+            Self::Unknown(value) => value.as_str(),
+        }
+    }
+}
+
+impl serde::Serialize for VerificationOauthStatusEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.as_str())
+    }
+}
+
+impl<'de> serde::Deserialize<'de> for VerificationOauthStatusEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = <String as serde::Deserialize>::deserialize(deserializer)?;
+        Ok(match value.as_str() {
+            "unverified" => Self::Unverified,
+            "verified" => Self::Verified,
+            "failed" => Self::Failed,
+            "expired" => Self::Expired,
+            "transferable" => Self::Transferable,
+            _ => Self::Unknown(value),
+        })
+    }
+}
+
+impl std::fmt::Display for VerificationOauthStatusEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
 /// Typed representation of the `VerificationOauth` API schema.
 #[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct VerificationOauth {
@@ -338,150 +470,4 @@ impl serde::Serialize for VerificationWeb3StatusEnum {
     {
         serializer.serialize_str(self.as_str())
     }
-}
-
-impl<'de> serde::Deserialize<'de> for VerificationWeb3StatusEnum {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        let value = <String as serde::Deserialize>::deserialize(deserializer)?;
-        Ok(match value.as_str() {
-            "unverified" => Self::Unverified,
-            "verified" => Self::Verified,
-            "failed" => Self::Failed,
-            "expired" => Self::Expired,
-            _ => Self::Unknown(value),
-        })
-    }
-}
-
-impl std::fmt::Display for VerificationWeb3StatusEnum {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(self.as_str())
-    }
-}
-
-/// Required enumerated value serialized in the `strategy` wire field.
-#[derive(Debug, Clone, PartialEq, Default)]
-pub enum VerificationWeb3StrategyEnum {
-    #[default]
-    Web3MetamaskSignature,
-    Web3BaseSignature,
-    Web3CoinbaseWalletSignature,
-    Web3OkxWalletSignature,
-    Web3SolanaSignature,
-    Unknown(String),
-}
-
-impl VerificationWeb3StrategyEnum {
-    pub fn as_str(&self) -> &str {
-        match self {
-            Self::Web3MetamaskSignature => "web3_metamask_signature",
-            Self::Web3BaseSignature => "web3_base_signature",
-            Self::Web3CoinbaseWalletSignature => "web3_coinbase_wallet_signature",
-            Self::Web3OkxWalletSignature => "web3_okx_wallet_signature",
-            Self::Web3SolanaSignature => "web3_solana_signature",
-            Self::Unknown(value) => value.as_str(),
-        }
-    }
-}
-
-impl serde::Serialize for VerificationWeb3StrategyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
-    }
-}
-
-impl<'de> serde::Deserialize<'de> for VerificationWeb3StrategyEnum {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        let value = <String as serde::Deserialize>::deserialize(deserializer)?;
-        Ok(match value.as_str() {
-            "web3_metamask_signature" => Self::Web3MetamaskSignature,
-            "web3_base_signature" => Self::Web3BaseSignature,
-            "web3_coinbase_wallet_signature" => Self::Web3CoinbaseWalletSignature,
-            "web3_okx_wallet_signature" => Self::Web3OkxWalletSignature,
-            "web3_solana_signature" => Self::Web3SolanaSignature,
-            _ => Self::Unknown(value),
-        })
-    }
-}
-
-impl std::fmt::Display for VerificationWeb3StrategyEnum {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(self.as_str())
-    }
-}
-
-/// Typed representation of the `VerificationWeb3` API schema.
-#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
-pub struct VerificationWeb3 {
-    /// Optional enumerated value serialized in the `object` wire field.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub object: Option<VerificationWeb3ObjectEnum>,
-    /// Required enumerated value serialized in the `status` wire field.
-    pub status: VerificationWeb3StatusEnum,
-    /// Required enumerated value serialized in the `strategy` wire field.
-    pub strategy: VerificationWeb3StrategyEnum,
-    /// Optional `string` value serialized in the `nonce` wire field.
-    #[serde(
-        skip_serializing_if = "Option::is_none",
-        default,
-        with = "crate::client::double_option"
-    )]
-    pub nonce: Option<Option<String>>,
-    /// Optional `string` value serialized in the `message` wire field.
-    #[serde(
-        skip_serializing_if = "Option::is_none",
-        default,
-        with = "crate::client::double_option"
-    )]
-    pub message: Option<Option<String>>,
-    /// Required `integer` value serialized in the `attempts` wire field.
-    #[serde(deserialize_with = "Option::deserialize")]
-    pub attempts: Option<i64>,
-    /// Required `integer` value serialized in the `expire_at` wire field.
-    #[serde(deserialize_with = "Option::deserialize")]
-    pub expire_at: Option<i64>,
-    /// Optional `string` value serialized in the `verified_at_client` wire field.
-    #[serde(
-        skip_serializing_if = "Option::is_none",
-        default,
-        with = "crate::client::double_option"
-    )]
-    pub verified_at_client: Option<Option<String>>,
-}
-
-impl VerificationWeb3 {
-    pub fn new(
-        status: VerificationWeb3StatusEnum,
-        strategy: VerificationWeb3StrategyEnum,
-        attempts: Option<i64>,
-        expire_at: Option<i64>,
-    ) -> Self {
-        Self {
-            object: None,
-            status,
-            strategy,
-            nonce: None,
-            message: None,
-            attempts,
-            expire_at,
-            verified_at_client: None,
-        }
-    }
-}
-
-/// String representing the object's type. Objects of the same type share the same value.
-#[derive(Debug, Clone, PartialEq, Default)]
-pub enum Web3WalletObjectEnum {
-    #[default]
-    Web3Wallet,
-    Unknown(String),
 }

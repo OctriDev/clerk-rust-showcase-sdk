@@ -259,6 +259,21 @@ impl BiometricCredential {
     }
 }
 
+/// Typed representation of the `BiometricCredentialList` API schema.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct BiometricCredentialList {
+    /// Required array value serialized in the `data` wire field.
+    pub data: Vec<BiometricCredential>,
+    /// Total number of biometric credentials
+    pub total_count: i64,
+}
+
+impl BiometricCredentialList {
+    pub fn new(data: Vec<BiometricCredential>, total_count: i64) -> Self {
+        Self { data, total_count }
+    }
+}
+
 /// String representing the object's type. Objects of the same type share the same value.
 #[derive(Debug, Clone, PartialEq, Default)]
 pub enum EnterpriseAccountObjectEnum {
@@ -444,47 +459,4 @@ impl EnterpriseAccount {
             last_authenticated_at: None,
         }
     }
-}
-
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-#[serde(untagged)]
-pub enum EnterpriseAccountConnection {
-    Value(serde_json::Value),
-}
-
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-#[serde(untagged)]
-pub enum EnterpriseAccountVerification {
-    VerificationTicket(Box<VerificationTicket>),
-    VerificationSaml(Box<VerificationSaml>),
-    VerificationOauth(Box<VerificationOauth>),
-    /// A member whose `object` names no branch this SDK knows, kept as received.
-    #[serde(deserialize_with = "EnterpriseAccountVerification::unknown_member")]
-    Unknown(serde_json::Value),
-}
-
-impl EnterpriseAccountVerification {
-    fn unknown_member<'de, D: serde::Deserializer<'de>>(
-        deserializer: D,
-    ) -> Result<serde_json::Value, D::Error> {
-        crate::client::unknown_union_member(
-            deserializer,
-            "object",
-            &[
-                "verification_ticket",
-                "verification_saml",
-                "verification_oauth",
-            ],
-        )
-    }
-}
-
-/// String representing the object's type. Objects of the same type share the same value.
-#[derive(Debug, Clone, PartialEq, Default)]
-pub enum ExternalAccountWithVerificationObjectEnum {
-    #[default]
-    ExternalAccount,
-    FacebookAccount,
-    GoogleAccount,
-    Unknown(String),
 }

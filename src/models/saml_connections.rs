@@ -3,10 +3,231 @@
 
 // saml_connections domain models
 
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-#[serde(untagged)]
-pub enum SAMLConnection {
-    Value(serde_json::Value),
+/// Required enumerated value serialized in the `object` wire field.
+#[derive(Debug, Clone, PartialEq, Default)]
+pub enum SAMLConnectionObjectEnum {
+    #[default]
+    SamlConnection,
+    Unknown(String),
+}
+
+impl SAMLConnectionObjectEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            Self::SamlConnection => "saml_connection",
+            Self::Unknown(value) => value.as_str(),
+        }
+    }
+}
+
+impl serde::Serialize for SAMLConnectionObjectEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.as_str())
+    }
+}
+
+impl<'de> serde::Deserialize<'de> for SAMLConnectionObjectEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = <String as serde::Deserialize>::deserialize(deserializer)?;
+        Ok(match value.as_str() {
+            "saml_connection" => Self::SamlConnection,
+            _ => Self::Unknown(value),
+        })
+    }
+}
+
+impl std::fmt::Display for SAMLConnectionObjectEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+/// Required object value serialized in the `idp_certificates[]` wire field.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct SAMLConnectionIdpCertificatesItem {
+    /// The X.509 certificate, base64 DER without PEM armor
+    pub certificate: String,
+    /// Unix timestamp (milliseconds) of the X.509 NotBefore
+    #[serde(deserialize_with = "Option::deserialize")]
+    pub issued_at: Option<i64>,
+    /// Unix timestamp (milliseconds) of the X.509 NotAfter
+    #[serde(deserialize_with = "Option::deserialize")]
+    pub expires_at: Option<i64>,
+}
+
+impl SAMLConnectionIdpCertificatesItem {
+    pub fn new(certificate: String, issued_at: Option<i64>, expires_at: Option<i64>) -> Self {
+        Self {
+            certificate,
+            issued_at,
+            expires_at,
+        }
+    }
+}
+
+/// Typed representation of the `SAMLConnection` API schema.
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct SAMLConnection {
+    /// Required enumerated value serialized in the `object` wire field.
+    pub object: SAMLConnectionObjectEnum,
+    /// Required `string` value serialized in the `id` wire field.
+    pub id: String,
+    /// Required `string` value serialized in the `name` wire field.
+    pub name: String,
+    /// Optional `string` value serialized in the `domain` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain: Option<String>,
+    /// Optional array value serialized in the `domains` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domains: Option<Vec<String>>,
+    /// Required `string` value serialized in the `idp_entity_id` wire field.
+    #[serde(deserialize_with = "Option::deserialize")]
+    pub idp_entity_id: Option<String>,
+    /// Required `string` value serialized in the `idp_sso_url` wire field.
+    #[serde(deserialize_with = "Option::deserialize")]
+    pub idp_sso_url: Option<String>,
+    /// Required `string` value serialized in the `idp_certificate` wire field.
+    #[serde(deserialize_with = "Option::deserialize")]
+    pub idp_certificate: Option<String>,
+    /// Unix timestamp (milliseconds) of the start of the IdP certificate validity window (X.509 NotBefore). Null when no certificate is configured.
+    #[serde(deserialize_with = "Option::deserialize")]
+    pub idp_certificate_issued_at: Option<i64>,
+    /// Unix timestamp (milliseconds) of the end of the IdP certificate validity window (X.509 NotAfter). Null when no certificate is configured.
+    #[serde(deserialize_with = "Option::deserialize")]
+    pub idp_certificate_expires_at: Option<i64>,
+    /// Every IdP signing certificate the connection trusts, primary first. A SAML response verifies against any of them.
+    pub idp_certificates: Vec<SAMLConnectionIdpCertificatesItem>,
+    /// Optional `string` value serialized in the `idp_metadata_url` wire field.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        with = "crate::client::double_option"
+    )]
+    pub idp_metadata_url: Option<Option<String>>,
+    /// Optional `string` value serialized in the `idp_metadata` wire field.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        with = "crate::client::double_option"
+    )]
+    pub idp_metadata: Option<Option<String>>,
+    /// Required `string` value serialized in the `acs_url` wire field.
+    pub acs_url: String,
+    /// Required `string` value serialized in the `sp_entity_id` wire field.
+    pub sp_entity_id: String,
+    /// Required `string` value serialized in the `sp_metadata_url` wire field.
+    pub sp_metadata_url: String,
+    /// Optional `string` value serialized in the `organization_id` wire field.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        with = "crate::client::double_option"
+    )]
+    pub organization_id: Option<Option<String>>,
+    /// Optional object value serialized in the `attribute_mapping` wire field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attribute_mapping: Option<SAMLConnectionAttributeMapping>,
+    /// Required `boolean` value serialized in the `active` wire field.
+    pub active: bool,
+    /// Required `string` value serialized in the `provider` wire field.
+    pub provider: String,
+    /// Required `integer` value serialized in the `user_count` wire field.
+    pub user_count: i64,
+    /// Required `boolean` value serialized in the `sync_user_attributes` wire field.
+    pub sync_user_attributes: bool,
+    /// Required `boolean` value serialized in the `allow_subdomains` wire field.
+    pub allow_subdomains: bool,
+    /// Required `boolean` value serialized in the `allow_idp_initiated` wire field.
+    pub allow_idp_initiated: bool,
+    /// Required `boolean` value serialized in the `disable_additional_identifications` wire field.
+    pub disable_additional_identifications: bool,
+    /// Required `boolean` value serialized in the `allow_organization_account_linking` wire field.
+    pub allow_organization_account_linking: bool,
+    /// Enable or deactivate ForceAuthn
+    pub force_authn: bool,
+    /// Configuration for the login_hint sent to the IdP on SSO sign-in
+    pub login_hint: SAMLConnectionLoginHint,
+    /// Optional `string` value serialized in the `enterprise_connection_id` wire field.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        with = "crate::client::double_option"
+    )]
+    pub enterprise_connection_id: Option<Option<String>>,
+    /// Unix timestamp of creation.
+    pub created_at: i64,
+    /// Unix timestamp of last update.
+    pub updated_at: i64,
+}
+
+impl SAMLConnection {
+    #[allow(clippy::too_many_arguments)]
+    pub fn new(
+        object: SAMLConnectionObjectEnum,
+        id: String,
+        name: String,
+        idp_entity_id: Option<String>,
+        idp_sso_url: Option<String>,
+        idp_certificate: Option<String>,
+        idp_certificate_issued_at: Option<i64>,
+        idp_certificate_expires_at: Option<i64>,
+        idp_certificates: Vec<SAMLConnectionIdpCertificatesItem>,
+        acs_url: String,
+        sp_entity_id: String,
+        sp_metadata_url: String,
+        active: bool,
+        provider: String,
+        user_count: i64,
+        sync_user_attributes: bool,
+        allow_subdomains: bool,
+        allow_idp_initiated: bool,
+        disable_additional_identifications: bool,
+        allow_organization_account_linking: bool,
+        force_authn: bool,
+        login_hint: SAMLConnectionLoginHint,
+        created_at: i64,
+        updated_at: i64,
+    ) -> Self {
+        Self {
+            object,
+            id,
+            name,
+            domain: None,
+            domains: None,
+            idp_entity_id,
+            idp_sso_url,
+            idp_certificate,
+            idp_certificate_issued_at,
+            idp_certificate_expires_at,
+            idp_certificates,
+            idp_metadata_url: None,
+            idp_metadata: None,
+            acs_url,
+            sp_entity_id,
+            sp_metadata_url,
+            organization_id: None,
+            attribute_mapping: None,
+            active,
+            provider,
+            user_count,
+            sync_user_attributes,
+            allow_subdomains,
+            allow_idp_initiated,
+            disable_additional_identifications,
+            allow_organization_account_linking,
+            force_authn,
+            login_hint,
+            enterprise_connection_id: None,
+            created_at,
+            updated_at,
+        }
+    }
 }
 
 /// Typed representation of the `SAMLConnectionAttributeMapping` API schema.

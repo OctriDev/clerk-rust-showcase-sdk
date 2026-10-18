@@ -3,6 +3,71 @@
 
 // jwks domain models (part 2)
 
+impl<'de> serde::Deserialize<'de> for JWKSKeysItem {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let value = <serde_json::Value as serde::Deserialize>::deserialize(deserializer)?;
+        let mut lossy = None;
+        if let Ok(branch) = serde_json::from_value::<Box<JWKSEd25519PublicKey>>(value.clone()) {
+            let candidate = Self::JWKSEd25519PublicKey(branch);
+            if crate::client::keeps_every_key(&value, &candidate) {
+                return Ok(candidate);
+            }
+            lossy.get_or_insert(candidate);
+        }
+        if let Ok(branch) = serde_json::from_value::<Box<JWKSEcdsaPublicKey>>(value.clone()) {
+            let candidate = Self::JWKSEcdsaPublicKey(branch);
+            if crate::client::keeps_every_key(&value, &candidate) {
+                return Ok(candidate);
+            }
+            lossy.get_or_insert(candidate);
+        }
+        if let Ok(branch) = serde_json::from_value::<Box<JWKSRsaPublicKey>>(value.clone()) {
+            let candidate = Self::JWKSRsaPublicKey(branch);
+            if crate::client::keeps_every_key(&value, &candidate) {
+                return Ok(candidate);
+            }
+            lossy.get_or_insert(candidate);
+        }
+        if let Ok(branch) = serde_json::from_value::<Box<JWKSEd25519PrivateKey>>(value.clone()) {
+            let candidate = Self::JWKSEd25519PrivateKey(branch);
+            if crate::client::keeps_every_key(&value, &candidate) {
+                return Ok(candidate);
+            }
+            lossy.get_or_insert(candidate);
+        }
+        if let Ok(branch) = serde_json::from_value::<Box<JWKSEcdsaPrivateKey>>(value.clone()) {
+            let candidate = Self::JWKSEcdsaPrivateKey(branch);
+            if crate::client::keeps_every_key(&value, &candidate) {
+                return Ok(candidate);
+            }
+            lossy.get_or_insert(candidate);
+        }
+        if let Ok(branch) = serde_json::from_value::<Box<JWKSRsaPrivateKey>>(value.clone()) {
+            let candidate = Self::JWKSRsaPrivateKey(branch);
+            if crate::client::keeps_every_key(&value, &candidate) {
+                return Ok(candidate);
+            }
+            lossy.get_or_insert(candidate);
+        }
+        if let Ok(branch) = serde_json::from_value::<Box<JWKSSymmetricKey>>(value.clone()) {
+            let candidate = Self::JWKSSymmetricKey(branch);
+            if crate::client::keeps_every_key(&value, &candidate) {
+                return Ok(candidate);
+            }
+            lossy.get_or_insert(candidate);
+        }
+        lossy.ok_or_else(|| serde::de::Error::custom("no JWKSKeysItem branch accepts this payload"))
+    }
+}
+
+/// Required enumerated value serialized in the `kty` wire field.
+#[derive(Debug, Clone, PartialEq, Default)]
+pub enum JWKSRsaPrivateKeyKtyEnum {
+    #[default]
+    Rsa,
+    Unknown(String),
+}
+
 impl JWKSRsaPrivateKeyKtyEnum {
     pub fn as_str(&self) -> &str {
         match self {

@@ -78,10 +78,10 @@ impl CommerceCreditLedgerResponse {
 /// Typed representation of the `CommerceCreditsResponse` API schema.
 #[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct CommerceCreditsResponse {
-    /// Required API value serialized in the `proration` wire field.
+    /// Required object value serialized in the `proration` wire field.
     #[serde(deserialize_with = "Option::deserialize")]
     pub proration: Option<CommerceProrationCreditDetailResponse>,
-    /// Required API value serialized in the `payer` wire field.
+    /// Required object value serialized in the `payer` wire field.
     #[serde(deserialize_with = "Option::deserialize")]
     pub payer: Option<CommercePayerCreditResponse>,
     /// Required object value serialized in the `total` wire field.
@@ -105,7 +105,7 @@ impl CommerceCreditsResponse {
 /// Typed representation of the `CommerceDiscountsResponse` API schema.
 #[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct CommerceDiscountsResponse {
-    /// Required API value serialized in the `proration` wire field.
+    /// Required object value serialized in the `proration` wire field.
     #[serde(deserialize_with = "Option::deserialize")]
     pub proration: Option<CommerceProrationDiscountResponse>,
     /// Required object value serialized in the `total` wire field.
