@@ -502,7 +502,7 @@ fn attempt_email_address_verification_attempt_email_address_verification_reaches
         &config,
         decode(fixture(r#""email_address-1""#)),
         decode(fixture(r#""verification-1""#)),
-        decode(fixture(r#""code""#)),
+        decode(fixture(r#""user@example.com""#)),
         None,
     )
     .expect("attempt_email_address_verification request failed");
@@ -532,7 +532,7 @@ fn attempt_email_address_verification_attempt_email_address_verification_400_dec
         &config,
         decode(fixture(r#""email_address-1""#)),
         decode(fixture(r#""verification-1""#)),
-        decode(fixture(r#""code""#)),
+        decode(fixture(r#""user@example.com""#)),
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -892,7 +892,9 @@ fn create_agent_task_create_agent_task_reaches_mock_and_decodes_response() {
     let actual = agent_tasks::create_agent_task(
         &config,
         agent_tasks::CreateAgentTaskParams {
-            on_behalf_of: decode(fixture(r#"{"user_id":"user-1","identifier":"identifier"}"#)),
+            on_behalf_of: decode(fixture(
+                r#"{"user_id":"user-1","identifier":"user@example.com"}"#,
+            )),
             permissions: decode(fixture(r#""*""#)),
             agent_name: decode(fixture(r#""Example Name""#)),
             task_description: decode(fixture(r#""example text""#)),
@@ -926,7 +928,9 @@ fn create_agent_task_create_agent_task_400_decodes_declared_error() {
     let result = agent_tasks::create_agent_task(
         &config,
         agent_tasks::CreateAgentTaskParams {
-            on_behalf_of: decode(fixture(r#"{"user_id":"user-1","identifier":"identifier"}"#)),
+            on_behalf_of: decode(fixture(
+                r#"{"user_id":"user-1","identifier":"user@example.com"}"#,
+            )),
             permissions: decode(fixture(r#""*""#)),
             agent_name: decode(fixture(r#""Example Name""#)),
             task_description: decode(fixture(r#""example text""#)),
@@ -957,14 +961,14 @@ fn create_allowlist_identifier_create_allowlist_identifier_reaches_mock_and_deco
     let _ = &config;
     let actual = allow_list_block_list::create_allowlist_identifier(
         &config,
-        decode(fixture(r#""identifier""#)),
+        decode(fixture(r#""user@example.com""#)),
         Some(decode(fixture(r#"false"#))),
         None,
     )
     .expect("create_allowlist_identifier request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
-        r#"{"object":"allowlist_identifier","id":"id-1","invitation_id":"invitation-1","identifier":"identifier","identifier_type":"email_address","instance_id":"instance-1","created_at":1,"updated_at":1}"#,
+        r#"{"object":"allowlist_identifier","id":"id-1","invitation_id":"invitation-1","identifier":"user@example.com","identifier_type":"email_address","instance_id":"instance-1","created_at":1,"updated_at":1}"#,
     );
     assert!(
         representative(&actual, &expected),
@@ -985,7 +989,7 @@ fn create_allowlist_identifier_create_allowlist_identifier_400_decodes_declared_
     };
     let result = allow_list_block_list::create_allowlist_identifier(
         &config,
-        decode(fixture(r#""identifier""#)),
+        decode(fixture(r#""user@example.com""#)),
         Some(decode(fixture(r#"false"#))),
         None,
     );
@@ -1167,13 +1171,13 @@ fn create_blocklist_identifier_create_blocklist_identifier_reaches_mock_and_deco
     let _ = &config;
     let actual = allow_list_block_list::create_blocklist_identifier(
         &config,
-        decode(fixture(r#""identifier""#)),
+        decode(fixture(r#""user@example.com""#)),
         None,
     )
     .expect("create_blocklist_identifier request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
-        r#"{"object":"blocklist_identifier","id":"id-1","identifier":"identifier","identifier_type":"email_address","instance_id":"instance-1","created_at":1,"updated_at":1}"#,
+        r#"{"object":"blocklist_identifier","id":"id-1","identifier":"user@example.com","identifier_type":"email_address","instance_id":"instance-1","created_at":1,"updated_at":1}"#,
     );
     assert!(
         representative(&actual, &expected),
@@ -1194,7 +1198,7 @@ fn create_blocklist_identifier_create_blocklist_identifier_400_decodes_declared_
     };
     let result = allow_list_block_list::create_blocklist_identifier(
         &config,
-        decode(fixture(r#""identifier""#)),
+        decode(fixture(r#""user@example.com""#)),
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -7297,7 +7301,7 @@ fn list_allowlist_identifiers_list_allowlist_identifiers_reaches_mock_and_decode
     .expect("list_allowlist_identifiers request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
-        r#"[{"object":"allowlist_identifier","id":"id-1","invitation_id":"invitation-1","identifier":"identifier","identifier_type":"email_address","instance_id":"instance-1","created_at":1,"updated_at":1}]"#,
+        r#"[{"object":"allowlist_identifier","id":"id-1","invitation_id":"invitation-1","identifier":"user@example.com","identifier_type":"email_address","instance_id":"instance-1","created_at":1,"updated_at":1}]"#,
     );
     assert!(
         representative(&actual, &expected),
@@ -7376,7 +7380,7 @@ fn list_blocklist_identifiers_list_blocklist_identifiers_reaches_mock_and_decode
         .expect("list_blocklist_identifiers request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
-        r#"{"data":[{"object":"blocklist_identifier","id":"id-1","identifier":"identifier","identifier_type":"email_address","instance_id":"instance-1","created_at":1,"updated_at":1}],"total_count":100}"#,
+        r#"{"data":[{"object":"blocklist_identifier","id":"id-1","identifier":"user@example.com","identifier_type":"email_address","instance_id":"instance-1","created_at":1,"updated_at":1}],"total_count":100}"#,
     );
     assert!(
         representative(&actual, &expected),
