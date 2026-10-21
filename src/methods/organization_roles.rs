@@ -7,6 +7,14 @@ use crate::errors::{SdkError, SdkNetworkError};
 use crate::types::{DeletedObject, Role, Roles};
 use crate::validation::{validate_range, RangeOpts};
 
+#[derive(Debug, Clone, Default)]
+pub struct ListOrganizationRolesParams {
+    pub query: Option<String>,
+    pub order_by: Option<String>,
+    pub limit: Option<i64>,
+    pub offset: Option<i64>,
+}
+
 /// This request returns the list of organization roles for the instance. Results can be paginated using the optional `limit` and `offset` query parameters. The organization roles are ordered by descending creation date. Most recent roles will be returned first.
 ///
 /// # Arguments
@@ -27,12 +35,15 @@ use crate::validation::{validate_range, RangeOpts};
 ///   integer greater or equal to zero. To be used in conjunction with `limit`.
 pub fn list_organization_roles(
     config: &ClientConfig,
-    query: Option<String>,
-    order_by: Option<String>,
-    limit: Option<i64>,
-    offset: Option<i64>,
+    params: ListOrganizationRolesParams,
     options: Option<&RequestOptions>,
 ) -> Result<Roles, SdkError> {
+    let ListOrganizationRolesParams {
+        query,
+        order_by,
+        limit,
+        offset,
+    } = params;
     if let Some(ref limit_v) = limit {
         validate_range(
             "limit",
@@ -199,6 +210,11 @@ pub fn create_organization_role(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct GetOrganizationRoleParams {
+    pub organization_role_id: String,
+}
+
 /// Use this request to retrieve an existing organization role by its ID.
 ///
 /// # Arguments
@@ -206,9 +222,12 @@ pub fn create_organization_role(
 /// * `organization_role_id` - The ID of the organization role
 pub fn get_organization_role(
     config: &ClientConfig,
-    organization_role_id: String,
+    params: GetOrganizationRoleParams,
     options: Option<&RequestOptions>,
 ) -> Result<Role, SdkError> {
+    let GetOrganizationRoleParams {
+        organization_role_id,
+    } = params;
     Ok(sdk_request::<Role>(
         "GET",
         &format!(
@@ -335,6 +354,11 @@ pub fn update_organization_role(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct DeleteOrganizationRoleParams {
+    pub organization_role_id: String,
+}
+
 /// Deletes the organization role. The role cannot be deleted if it is currently used as the default creator role, domain default role, assigned to any members, or exists in any invitations.
 ///
 /// # Arguments
@@ -342,9 +366,12 @@ pub fn update_organization_role(
 /// * `organization_role_id` - The ID of the organization role to delete
 pub fn delete_organization_role(
     config: &ClientConfig,
-    organization_role_id: String,
+    params: DeleteOrganizationRoleParams,
     options: Option<&RequestOptions>,
 ) -> Result<DeletedObject, SdkError> {
+    let DeleteOrganizationRoleParams {
+        organization_role_id,
+    } = params;
     Ok(sdk_request::<DeletedObject>(
         "DELETE",
         &format!(
@@ -368,6 +395,12 @@ pub fn delete_organization_role(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct AssignPermissionToOrganizationRoleParams {
+    pub organization_role_id: String,
+    pub permission_id: String,
+}
+
 /// Assigns a permission to an organization role. Use the `organization_role_id` and `permission_id` path parameters to identify the role and permission to link. The response contains the updated role and its permissions.
 ///
 /// Assigns a permission to an organization role
@@ -378,10 +411,13 @@ pub fn delete_organization_role(
 /// * `permission_id` - The ID of the permission to assign
 pub fn assign_permission_to_organization_role(
     config: &ClientConfig,
-    organization_role_id: String,
-    permission_id: String,
+    params: AssignPermissionToOrganizationRoleParams,
     options: Option<&RequestOptions>,
 ) -> Result<Role, SdkError> {
+    let AssignPermissionToOrganizationRoleParams {
+        organization_role_id,
+        permission_id,
+    } = params;
     Ok(sdk_request::<Role>(
         "POST",
         &format!(
@@ -406,6 +442,12 @@ pub fn assign_permission_to_organization_role(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct RemovePermissionFromOrganizationRoleParams {
+    pub organization_role_id: String,
+    pub permission_id: String,
+}
+
 /// Removes a permission from an organization role. Use the `organization_role_id` and `permission_id` path parameters to identify the role and permission to unlink. The response contains the updated role and its remaining permissions.
 ///
 /// Removes a permission from an organization role
@@ -416,10 +458,13 @@ pub fn assign_permission_to_organization_role(
 /// * `permission_id` - The ID of the permission to remove
 pub fn remove_permission_from_organization_role(
     config: &ClientConfig,
-    organization_role_id: String,
-    permission_id: String,
+    params: RemovePermissionFromOrganizationRoleParams,
     options: Option<&RequestOptions>,
 ) -> Result<Role, SdkError> {
+    let RemovePermissionFromOrganizationRoleParams {
+        organization_role_id,
+        permission_id,
+    } = params;
     Ok(sdk_request::<Role>(
         "DELETE",
         &format!(

@@ -258,15 +258,26 @@ impl RevokeAdminPortalLinkTokenResponse {
     }
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct CreateAdminPortalLinkTokenParams {
+    pub organization_id: Option<String>,
+    pub it_contact_id: Option<String>,
+    pub scopes: Option<Vec<String>>,
+    pub seconds_until_expiration: Option<i64>,
+}
+
 /// Creates a single-use admin portal link token, optionally scoped to an organization and IT contact. Supply `organization_id`, `it_contact_id`, `scopes`, and `seconds_until_expiration` as needed; the expiration defaults to 3600 seconds. Treat the returned token as a secret because it is URL-borne.
 pub fn create_admin_portal_link_token(
     config: &ClientConfig,
-    organization_id: Option<String>,
-    it_contact_id: Option<String>,
-    scopes: Option<Vec<String>>,
-    seconds_until_expiration: Option<i64>,
+    params: CreateAdminPortalLinkTokenParams,
     options: Option<&RequestOptions>,
 ) -> Result<CreateAdminPortalLinkTokenResponse, SdkError> {
+    let CreateAdminPortalLinkTokenParams {
+        organization_id,
+        it_contact_id,
+        scopes,
+        seconds_until_expiration,
+    } = params;
     if let Some(ref organization_id_v) = organization_id {
         validate_pattern("organization_id", organization_id_v, "^org_\\w{27}$")?;
     }
@@ -354,13 +365,22 @@ pub fn create_admin_portal_link_token(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct RevokeAdminPortalLinkTokenParams {
+    pub admin_portal_link_token_id: String,
+    pub revocation_reason: Option<Option<String>>,
+}
+
 /// Revokes an admin portal link token identified by its token ID. You can include `revocation_reason` to record why the token was revoked. The response contains the token's updated revocation state.
 pub fn revoke_admin_portal_link_token(
     config: &ClientConfig,
-    admin_portal_link_token_id: String,
-    revocation_reason: Option<Option<String>>,
+    params: RevokeAdminPortalLinkTokenParams,
     options: Option<&RequestOptions>,
 ) -> Result<RevokeAdminPortalLinkTokenResponse, SdkError> {
+    let RevokeAdminPortalLinkTokenParams {
+        admin_portal_link_token_id,
+        revocation_reason,
+    } = params;
     validate_pattern(
         "adminPortalLinkTokenID",
         &admin_portal_link_token_id,

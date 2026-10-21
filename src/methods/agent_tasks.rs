@@ -198,6 +198,11 @@ pub fn create_agent_task(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct RevokeAgentTaskParams {
+    pub agent_task_id: String,
+}
+
 /// Revokes a pending agent task. Use `agent_task_id` to identify the task whose pending status you want to revoke.
 ///
 /// Revokes a pending agent task.
@@ -207,9 +212,10 @@ pub fn create_agent_task(
 /// * `agent_task_id` - The ID of the agent task to be revoked.
 pub fn revoke_agent_task(
     config: &ClientConfig,
-    agent_task_id: String,
+    params: RevokeAgentTaskParams,
     options: Option<&RequestOptions>,
 ) -> Result<AgentTask, SdkError> {
+    let RevokeAgentTaskParams { agent_task_id } = params;
     Ok(sdk_request::<AgentTask>(
         "POST",
         &format!(

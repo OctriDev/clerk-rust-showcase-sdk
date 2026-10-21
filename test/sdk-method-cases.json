@@ -9520,6 +9520,78 @@
       }
     },
     {
+      "id": "deleteUserPasskey:delete_user_passkey",
+      "operationId": "deleteUserPasskey",
+      "methodName": "delete_user_passkey",
+      "namespace": [
+        "users"
+      ],
+      "mode": "normal",
+      "owner": null,
+      "arguments": {
+        "user_id": "user-1",
+        "passkey_identification_id": "passkey_identification-1"
+      },
+      "wireNames": {
+        "user_id": "user_id",
+        "passkey_identification_id": "passkey_identification_id"
+      },
+      "argumentOrder": [
+        "user_id",
+        "passkey_identification_id"
+      ],
+      "response": {
+        "kind": "json",
+        "expected": {
+          "object": "object",
+          "id": "id-1",
+          "slug": "slug",
+          "deleted": false,
+          "external_id": "external-1"
+        },
+        "byteLength": 0
+      }
+    },
+    {
+      "id": "deleteUserPasskey:delete_user_passkey:403",
+      "operationId": "deleteUserPasskey",
+      "methodName": "delete_user_passkey",
+      "namespace": [
+        "users"
+      ],
+      "mode": "normal",
+      "owner": null,
+      "arguments": {
+        "user_id": "user-1",
+        "passkey_identification_id": "passkey_identification-1"
+      },
+      "wireNames": {
+        "user_id": "user_id",
+        "passkey_identification_id": "passkey_identification_id"
+      },
+      "argumentOrder": [
+        "user_id",
+        "passkey_identification_id"
+      ],
+      "response": {
+        "kind": "error",
+        "status": 403,
+        "expected": {
+          "errors": [
+            {
+              "message": "example text",
+              "long_message": "example text",
+              "code": "code",
+              "meta": {}
+            }
+          ],
+          "meta": {},
+          "clerk_trace_id": "clerk_trace-1"
+        },
+        "byteLength": 0
+      }
+    },
+    {
       "id": "DeleteUserProfileImage:delete_user_profile_image",
       "operationId": "DeleteUserProfileImage",
       "methodName": "delete_user_profile_image",
@@ -9916,78 +9988,6 @@
       "response": {
         "kind": "error",
         "status": 404,
-        "expected": {
-          "errors": [
-            {
-              "message": "example text",
-              "long_message": "example text",
-              "code": "code",
-              "meta": {}
-            }
-          ],
-          "meta": {},
-          "clerk_trace_id": "clerk_trace-1"
-        },
-        "byteLength": 0
-      }
-    },
-    {
-      "id": "deleteUsersPasskey:delete_users_passkey",
-      "operationId": "deleteUsersPasskey",
-      "methodName": "delete_users_passkey",
-      "namespace": [
-        "users"
-      ],
-      "mode": "normal",
-      "owner": null,
-      "arguments": {
-        "user_id": "user-1",
-        "passkey_identification_id": "passkey_identification-1"
-      },
-      "wireNames": {
-        "user_id": "user_id",
-        "passkey_identification_id": "passkey_identification_id"
-      },
-      "argumentOrder": [
-        "user_id",
-        "passkey_identification_id"
-      ],
-      "response": {
-        "kind": "json",
-        "expected": {
-          "object": "object",
-          "id": "id-1",
-          "slug": "slug",
-          "deleted": false,
-          "external_id": "external-1"
-        },
-        "byteLength": 0
-      }
-    },
-    {
-      "id": "deleteUsersPasskey:delete_users_passkey:403",
-      "operationId": "deleteUsersPasskey",
-      "methodName": "delete_users_passkey",
-      "namespace": [
-        "users"
-      ],
-      "mode": "normal",
-      "owner": null,
-      "arguments": {
-        "user_id": "user-1",
-        "passkey_identification_id": "passkey_identification-1"
-      },
-      "wireNames": {
-        "user_id": "user_id",
-        "passkey_identification_id": "passkey_identification_id"
-      },
-      "argumentOrder": [
-        "user_id",
-        "passkey_identification_id"
-      ],
-      "response": {
-        "kind": "error",
-        "status": 403,
         "expected": {
           "errors": [
             {

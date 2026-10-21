@@ -68,32 +68,30 @@ impl ClientsNamespace {
     /// This operation is deprecated and may be removed in a future release.
     pub fn list(
         &self,
-        paginated: Option<bool>,
-        limit: Option<i64>,
-        offset: Option<i64>,
+        params: crate::methods::clients::ListClientsParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Vec<Client>, crate::errors::SdkError> {
-        crate::methods::clients::list_clients(&self.config, paginated, limit, offset, options)
+        crate::methods::clients::list_clients(&self.config, params, options)
     }
     /// Verifies a client by validating the JWT supplied in the request body. Send the token for the active client to retrieve the associated client and session details.
     ///
     /// Verifies the client in the provided token
     pub fn verify(
         &self,
-        token: String,
+        params: crate::methods::clients::VerifyClientParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Client, crate::errors::SdkError> {
-        crate::methods::clients::verify_client(&self.config, token, options)
+        crate::methods::clients::verify_client(&self.config, params, options)
     }
     /// Retrieves the details of a client and its associated session information. Use `client_id` to look up the client whose sessions and authentication state you need to inspect.
     ///
     /// Returns the details of a client.
     pub fn get(
         &self,
-        client_id: String,
+        params: crate::methods::clients::GetClientParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Client, crate::errors::SdkError> {
-        crate::methods::clients::get_client(&self.config, client_id, options)
+        crate::methods::clients::get_client(&self.config, params, options)
     }
 }
 
@@ -124,92 +122,62 @@ impl EmailAddressesNamespace {
     /// Returns the details of an email address.
     pub fn get_email_address(
         &self,
-        email_address_id: String,
+        params: crate::methods::email_addresses::GetEmailAddressParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<EmailAddress, crate::errors::SdkError> {
-        crate::methods::email_addresses::get_email_address(&self.config, email_address_id, options)
+        crate::methods::email_addresses::get_email_address(&self.config, params, options)
     }
     /// Deletes an email address by its identifier. Use `email_address_id` to select the address to remove. The response confirms the deletion and identifies the deleted object.
     ///
     /// Delete the email address with the given ID
     pub fn delete_email_address(
         &self,
-        email_address_id: String,
+        params: crate::methods::email_addresses::DeleteEmailAddressParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
-        crate::methods::email_addresses::delete_email_address(
-            &self.config,
-            email_address_id,
-            options,
-        )
+        crate::methods::email_addresses::delete_email_address(&self.config, params, options)
     }
     /// Updates an existing email address's verification or primary status, or its notification behavior. Supply any of `verified`, `primary`, or `notify_primary_email_address_changed` to change that setting. The notification option applies when the update makes this address the user's new primary address.
     ///
     /// Updates an email address.
     pub fn update_email_address(
         &self,
-        email_address_id: String,
-        verified: Option<Option<bool>>,
-        primary: Option<Option<bool>>,
-        notify_primary_email_address_changed: Option<Option<bool>>,
+        params: crate::methods::email_addresses::UpdateEmailAddressParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<EmailAddress, crate::errors::SdkError> {
-        crate::methods::email_addresses::update_email_address(
-            &self.config,
-            email_address_id,
-            verified,
-            primary,
-            notify_primary_email_address_changed,
-            options,
-        )
+        crate::methods::email_addresses::update_email_address(&self.config, params, options)
     }
     /// Sends a one-time code to the given email address so that a backend can verify the user controls it (for example, in a custom, backend-driven sign-in flow). The code is tracked on its own verification; confirm it with attempt_verification.
     pub fn prepare_email_address_verification(
         &self,
-        email_address_id: String,
+        params: crate::methods::email_addresses::PrepareEmailAddressVerificationParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<VerificationResponse, crate::errors::SdkError> {
         crate::methods::email_addresses::prepare_email_address_verification(
             &self.config,
-            email_address_id,
+            params,
             options,
         )
     }
     /// Checks a one-time code against the verification identified by verification_id, and returns the verification with its updated status (`verified`, `unverified`, `expired`, or `failed`) and attempt count, so a backend driving its own frontend can react on every attempt — an incorrect or expired code is reported through the status, not as an error. Resubmitting a verification whose code was already accepted is rejected with a `verification_already_verified` error. If the code is correct and the email address is not already verified, it is also marked as verified as a side effect (just as it would be in a frontend verification flow); an already verified email address is left unchanged. It never creates a session; to sign the user in afterwards, mint a sign-in token.
     pub fn attempt_email_address_verification(
         &self,
-        email_address_id: String,
-        verification_id: String,
-        code: String,
+        params: crate::methods::email_addresses::AttemptEmailAddressVerificationParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<VerificationResponse, crate::errors::SdkError> {
         crate::methods::email_addresses::attempt_email_address_verification(
             &self.config,
-            email_address_id,
-            verification_id,
-            code,
+            params,
             options,
         )
     }
     /// Replaces all of the user's email addresses with a single primary email address. By default the new email address is created verified, with the admin verification strategy. When `identification_status` is `reserved` it is created reserved instead: unverified but usable for sign-in and locked so no other user can claim it. When it is `unverified` the address is neither usable for sign-in nor locked. Any existing email addresses are deleted. If an existing email address is linked to a connected account, the request is rejected; remove the connected account first. \*\*Warning:\*\* `identification_status: unverified` can lock the user out of their account. An unverified email address cannot be used to sign in, so if the user has no other verified or reserved identifier, deleting their existing email addresses leaves them unable to authenticate — and unable to verify the new address, since that requires signing in. Recovery then requires another admin API call.
     pub fn replace_user_email_address(
         &self,
-        user_id: String,
-        email_address: String,
-        identification_status: Option<
-            crate::methods::email_addresses::ReplaceUserEmailAddressIdentificationStatusEnum,
-        >,
-        notify_primary_email_address_changed: Option<Option<bool>>,
+        params: crate::methods::email_addresses::ReplaceUserEmailAddressParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<EmailAddress, crate::errors::SdkError> {
-        crate::methods::email_addresses::replace_user_email_address(
-            &self.config,
-            user_id,
-            email_address,
-            identification_status,
-            notify_primary_email_address_changed,
-            options,
-        )
+        crate::methods::email_addresses::replace_user_email_address(&self.config, params, options)
     }
 }
 
@@ -240,86 +208,62 @@ impl PhoneNumbersNamespace {
     /// Returns the details of a phone number
     pub fn get(
         &self,
-        phone_number_id: String,
+        params: crate::methods::phone_numbers::GetPhoneNumberParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<PhoneNumber, crate::errors::SdkError> {
-        crate::methods::phone_numbers::get_phone_number(&self.config, phone_number_id, options)
+        crate::methods::phone_numbers::get_phone_number(&self.config, params, options)
     }
     /// Deletes a phone number by its identifier. Use this operation to remove a phone number you no longer need; the response confirms whether it was deleted.
     ///
     /// Delete the phone number with the given ID
     pub fn delete(
         &self,
-        phone_number_id: String,
+        params: crate::methods::phone_numbers::DeletePhoneNumberParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
-        crate::methods::phone_numbers::delete_phone_number(&self.config, phone_number_id, options)
+        crate::methods::phone_numbers::delete_phone_number(&self.config, params, options)
     }
     /// Updates verification, primary-phone, or multi-factor authentication reservation settings for a phone number. Supply only the fields you want to change; reserving the number for multi-factor authentication requires it to be verified.
     ///
     /// Updates a phone number
     pub fn update(
         &self,
-        phone_number_id: String,
-        verified: Option<Option<bool>>,
-        primary: Option<Option<bool>>,
-        reserved_for_second_factor: Option<Option<bool>>,
+        params: crate::methods::phone_numbers::UpdatePhoneNumberParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<PhoneNumber, crate::errors::SdkError> {
-        crate::methods::phone_numbers::update_phone_number(
-            &self.config,
-            phone_number_id,
-            verified,
-            primary,
-            reserved_for_second_factor,
-            options,
-        )
+        crate::methods::phone_numbers::update_phone_number(&self.config, params, options)
     }
     /// Sends a one-time code to the given phone number so that a backend can verify the user controls it (for example, in a custom, backend-driven sign-in flow). The code is tracked on its own verification; confirm it with attempt_verification.
     pub fn prepare_verification(
         &self,
-        phone_number_id: String,
+        params: crate::methods::phone_numbers::PreparePhoneNumberVerificationParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<VerificationResponse, crate::errors::SdkError> {
         crate::methods::phone_numbers::prepare_phone_number_verification(
             &self.config,
-            phone_number_id,
+            params,
             options,
         )
     }
     /// Checks a one-time code against the verification identified by verification_id, and returns the verification with its updated status (`verified`, `unverified`, `expired`, or `failed`) and attempt count, so a backend driving its own frontend can react on every attempt — an incorrect or expired code is reported through the status, not as an error. Resubmitting a verification whose code was already accepted is rejected with a `verification_already_verified` error. If the code for this verification could not be sent (the SMS provider refused or failed the send after prepare_verification had returned), the attempt is rejected with a `verification_code_not_sent` error and no attempt is counted; call prepare_verification again to send a new code. If too many codes have been checked for this phone number recently, the attempt is rejected with a `verification_code_too_many_attempts` error and no attempt is counted; the limit is per phone number, so wait for the `Retry-After` period rather than sending a new code. If the code is correct and the phone number is not already verified, it is also marked as verified as a side effect (just as it would be in a frontend verification flow); an already verified phone number is left unchanged. It never creates a session; to sign the user in afterwards, mint a sign-in token.
     pub fn attempt_verification(
         &self,
-        phone_number_id: String,
-        verification_id: String,
-        code: String,
+        params: crate::methods::phone_numbers::AttemptPhoneNumberVerificationParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<VerificationResponse, crate::errors::SdkError> {
         crate::methods::phone_numbers::attempt_phone_number_verification(
             &self.config,
-            phone_number_id,
-            verification_id,
-            code,
+            params,
             options,
         )
     }
     /// Replaces all of the user's phone numbers with a single primary phone number. By default the new phone number is created verified, with the admin verification strategy. When `identification_status` is `reserved` it is created reserved instead: unverified but usable for sign-in and locked so no other user can claim it. When it is `unverified` the phone number is neither usable for sign-in nor locked. The new phone number is never reserved for second factor. Any existing phone numbers are deleted; replacing a phone number that is reserved for second factor disables the user's MFA. \*\*Warning:\*\* `identification_status: unverified` can lock the user out of their account. An unverified phone number cannot be used to sign in, so if the user has no other verified or reserved identifier, deleting their existing phone numbers leaves them unable to authenticate — and unable to verify the new number, since that requires signing in. Recovery then requires another admin API call.
     pub fn replace(
         &self,
-        user_id: String,
-        phone_number: String,
-        identification_status: Option<
-            crate::methods::phone_numbers::ReplaceUserPhoneNumberIdentificationStatusEnum,
-        >,
+        params: crate::methods::phone_numbers::ReplaceUserPhoneNumberParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<PhoneNumber, crate::errors::SdkError> {
-        crate::methods::phone_numbers::replace_user_phone_number(
-            &self.config,
-            user_id,
-            phone_number,
-            identification_status,
-            options,
-        )
+        crate::methods::phone_numbers::replace_user_phone_number(&self.config, params, options)
     }
 }
 
@@ -346,26 +290,20 @@ impl SessionsNamespace {
     /// Create a new active session for the provided user ID. \*\*This operation is intended only for use in testing, and is not available for production instances.\*\* If you are looking to generate a user session from the backend, we recommend using the [Sign-in Tokens](https://clerk.com/docs/reference/backend-api/tag/Sign-in-Tokens#operation/CreateSignInToken) resource instead.
     pub fn create(
         &self,
-        user_id: String,
-        active_organization_id: Option<String>,
+        params: crate::methods::sessions::CreateSessionParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Session, crate::errors::SdkError> {
-        crate::methods::sessions::create_session(
-            &self.config,
-            user_id,
-            active_organization_id,
-            options,
-        )
+        crate::methods::sessions::create_session(&self.config, params, options)
     }
     /// Retrieves the details and current status of a session identified by its session ID. Use `session_id` to look up the session and inspect its user, client, activity timestamps, expiry, and latest activity when available.
     ///
     /// Retrieve the details of a session
     pub fn get(
         &self,
-        session_id: String,
+        params: crate::methods::sessions::GetSessionParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Session, crate::errors::SdkError> {
-        crate::methods::sessions::get_session(&self.config, session_id, options)
+        crate::methods::sessions::get_session(&self.config, params, options)
     }
     /// Refreshes a session by creating a new session token. A 401 is returned when there are validation errors, which signals the SDKs to fall back to the handshake flow.
     pub fn refresh(
@@ -378,61 +316,41 @@ impl SessionsNamespace {
     /// Retrieve a reverification scoped to a session. A resource server can use this to validate a reverification id it received from its client: confirm it is real, scoped to the expected session, completed, and how fresh each factor is. Single-use / replay detection is the caller's responsibility (the id is stable, so the caller dedups consumed ids).
     pub fn get_reverification(
         &self,
-        session_id: String,
-        reverification_id: String,
+        params: crate::methods::sessions::GetReverificationParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Reverification, crate::errors::SdkError> {
-        crate::methods::sessions::get_reverification(
-            &self.config,
-            session_id,
-            reverification_id,
-            options,
-        )
+        crate::methods::sessions::get_reverification(&self.config, params, options)
     }
     /// Sets the status of a session as "revoked", which is an unauthenticated state. In multi-session mode, a revoked session will still be returned along with its client object, however the user will need to sign in again.
     pub fn revoke(
         &self,
-        session_id: String,
+        params: crate::methods::sessions::RevokeSessionParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Session, crate::errors::SdkError> {
-        crate::methods::sessions::revoke_session(&self.config, session_id, options)
+        crate::methods::sessions::revoke_session(&self.config, params, options)
     }
     /// Creates a session JSON Web Token (JWT) for the specified session. You can optionally set `expires_in_seconds` to override the default token lifetime; the value must be between 30 and 315360000 seconds.
     ///
     /// Creates a session JSON Web Token (JWT) based on a session.
     pub fn create_token(
         &self,
-        session_id: String,
-        expires_in_seconds: Option<Option<i64>>,
+        params: crate::methods::sessions::CreateSessionTokenParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<crate::methods::sessions::CreateSessionTokenResponse, crate::errors::SdkError> {
-        crate::methods::sessions::create_session_token(
-            &self.config,
-            session_id,
-            expires_in_seconds,
-            options,
-        )
+        crate::methods::sessions::create_session_token(&self.config, params, options)
     }
     /// Creates a JSON Web Token (JWT) for the specified session using a JWT template defined for your instance. Use `template_name` to select the template and optionally set `expires_in_seconds` to override the token lifetime, between 30 and 315360000 seconds.
     ///
     /// Creates a JSON Web Token (JWT) based on a session and a JWT Template name defined for your instance
     pub fn create_token_from_template(
         &self,
-        session_id: String,
-        template_name: String,
-        expires_in_seconds: Option<Option<i64>>,
+        params: crate::methods::sessions::CreateSessionTokenFromTemplateParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<
         crate::methods::sessions::CreateSessionTokenFromTemplateResponse,
         crate::errors::SdkError,
     > {
-        crate::methods::sessions::create_session_token_from_template(
-            &self.config,
-            session_id,
-            template_name,
-            expires_in_seconds,
-            options,
-        )
+        crate::methods::sessions::create_session_token_from_template(&self.config, params, options)
     }
 }
 
@@ -455,20 +373,10 @@ impl EmailSmsTemplatesNamespace {
     /// This operation is deprecated and may be removed in a future release.
     pub fn get_template_list(
         &self,
-        template_type: crate::methods::email_sms_templates::GetTemplateListEnum,
-        paginated: Option<bool>,
-        limit: Option<i64>,
-        offset: Option<i64>,
+        params: crate::methods::email_sms_templates::GetTemplateListParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Vec<Template>, crate::errors::SdkError> {
-        crate::methods::email_sms_templates::get_template_list(
-            &self.config,
-            template_type,
-            paginated,
-            limit,
-            offset,
-            options,
-        )
+        crate::methods::email_sms_templates::get_template_list(&self.config, params, options)
     }
     /// Retrieves the details of an email or SMS template by its slug. Use `template_type` to select the template category and `slug` to identify the template. This operation is deprecated.
     ///
@@ -479,16 +387,10 @@ impl EmailSmsTemplatesNamespace {
     /// This operation is deprecated and may be removed in a future release.
     pub fn get_template(
         &self,
-        template_type: crate::methods::email_sms_templates::GetTemplateEnum,
-        slug: String,
+        params: crate::methods::email_sms_templates::GetTemplateParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Template, crate::errors::SdkError> {
-        crate::methods::email_sms_templates::get_template(
-            &self.config,
-            template_type,
-            slug,
-            options,
-        )
+        crate::methods::email_sms_templates::get_template(&self.config, params, options)
     }
     /// Updates the existing template of the given type and slug
     ///
@@ -511,16 +413,10 @@ impl EmailSmsTemplatesNamespace {
     /// This operation is deprecated and may be removed in a future release.
     pub fn revert_template(
         &self,
-        template_type: crate::methods::email_sms_templates::RevertTemplateEnum,
-        slug: String,
+        params: crate::methods::email_sms_templates::RevertTemplateParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Template, crate::errors::SdkError> {
-        crate::methods::email_sms_templates::revert_template(
-            &self.config,
-            template_type,
-            slug,
-            options,
-        )
+        crate::methods::email_sms_templates::revert_template(&self.config, params, options)
     }
     /// Returns a preview of a template using the specified template type, slug, and optional body values. Use the body fields to preview changes; `subject`, `from_email_name`, and `reply_to_email_name` apply only to email templates.
     ///
@@ -543,18 +439,10 @@ impl EmailSmsTemplatesNamespace {
     /// This operation is deprecated and may be removed in a future release.
     pub fn toggle_template_delivery(
         &self,
-        template_type: crate::methods::email_sms_templates::ToggleTemplateDeliveryEnum,
-        slug: String,
-        delivered_by_clerk: Option<bool>,
+        params: crate::methods::email_sms_templates::ToggleTemplateDeliveryParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Template, crate::errors::SdkError> {
-        crate::methods::email_sms_templates::toggle_template_delivery(
-            &self.config,
-            template_type,
-            slug,
-            delivered_by_clerk,
-            options,
-        )
+        crate::methods::email_sms_templates::toggle_template_delivery(&self.config, params, options)
     }
 }
 
@@ -599,10 +487,10 @@ impl UsersNamespace {
     /// Retrieve the details of a user
     pub fn get(
         &self,
-        user_id: String,
+        params: crate::methods::users::GetUserParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<User, crate::errors::SdkError> {
-        crate::methods::users::get_user(&self.config, user_id, options)
+        crate::methods::users::get_user(&self.config, params, options)
     }
     /// Update a user's attributes. You can set the user's primary contact identifiers (email address and phone numbers) by updating the `primary_email_address_id` and `primary_phone_number_id` attributes respectively. Both IDs should correspond to verified identifications that belong to the user. You can remove a user's username by setting the username attribute to null or the blank string "". As of API version 2026-05-12, this endpoint no longer accepts `public_metadata`, `private_metadata`, or `unsafe_metadata`. Use `PATCH /v1/users/{user_id}/metadata` to merge updates into existing metadata, or `PUT /v1/users/{user_id}/metadata` to replace a metadata field entirely.
     pub fn update(
@@ -617,137 +505,116 @@ impl UsersNamespace {
     /// Delete the specified user
     pub fn delete(
         &self,
-        user_id: String,
+        params: crate::methods::users::DeleteUserParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
-        crate::methods::users::delete_user(&self.config, user_id, options)
+        crate::methods::users::delete_user(&self.config, params, options)
     }
     /// Marks the given user as banned, which means that all their sessions are revoked and they are not allowed to sign in again.
     pub fn ban(
         &self,
-        user_id: String,
+        params: crate::methods::users::BanUserParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<User, crate::errors::SdkError> {
-        crate::methods::users::ban_user(&self.config, user_id, options)
+        crate::methods::users::ban_user(&self.config, params, options)
     }
     /// Removes the ban mark from a user account. Use `user_id` to identify the user whose ban you want to remove. A 200 response returns the updated user object.
     ///
     /// Removes the ban mark from the given user.
     pub fn unban(
         &self,
-        user_id: String,
+        params: crate::methods::users::UnbanUserParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<User, crate::errors::SdkError> {
-        crate::methods::users::unban_user(&self.config, user_id, options)
+        crate::methods::users::unban_user(&self.config, params, options)
     }
     /// Marks multiple users as banned, which means that all their sessions are revoked and they are not allowed to sign in again.
     pub fn ban_bulk(
         &self,
-        user_ids: Vec<String>,
+        params: crate::methods::users::BanUsersBulkParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Vec<User>, crate::errors::SdkError> {
-        crate::methods::users::ban_users_bulk(&self.config, user_ids, options)
+        crate::methods::users::ban_users_bulk(&self.config, params, options)
     }
     /// Removes the ban marks from multiple user accounts in one request. Supply `user_ids` with between 1 and 50 user IDs. A 200 response returns the updated user objects.
     ///
     /// Removes the ban mark from multiple users.
     pub fn unban_bulk(
         &self,
-        user_ids: Vec<String>,
+        params: crate::methods::users::UnbanUsersBulkParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Vec<User>, crate::errors::SdkError> {
-        crate::methods::users::unban_users_bulk(&self.config, user_ids, options)
+        crate::methods::users::unban_users_bulk(&self.config, params, options)
     }
     /// Marks the given user as locked, which means they are not allowed to sign in again until the lock expires. Lock duration can be configured in the instance's restrictions settings.
     pub fn lock(
         &self,
-        user_id: String,
+        params: crate::methods::users::LockUserParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<User, crate::errors::SdkError> {
-        crate::methods::users::lock_user(&self.config, user_id, options)
+        crate::methods::users::lock_user(&self.config, params, options)
     }
     /// Removes the lock from a user account. Use `user_id` to identify the user whose lock you want to remove. A 200 response returns the updated user object.
     ///
     /// Removes the lock from the given user.
     pub fn unlock(
         &self,
-        user_id: String,
+        params: crate::methods::users::UnlockUserParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<User, crate::errors::SdkError> {
-        crate::methods::users::unlock_user(&self.config, user_id, options)
+        crate::methods::users::unlock_user(&self.config, params, options)
     }
     /// Sets or replaces a user's profile image. Send the image in the `file` field as multipart form data, and use `user_id` to identify the account to update. A 200 response returns the updated user object.
     ///
     /// Update a user's profile image
     pub fn set_profile_image(
         &self,
-        user_id: String,
-        file: Option<crate::client::UploadFile>,
+        params: crate::methods::users::SetUserProfileImageParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<User, crate::errors::SdkError> {
-        crate::methods::users::set_user_profile_image(&self.config, user_id, file, options)
+        crate::methods::users::set_user_profile_image(&self.config, params, options)
     }
     /// Deletes the profile image associated with a user account. Use `user_id` to identify the account whose image you want to remove. A 200 response returns the updated user object.
     ///
     /// Delete a user's profile image
     pub fn delete_profile_image(
         &self,
-        user_id: String,
+        params: crate::methods::users::DeleteUserProfileImageParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<User, crate::errors::SdkError> {
-        crate::methods::users::delete_user_profile_image(&self.config, user_id, options)
+        crate::methods::users::delete_user_profile_image(&self.config, params, options)
     }
     /// Update a user's metadata attributes by merging existing values with the provided parameters. This endpoint behaves differently than the \*Update a user\* endpoint. Metadata values will not be replaced entirely. Instead, a deep merge will be performed. Deep means that any nested JSON objects will be merged as well. You can remove metadata keys at any level by setting their value to `null`.
     pub fn update_metadata(
         &self,
-        user_id: String,
-        public_metadata: Option<std::collections::HashMap<String, serde_json::Value>>,
-        private_metadata: Option<std::collections::HashMap<String, serde_json::Value>>,
-        unsafe_metadata: Option<std::collections::HashMap<String, serde_json::Value>>,
+        params: crate::methods::users::UpdateUserMetadataParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<User, crate::errors::SdkError> {
-        crate::methods::users::update_user_metadata(
-            &self.config,
-            user_id,
-            public_metadata,
-            private_metadata,
-            unsafe_metadata,
-            options,
-        )
+        crate::methods::users::update_user_metadata(&self.config, params, options)
     }
     /// Replace a user's metadata attributes with the provided values. Unlike `PATCH /v1/users/{user_id}/metadata` (merge semantics), this endpoint replaces the supplied metadata fields entirely — the prior contents of each supplied field are discarded. Fields omitted from the request body are left unchanged. Prefer the `PATCH` endpoint for partial updates. Use `PUT` only when you explicitly intend to overwrite a metadata field wholesale.
     pub fn replace_metadata(
         &self,
-        user_id: String,
-        public_metadata: Option<std::collections::HashMap<String, serde_json::Value>>,
-        private_metadata: Option<std::collections::HashMap<String, serde_json::Value>>,
-        unsafe_metadata: Option<std::collections::HashMap<String, serde_json::Value>>,
+        params: crate::methods::users::ReplaceUserMetadataParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<User, crate::errors::SdkError> {
-        crate::methods::users::replace_user_metadata(
-            &self.config,
-            user_id,
-            public_metadata,
-            private_metadata,
-            unsafe_metadata,
-            options,
-        )
+        crate::methods::users::replace_user_metadata(&self.config, params, options)
     }
     /// Retrieves the billing subscription for the specified user. This includes subscription details, active plans, billing information, and payment status. The subscription contains subscription items which represent the individual plans the user is subscribed to.
     pub fn get_billing_subscription(
         &self,
-        user_id: String,
+        params: crate::methods::users::GetUserBillingSubscriptionParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<CommerceSubscription, crate::errors::SdkError> {
-        crate::methods::users::get_user_billing_subscription(&self.config, user_id, options)
+        crate::methods::users::get_user_billing_subscription(&self.config, params, options)
     }
     /// Retrieves the current credit balance for the specified user. Credits can be applied during checkout to reduce the charge or automatically applied to upcoming recurring charges
     pub fn get_billing_credit_balance(
         &self,
-        user_id: String,
+        params: crate::methods::users::GetUserBillingCreditBalanceParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<CommerceCreditBalanceResponse, crate::errors::SdkError> {
-        crate::methods::users::get_user_billing_credit_balance(&self.config, user_id, options)
+        crate::methods::users::get_user_billing_credit_balance(&self.config, params, options)
     }
     /// Increases or decreases the credit balance for the specified user. Each adjustment is recorded as a ledger entry. The idempotency_key parameter ensures that duplicate requests are safely handled.
     pub fn adjust_billing_credit_balance(
@@ -768,100 +635,68 @@ impl UsersNamespace {
     /// Retrieve a paginated list of the user's organization memberships
     pub fn get_organization_memberships(
         &self,
-        user_id: String,
-        limit: Option<i64>,
-        offset: Option<i64>,
+        params: crate::methods::users::UsersGetOrganizationMembershipsParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<OrganizationMemberships, crate::errors::SdkError> {
-        crate::methods::users::users_get_organization_memberships(
-            &self.config,
-            user_id,
-            limit,
-            offset,
-            options,
-        )
+        crate::methods::users::users_get_organization_memberships(&self.config, params, options)
     }
     /// Retrieve a paginated list of the user's organization invitations
     pub fn get_organization_invitations(
         &self,
-        user_id: String,
-        limit: Option<i64>,
-        offset: Option<i64>,
-        status: Option<crate::methods::users::UsersGetOrganizationInvitationsEnum>,
+        params: crate::methods::users::UsersGetOrganizationInvitationsParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<OrganizationInvitationsWithPublicOrganizationData, crate::errors::SdkError> {
-        crate::methods::users::users_get_organization_invitations(
-            &self.config,
-            user_id,
-            limit,
-            offset,
-            status,
-            options,
-        )
+        crate::methods::users::users_get_organization_invitations(&self.config, params, options)
     }
     /// Removes the password credential from the given user. This is a privileged operation and does not require the user's current password. Password removal is allowed even when the user has no other sign-in method configured. If the user does not have a password, the user is returned unchanged and no password-deletion or user-update event is emitted. By default, existing sessions remain active. Set `sign_out_of_other_sessions` to `true` to revoke sessions active when the request is processed.
     pub fn remove_password(
         &self,
-        user_id: String,
-        sign_out_of_other_sessions: Option<bool>,
+        params: crate::methods::users::RemoveUserPasswordParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<User, crate::errors::SdkError> {
-        crate::methods::users::remove_user_password(
-            &self.config,
-            user_id,
-            sign_out_of_other_sessions,
-            options,
-        )
+        crate::methods::users::remove_user_password(&self.config, params, options)
     }
     /// Check that the user's password matches the supplied input. Useful for custom auth flows and re-verification.
     pub fn verify_password(
         &self,
-        user_id: String,
-        password: String,
+        params: crate::methods::users::VerifyPasswordParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<crate::methods::users::VerifyPasswordResponse, crate::errors::SdkError> {
-        crate::methods::users::verify_password(&self.config, user_id, password, options)
+        crate::methods::users::verify_password(&self.config, params, options)
     }
     /// Verify that the provided TOTP or backup code is valid for the user. Verifying a backup code will result it in being consumed (i.e. it will become invalid). Useful for custom auth flows and re-verification.
     pub fn verify_totp(
         &self,
-        user_id: String,
-        code: String,
+        params: crate::methods::users::VerifyTotpParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<crate::methods::users::VerifyTOTPResponse, crate::errors::SdkError> {
-        crate::methods::users::verify_totp(&self.config, user_id, code, options)
+        crate::methods::users::verify_totp(&self.config, params, options)
     }
     /// Disable all of a user's MFA methods (e.g. OTP sent via SMS, TOTP on their authenticator app) at once.
     pub fn disable_mfa(
         &self,
-        user_id: String,
+        params: crate::methods::users::DisableMfaParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<crate::methods::users::DisableMFAResponse, crate::errors::SdkError> {
-        crate::methods::users::disable_mfa(&self.config, user_id, options)
+        crate::methods::users::disable_mfa(&self.config, params, options)
     }
     /// Deletes all backup codes for a user, disabling them for future use. Supply `user_id` to identify the user whose backup codes you want to disable.
     ///
     /// Disable all of a user's backup codes.
     pub fn delete_backup_code(
         &self,
-        user_id: String,
+        params: crate::methods::users::DeleteBackupCodeParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<crate::methods::users::DeleteBackupCodeResponse, crate::errors::SdkError> {
-        crate::methods::users::delete_backup_code(&self.config, user_id, options)
+        crate::methods::users::delete_backup_code(&self.config, params, options)
     }
     /// Delete the passkey identification for a given user. The user is notified through email or SMS unless the passkey registration was never completed.
     pub fn delete_passkey(
         &self,
-        user_id: String,
-        passkey_identification_id: String,
+        params: crate::methods::users::DeleteUserPasskeyParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
-        crate::methods::users::delete_users_passkey(
-            &self.config,
-            user_id,
-            passkey_identification_id,
-            options,
-        )
+        crate::methods::users::delete_user_passkey(&self.config, params, options)
     }
     /// Returns the active trusted devices enrolled by the user.
     ///
@@ -870,10 +705,10 @@ impl UsersNamespace {
     /// This operation is deprecated and may be removed in a future release.
     pub fn list_trusted_devices(
         &self,
-        user_id: String,
+        params: crate::methods::users::ListUserTrustedDevicesParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<TrustedDeviceList, crate::errors::SdkError> {
-        crate::methods::users::list_user_trusted_devices(&self.config, user_id, options)
+        crate::methods::users::list_user_trusted_devices(&self.config, params, options)
     }
     /// Revokes an active trusted device enrolled by the user.
     ///
@@ -882,102 +717,72 @@ impl UsersNamespace {
     /// This operation is deprecated and may be removed in a future release.
     pub fn revoke_trusted_device(
         &self,
-        user_id: String,
-        trusted_device_id: String,
+        params: crate::methods::users::RevokeUserTrustedDeviceParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<TrustedDevice, crate::errors::SdkError> {
-        crate::methods::users::revoke_user_trusted_device(
-            &self.config,
-            user_id,
-            trusted_device_id,
-            options,
-        )
+        crate::methods::users::revoke_user_trusted_device(&self.config, params, options)
     }
     /// Returns the active biometric credentials enrolled by the user.
     pub fn list_biometric_credentials(
         &self,
-        user_id: String,
+        params: crate::methods::users::ListUserBiometricCredentialsParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<BiometricCredentialList, crate::errors::SdkError> {
-        crate::methods::users::list_user_biometric_credentials(&self.config, user_id, options)
+        crate::methods::users::list_user_biometric_credentials(&self.config, params, options)
     }
     /// Revokes an active biometric credential enrolled by the user.
     pub fn revoke_biometric_credential(
         &self,
-        user_id: String,
-        biometric_credential_id: String,
+        params: crate::methods::users::RevokeUserBiometricCredentialParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<BiometricCredential, crate::errors::SdkError> {
-        crate::methods::users::revoke_user_biometric_credential(
-            &self.config,
-            user_id,
-            biometric_credential_id,
-            options,
-        )
+        crate::methods::users::revoke_user_biometric_credential(&self.config, params, options)
     }
     /// Delete the web3 wallet identification for a given user.
     pub fn delete_web3_wallet(
         &self,
-        user_id: String,
-        web3_wallet_identification_id: String,
+        params: crate::methods::users::DeleteUsersWeb3WalletParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
-        crate::methods::users::delete_users_web3_wallet(
-            &self.config,
-            user_id,
-            web3_wallet_identification_id,
-            options,
-        )
+        crate::methods::users::delete_users_web3_wallet(&self.config, params, options)
     }
     /// Deletes all TOTP credentials associated with a user. Supply the `user_id` of the user whose TOTPs you want to delete; the operation removes all of that user's TOTPs.
     ///
     /// Deletes all of the user's TOTPs.
     pub fn delete_totp(
         &self,
-        user_id: String,
+        params: crate::methods::users::DeleteTotpParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<crate::methods::users::DeleteTOTPResponse, crate::errors::SdkError> {
-        crate::methods::users::delete_totp(&self.config, user_id, options)
+        crate::methods::users::delete_totp(&self.config, params, options)
     }
     /// Deletes an external account associated with a user. Supply the `user_id` and `external_account_id` for the account you want to remove.
     ///
     /// Delete an external account by ID.
     pub fn delete_external_account(
         &self,
-        user_id: String,
-        external_account_id: String,
+        params: crate::methods::users::DeleteExternalAccountParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
-        crate::methods::users::delete_external_account(
-            &self.config,
-            user_id,
-            external_account_id,
-            options,
-        )
+        crate::methods::users::delete_external_account(&self.config, params, options)
     }
     /// Marks a user's password as compromised so the user is prompted to reset it at their next sign-in. Supply the `user_id` of the user whose password you want to flag. You can optionally set `revoke_all_sessions` to revoke the user's sessions as part of the operation.
     ///
     /// Sets the given user's password as compromised. The user will be prompted to reset their password on their next sign-in.
     pub fn set_password_compromised(
         &self,
-        user_id: String,
-        revoke_all_sessions: Option<Option<bool>>,
+        params: crate::methods::users::SetUserPasswordCompromisedParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<User, crate::errors::SdkError> {
-        crate::methods::users::set_user_password_compromised(
-            &self.config,
-            user_id,
-            revoke_all_sessions,
-            options,
-        )
+        crate::methods::users::set_user_password_compromised(&self.config, params, options)
     }
     /// Sets the given user's password as no longer compromised. The user will no longer be prompted to reset their password on their next sign-in. If the user is in reserved-email password quarantine, the quarantine is preserved and the returned user will still have `requires_password_reset` set to `true`. Reserved-email password quarantine can only be cleared by completing a password reset or changing/removing the password.
     pub fn unset_password_compromised(
         &self,
-        user_id: String,
+        params: crate::methods::users::UnsetUserPasswordCompromisedParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<User, crate::errors::SdkError> {
-        crate::methods::users::unset_user_password_compromised(&self.config, user_id, options)
+        crate::methods::users::unset_user_password_compromised(&self.config, params, options)
     }
 }
 
@@ -1014,26 +819,26 @@ impl InvitationsNamespace {
     /// Use this API operation to create multiple invitations for the provided email addresses. You can choose to send the invitations as emails by setting the `notify` parameter to `true`. There cannot be an existing invitation for any of the email addresses you provide unless you set `ignore_existing` to `true` for specific email addresses. Please note that there must be no existing user for any of the email addresses you provide, and this rule cannot be bypassed. This endpoint is limited to a maximum of 10 invitations per API call. If you need to send more invitations, please make multiple requests.
     pub fn create_bulk(
         &self,
-        body: Option<Vec<crate::methods::invitations::CreateBulkInvitationsItem>>,
+        params: crate::methods::invitations::CreateBulkInvitationsParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Vec<Invitation>, crate::errors::SdkError> {
-        crate::methods::invitations::create_bulk_invitations(&self.config, body, options)
+        crate::methods::invitations::create_bulk_invitations(&self.config, params, options)
     }
     /// Permanently deletes the given invitation and the copies of the invitation email Clerk stored for its recipient. Unlike revoking, deleting removes the invitation record itself, which helps honor a data erasure request from someone who was invited but never signed up. Other records that contain the same email address, such as users or organization invitations, are not affected. Invitations of any status can be deleted.
     pub fn delete(
         &self,
-        invitation_id: String,
+        params: crate::methods::invitations::DeleteInvitationParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
-        crate::methods::invitations::delete_invitation(&self.config, invitation_id, options)
+        crate::methods::invitations::delete_invitation(&self.config, params, options)
     }
     /// Revokes the given invitation. Revoking an invitation will prevent the user from using the invitation link that was sent to them. However, it doesn't prevent the user from signing up if they follow the sign up flow. Only active (i.e. non-revoked) invitations can be revoked.
     pub fn revoke(
         &self,
-        invitation_id: String,
+        params: crate::methods::invitations::RevokeInvitationParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<InvitationRevoked, crate::errors::SdkError> {
-        crate::methods::invitations::revoke_invitation(&self.config, invitation_id, options)
+        crate::methods::invitations::revoke_invitation(&self.config, params, options)
     }
 }
 
@@ -1090,14 +895,12 @@ impl OrganizationInvitationsNamespace {
     /// Creates new organization invitations in bulk and sends out emails to the provided email addresses with a link to accept the invitation and join the organization. This endpoint is limited to a maximum of 10 invitations per API call. If you need to send more invitations, please make multiple requests. You can specify a different `role` for each invited organization member. New organization invitations get a "pending" status until they are revoked by an organization administrator or accepted by the invitee. The request body supports passing an optional `redirect_url` parameter for each invitation. When the invited user clicks the link to accept the invitation, they will be redirected to the provided URL. Use this parameter to implement a custom invitation acceptance flow. You can specify the ID of the user that will send the invitation with the `inviter_user_id` parameter. Each invitation can have a different inviter user. Inviter users must be members with administrator privileges in the organization. Only "admin" members can create organization invitations. You can optionally provide public and private metadata for each organization invitation. The public metadata are visible by both the Frontend and the Backend, whereas the private metadata are only visible by the Backend. When the organization invitation is accepted, the metadata will be transferred to the newly created organization membership.
     pub fn create_bulk(
         &self,
-        organization_id: String,
-        body: Vec<crate::methods::organization_invitations::CreateOrganizationInvitationBulkItem>,
+        params: crate::methods::organization_invitations::CreateOrganizationInvitationBulkParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<OrganizationInvitations, crate::errors::SdkError> {
         crate::methods::organization_invitations::create_organization_invitation_bulk(
             &self.config,
-            organization_id,
-            body,
+            params,
             options,
         )
     }
@@ -1108,46 +911,36 @@ impl OrganizationInvitationsNamespace {
     /// This operation is deprecated and may be removed in a future release.
     pub fn list_pending(
         &self,
-        organization_id: String,
-        limit: Option<i64>,
-        offset: Option<i64>,
+        params: crate::methods::organization_invitations::ListPendingOrganizationInvitationsParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<OrganizationInvitations, crate::errors::SdkError> {
         crate::methods::organization_invitations::list_pending_organization_invitations(
             &self.config,
-            organization_id,
-            limit,
-            offset,
+            params,
             options,
         )
     }
     /// Use this request to get an existing organization invitation by ID.
     pub fn get(
         &self,
-        organization_id: String,
-        invitation_id: String,
+        params: crate::methods::organization_invitations::GetOrganizationInvitationParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<OrganizationInvitation, crate::errors::SdkError> {
         crate::methods::organization_invitations::get_organization_invitation(
             &self.config,
-            organization_id,
-            invitation_id,
+            params,
             options,
         )
     }
     /// Use this request to revoke a previously issued organization invitation. Revoking an organization invitation makes it invalid; the invited user will no longer be able to join the organization with the revoked invitation. Only organization invitations with "pending" status can be revoked. The request accepts the `requesting_user_id` parameter to specify the user which revokes the invitation. Only users with "admin" role can revoke invitations.
     pub fn revoke(
         &self,
-        organization_id: String,
-        invitation_id: String,
-        requesting_user_id: Option<Option<String>>,
+        params: crate::methods::organization_invitations::RevokeOrganizationInvitationParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<OrganizationInvitation, crate::errors::SdkError> {
         crate::methods::organization_invitations::revoke_organization_invitation(
             &self.config,
-            organization_id,
-            invitation_id,
-            requesting_user_id,
+            params,
             options,
         )
     }
@@ -1168,30 +961,24 @@ impl AllowListBlockListNamespace {
     /// Get a list of all identifiers allowed to sign up to an instance
     pub fn list_allowlist_identifiers(
         &self,
-        paginated: Option<bool>,
-        limit: Option<i64>,
-        offset: Option<i64>,
+        params: crate::methods::allow_list_block_list::ListAllowlistIdentifiersParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Vec<AllowlistIdentifier>, crate::errors::SdkError> {
         crate::methods::allow_list_block_list::list_allowlist_identifiers(
             &self.config,
-            paginated,
-            limit,
-            offset,
+            params,
             options,
         )
     }
     /// Create an identifier allowed to sign up to an instance
     pub fn create_allowlist_identifier(
         &self,
-        identifier: String,
-        notify: Option<bool>,
+        params: crate::methods::allow_list_block_list::CreateAllowlistIdentifierParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<AllowlistIdentifier, crate::errors::SdkError> {
         crate::methods::allow_list_block_list::create_allowlist_identifier(
             &self.config,
-            identifier,
-            notify,
+            params,
             options,
         )
     }
@@ -1200,12 +987,12 @@ impl AllowListBlockListNamespace {
     /// Delete an identifier from the instance allow-list
     pub fn delete_allowlist_identifier(
         &self,
-        identifier_id: String,
+        params: crate::methods::allow_list_block_list::DeleteAllowlistIdentifierParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
         crate::methods::allow_list_block_list::delete_allowlist_identifier(
             &self.config,
-            identifier_id,
+            params,
             options,
         )
     }
@@ -1219,12 +1006,12 @@ impl AllowListBlockListNamespace {
     /// Create an identifier that is blocked from accessing an instance
     pub fn create_blocklist_identifier(
         &self,
-        identifier: String,
+        params: crate::methods::allow_list_block_list::CreateBlocklistIdentifierParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<BlocklistIdentifier, crate::errors::SdkError> {
         crate::methods::allow_list_block_list::create_blocklist_identifier(
             &self.config,
-            identifier,
+            params,
             options,
         )
     }
@@ -1233,12 +1020,12 @@ impl AllowListBlockListNamespace {
     /// Delete an identifier from the instance block-list
     pub fn delete_blocklist_identifier(
         &self,
-        identifier_id: String,
+        params: crate::methods::allow_list_block_list::DeleteBlocklistIdentifierParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
         crate::methods::allow_list_block_list::delete_blocklist_identifier(
             &self.config,
-            identifier_id,
+            params,
             options,
         )
     }
@@ -1261,20 +1048,10 @@ impl BetaFeaturesNamespace {
     /// Updates the settings of an instance
     pub fn update_instance_auth_config(
         &self,
-        restricted_to_allowlist: Option<Option<bool>>,
-        from_email_address: Option<Option<String>>,
-        progressive_sign_up: Option<Option<bool>>,
-        test_mode: Option<Option<bool>>,
+        params: crate::methods::beta_features::UpdateInstanceAuthConfigParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<InstanceSettings, crate::errors::SdkError> {
-        crate::methods::beta_features::update_instance_auth_config(
-            &self.config,
-            restricted_to_allowlist,
-            from_email_address,
-            progressive_sign_up,
-            test_mode,
-            options,
-        )
+        crate::methods::beta_features::update_instance_auth_config(&self.config, params, options)
     }
     /// Change the domain of a production instance. Changing the domain requires updating the [DNS records](https://clerk.com/docs/deployments/overview#dns-records) accordingly, deploying new [SSL certificates](https://clerk.com/docs/deployments/overview#deploy-certificates), updating your Social Connection's redirect URLs and setting the new keys in your code. WARNING: Changing your domain will invalidate all current user sessions (i.e. users will be logged out). Also, while your application is being deployed, a small downtime is expected to occur. Returns 403 `domain_managed_by_integration` for applications in a Vercel-managed workspace; change the domain from the Vercel integration instead.
     ///
@@ -1283,28 +1060,24 @@ impl BetaFeaturesNamespace {
     /// This operation is deprecated and may be removed in a future release.
     pub fn update_production_instance_domain(
         &self,
-        home_url: Option<String>,
-        is_secondary: Option<bool>,
+        params: crate::methods::beta_features::UpdateProductionInstanceDomainParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<serde_json::Value, crate::errors::SdkError> {
         crate::methods::beta_features::update_production_instance_domain(
             &self.config,
-            home_url,
-            is_secondary,
+            params,
             options,
         )
     }
     /// Change the domain of a production instance. Changing the domain requires updating the [DNS records](https://clerk.com/docs/deployments/overview#dns-records) accordingly, deploying new [SSL certificates](https://clerk.com/docs/deployments/overview#deploy-certificates), updating your Social Connection's redirect URLs and setting the new keys in your code. WARNING: Changing your domain will invalidate all current user sessions (i.e. users will be logged out). Also, while your application is being deployed, a small downtime is expected to occur. Returns 403 `domain_managed_by_integration` for applications in a Vercel-managed workspace; change the domain from the Vercel integration instead.
     pub fn change_production_instance_domain(
         &self,
-        home_url: Option<String>,
-        is_secondary: Option<bool>,
+        params: crate::methods::beta_features::ChangeProductionInstanceDomainParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<serde_json::Value, crate::errors::SdkError> {
         crate::methods::beta_features::change_production_instance_domain(
             &self.config,
-            home_url,
-            is_secondary,
+            params,
             options,
         )
     }
@@ -1325,30 +1098,20 @@ impl ActorTokensNamespace {
     /// Create an actor token that can be used to impersonate the given user. The `actor` parameter needs to include at least a "sub" key whose value is the ID of the actor (impersonating) user.
     pub fn create(
         &self,
-        user_id: String,
-        actor: crate::methods::actor_tokens::CreateActorTokenActor,
-        expires_in_seconds: Option<i64>,
-        session_max_duration_in_seconds: Option<i64>,
+        params: crate::methods::actor_tokens::CreateActorTokenParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<ActorToken, crate::errors::SdkError> {
-        crate::methods::actor_tokens::create_actor_token(
-            &self.config,
-            user_id,
-            actor,
-            expires_in_seconds,
-            session_max_duration_in_seconds,
-            options,
-        )
+        crate::methods::actor_tokens::create_actor_token(&self.config, params, options)
     }
     /// Revokes a pending actor token, changing its status to revoked. Use `actor_token_id` to identify the token; the response includes its resulting status and associated actor and user details.
     ///
     /// Revokes a pending actor token.
     pub fn revoke(
         &self,
-        actor_token_id: String,
+        params: crate::methods::actor_tokens::RevokeActorTokenParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<ActorToken, crate::errors::SdkError> {
-        crate::methods::actor_tokens::revoke_actor_token(&self.config, actor_token_id, options)
+        crate::methods::actor_tokens::revoke_actor_token(&self.config, params, options)
     }
 }
 
@@ -1374,38 +1137,26 @@ impl DomainsNamespace {
     /// Add a new domain for your instance. Useful in the case of multi-domain instances, allows adding satellite domains to an instance. The new domain must have a `name`. The domain name can contain the port for development instances, like `localhost:3000`. Set `is_satellite` to `true` to add a satellite domain. To migrate a production instance from an active provider domain to its first custom primary domain, set `is_satellite` to `false`. The custom domain becomes active and the provider domain stays attached. Additional custom primary domains are not supported. If you're planning to configure the new satellite domain to run behind a proxy, pass the `proxy_url` parameter accordingly. Adding a custom primary domain returns 403 `domain_managed_by_integration` for applications in a Vercel-managed workspace; change the domain from the Vercel integration instead.
     pub fn add(
         &self,
-        name: String,
-        is_satellite: bool,
-        proxy_url: Option<Option<String>>,
+        params: crate::methods::domains::AddDomainParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Domain, crate::errors::SdkError> {
-        crate::methods::domains::add_domain(&self.config, name, is_satellite, proxy_url, options)
+        crate::methods::domains::add_domain(&self.config, params, options)
     }
     /// Deletes a domain for the instance. The instance's active domain cannot be deleted. Deleting a non-satellite domain returns 403 `domain_managed_by_integration` for applications in a Vercel-managed workspace; change the domain from the Vercel integration instead.
     pub fn delete(
         &self,
-        domain_id: String,
+        params: crate::methods::domains::DeleteDomainParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
-        crate::methods::domains::delete_domain(&self.config, domain_id, options)
+        crate::methods::domains::delete_domain(&self.config, params, options)
     }
     /// The `proxy_url` can be updated only for production instances. Update one of the instance's domains. Both primary and satellite domains can be updated. If you choose to use Clerk via proxy, use this endpoint to specify the `proxy_url`. Whenever you decide you'd rather switch to DNS setup for Clerk, simply set `proxy_url` to `null` for the domain. When you update a production instance's primary domain name, you have to make sure that you've completed all the necessary setup steps for DNS and emails to work. Expect downtime otherwise. Updating a primary domain's name will also update the instance's home origin, affecting the default application paths. Updating the `name` or `is_secondary` of a primary domain returns 403 `domain_managed_by_integration` for applications in a Vercel-managed workspace; change the domain from the Vercel integration instead.
     pub fn update(
         &self,
-        domain_id: String,
-        name: Option<Option<String>>,
-        proxy_url: Option<Option<String>>,
-        is_secondary: Option<Option<bool>>,
+        params: crate::methods::domains::UpdateDomainParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Domain, crate::errors::SdkError> {
-        crate::methods::domains::update_domain(
-            &self.config,
-            domain_id,
-            name,
-            proxy_url,
-            is_secondary,
-            options,
-        )
+        crate::methods::domains::update_domain(&self.config, params, options)
     }
 }
 
@@ -1464,14 +1215,10 @@ impl InstanceSettingsNamespace {
     /// Updates whether Protect rules are enforced for the instance. Set `rules_enabled` to true to enforce rules or false to return to shadow evaluation, which continues scoring and recording rules without blocking traffic.
     pub fn update_instance_protect(
         &self,
-        rules_enabled: Option<Option<bool>>,
+        params: crate::methods::instance_settings::UpdateInstanceProtectParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<InstanceProtect, crate::errors::SdkError> {
-        crate::methods::instance_settings::update_instance_protect(
-            &self.config,
-            rules_enabled,
-            options,
-        )
+        crate::methods::instance_settings::update_instance_protect(&self.config, params, options)
     }
     /// Retrieves the per-instance SMS communication settings, including the SMS country blocklist.
     pub fn get_instance_communication(
@@ -1483,12 +1230,12 @@ impl InstanceSettingsNamespace {
     /// Replaces the SMS country blocklist for this instance. Pass the full set of ISO 3166-1 alpha-2 country codes that should be blocked; codes that aren't recognized as SMS-tier countries are silently dropped from the persisted list. Omitting `blocked_country_codes` is a no-op.
     pub fn update_instance_communication(
         &self,
-        blocked_country_codes: Option<Option<Vec<String>>>,
+        params: crate::methods::instance_settings::UpdateInstanceCommunicationParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<InstanceCommunication, crate::errors::SdkError> {
         crate::methods::instance_settings::update_instance_communication(
             &self.config,
-            blocked_country_codes,
+            params,
             options,
         )
     }
@@ -1587,18 +1334,10 @@ impl JwtTemplatesNamespace {
     /// Lists JWT templates, with an option to return paginated or unpaginated results. Use `limit` and `offset` to control the number of templates returned and the starting position.
     pub fn list(
         &self,
-        paginated: Option<bool>,
-        limit: Option<i64>,
-        offset: Option<i64>,
+        params: crate::methods::jwt_templates::ListJwtTemplatesParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Vec<JWTTemplate>, crate::errors::SdkError> {
-        crate::methods::jwt_templates::list_jwt_templates(
-            &self.config,
-            paginated,
-            limit,
-            offset,
-            options,
-        )
+        crate::methods::jwt_templates::list_jwt_templates(&self.config, params, options)
     }
     /// Creates a JWT template with the supplied name and claims. Include `name` and `claims`; set `lifetime` and `allowed_clock_skew` within their permitted ranges, and provide a signing algorithm and key when `custom_signing_key` is true. The response returns the created template.
     ///
@@ -1615,10 +1354,10 @@ impl JwtTemplatesNamespace {
     /// Retrieve the details of a given JWT template
     pub fn get(
         &self,
-        template_id: String,
+        params: crate::methods::jwt_templates::GetJwtTemplateParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<JWTTemplate, crate::errors::SdkError> {
-        crate::methods::jwt_templates::get_jwt_template(&self.config, template_id, options)
+        crate::methods::jwt_templates::get_jwt_template(&self.config, params, options)
     }
     /// Updates an existing JWT template's configuration. Include `name` and `claims`; `lifetime` and `allowed_clock_skew` must fall within their permitted ranges, and custom signing details are required when `custom_signing_key` is true. The response returns the updated template.
     ///
@@ -1633,10 +1372,10 @@ impl JwtTemplatesNamespace {
     /// Deletes a JWT template by its identifier. Use `template_id` to select the template to remove. The response indicates whether the template was deleted.
     pub fn delete(
         &self,
-        template_id: String,
+        params: crate::methods::jwt_templates::DeleteJwtTemplateParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
-        crate::methods::jwt_templates::delete_jwt_template(&self.config, template_id, options)
+        crate::methods::jwt_templates::delete_jwt_template(&self.config, params, options)
     }
 }
 
@@ -1655,126 +1394,82 @@ impl MachinesNamespace {
     /// This request returns the list of machines for an instance. The machines are ordered by descending creation date (i.e. most recent machines will be returned first)
     pub fn list(
         &self,
-        limit: Option<i64>,
-        offset: Option<i64>,
-        query: Option<String>,
-        order_by: Option<String>,
+        params: crate::methods::machines::ListMachinesParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<MachineList, crate::errors::SdkError> {
-        crate::methods::machines::list_machines(
-            &self.config,
-            limit,
-            offset,
-            query,
-            order_by,
-            options,
-        )
+        crate::methods::machines::list_machines(&self.config, params, options)
     }
     /// Creates a new machine. Provide a `name` and optionally configure its machine scopes and default token TTL. The response includes the machine's secret key, so store it securely.
     ///
     /// Creates a new machine.
     pub fn create(
         &self,
-        name: String,
-        scoped_machines: Option<Vec<String>>,
-        default_token_ttl: Option<i64>,
+        params: crate::methods::machines::CreateMachineParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<MachineCreated, crate::errors::SdkError> {
-        crate::methods::machines::create_machine(
-            &self.config,
-            name,
-            scoped_machines,
-            default_token_ttl,
-            options,
-        )
+        crate::methods::machines::create_machine(&self.config, params, options)
     }
     /// Retrieves the details of a machine. Use its `machine_id` to identify the machine whose configuration and scopes you need to inspect.
     ///
     /// Returns the details of a machine.
     pub fn get(
         &self,
-        machine_id: String,
+        params: crate::methods::machines::GetMachineParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Machine, crate::errors::SdkError> {
-        crate::methods::machines::get_machine(&self.config, machine_id, options)
+        crate::methods::machines::get_machine(&self.config, params, options)
     }
     /// Updates an existing machine. Only the provided fields will be updated.
     pub fn update(
         &self,
-        machine_id: String,
-        name: Option<String>,
-        default_token_ttl: Option<i64>,
+        params: crate::methods::machines::UpdateMachineParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Machine, crate::errors::SdkError> {
-        crate::methods::machines::update_machine(
-            &self.config,
-            machine_id,
-            name,
-            default_token_ttl,
-            options,
-        )
+        crate::methods::machines::update_machine(&self.config, params, options)
     }
     /// Deletes a machine. Use its `machine_id` to identify the machine you want to remove. The response confirms deletion with the machine ID and a `deleted` value.
     ///
     /// Deletes a machine.
     pub fn delete(
         &self,
-        machine_id: String,
+        params: crate::methods::machines::DeleteMachineParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<MachineDeleted, crate::errors::SdkError> {
-        crate::methods::machines::delete_machine(&self.config, machine_id, options)
+        crate::methods::machines::delete_machine(&self.config, params, options)
     }
     /// Retrieves the secret key for a machine. Use the `machine_id` to identify which machine's key you need.
     ///
     /// Returns the secret key for a machine.
     pub fn get_secret_key(
         &self,
-        machine_id: String,
+        params: crate::methods::machines::GetMachineSecretKeyParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<MachineSecretKey, crate::errors::SdkError> {
-        crate::methods::machines::get_machine_secret_key(&self.config, machine_id, options)
+        crate::methods::machines::get_machine_secret_key(&self.config, params, options)
     }
     /// Rotates the machine's secret key. When the secret key is rotated, make sure to update it in your machine/application. The previous secret key will remain valid for the duration specified by the previous_token_ttl parameter.
     pub fn rotate_secret_key(
         &self,
-        machine_id: String,
-        previous_token_ttl: i64,
+        params: crate::methods::machines::RotateMachineSecretKeyParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<MachineSecretKey, crate::errors::SdkError> {
-        crate::methods::machines::rotate_machine_secret_key(
-            &self.config,
-            machine_id,
-            previous_token_ttl,
-            options,
-        )
+        crate::methods::machines::rotate_machine_secret_key(&self.config, params, options)
     }
     /// Creates a new machine scope, allowing the specified machine to access another machine. Maximum of 150 scopes per machine.
     pub fn create_scope(
         &self,
-        machine_id: String,
-        to_machine_id: String,
+        params: crate::methods::machines::CreateMachineScopeParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<MachineScope, crate::errors::SdkError> {
-        crate::methods::machines::create_machine_scope(
-            &self.config,
-            machine_id,
-            to_machine_id,
-            options,
-        )
+        crate::methods::machines::create_machine_scope(&self.config, params, options)
     }
     /// Deletes a machine scope, removing access from one machine to another.
     pub fn delete_scope(
         &self,
-        machine_id: String,
-        other_machine_id: String,
+        params: crate::methods::machines::DeleteMachineScopeParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<MachineScopeDeleted, crate::errors::SdkError> {
-        crate::methods::machines::delete_machine_scope(
-            &self.config,
-            machine_id,
-            other_machine_id,
-            options,
-        )
+        crate::methods::machines::delete_machine_scope(&self.config, params, options)
     }
 }
 
@@ -1809,18 +1504,10 @@ impl OrganizationsNamespace {
     /// Fetches the organization whose ID or slug matches the provided `id_or_slug` URL query parameter.
     pub fn get(
         &self,
-        organization_id: String,
-        include_members_count: Option<bool>,
-        include_missing_member_with_elevated_permissions: Option<bool>,
+        params: crate::methods::organizations::GetOrganizationParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Organization, crate::errors::SdkError> {
-        crate::methods::organizations::get_organization(
-            &self.config,
-            organization_id,
-            include_members_count,
-            include_missing_member_with_elevated_permissions,
-            options,
-        )
+        crate::methods::organizations::get_organization(&self.config, params, options)
     }
     /// Updates an existing organization. As of API version 2026-05-12, this endpoint no longer accepts `public_metadata` or `private_metadata`. Use `PATCH /v1/organizations/{organization_id}/metadata` to merge updates into existing metadata, or `PUT /v1/organizations/{organization_id}/metadata` to replace a metadata field entirely.
     pub fn update(
@@ -1833,96 +1520,68 @@ impl OrganizationsNamespace {
     /// Deletes the given organization. Please note that deleting an organization will also delete all memberships and invitations. This is not reversible. After the organization is deleted, any user's active sessions that contain the deleted organization will be cleared.
     pub fn delete(
         &self,
-        organization_id: String,
+        params: crate::methods::organizations::DeleteOrganizationParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
-        crate::methods::organizations::delete_organization(&self.config, organization_id, options)
+        crate::methods::organizations::delete_organization(&self.config, params, options)
     }
     /// Update organization metadata attributes by merging existing values with the provided parameters. Metadata values will be updated via a deep merge. Deep meaning that any nested JSON objects will be merged as well. You can remove metadata keys at any level by setting their value to `null`.
     pub fn merge_metadata(
         &self,
-        organization_id: String,
-        public_metadata: Option<std::collections::HashMap<String, serde_json::Value>>,
-        private_metadata: Option<std::collections::HashMap<String, serde_json::Value>>,
+        params: crate::methods::organizations::MergeOrganizationMetadataParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Organization, crate::errors::SdkError> {
-        crate::methods::organizations::merge_organization_metadata(
-            &self.config,
-            organization_id,
-            public_metadata,
-            private_metadata,
-            options,
-        )
+        crate::methods::organizations::merge_organization_metadata(&self.config, params, options)
     }
     /// Replace an organization's metadata attributes with the provided values. Unlike `PATCH /v1/organizations/{organization_id}/metadata` (merge semantics), this endpoint replaces the supplied metadata fields entirely — the prior contents of each supplied field are discarded. Fields omitted from the request body are left unchanged. Prefer the `PATCH` endpoint for partial updates. Use `PUT` only when you explicitly intend to overwrite a metadata field wholesale.
     pub fn replace_metadata(
         &self,
-        organization_id: String,
-        public_metadata: Option<std::collections::HashMap<String, serde_json::Value>>,
-        private_metadata: Option<std::collections::HashMap<String, serde_json::Value>>,
+        params: crate::methods::organizations::ReplaceOrganizationMetadataParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Organization, crate::errors::SdkError> {
-        crate::methods::organizations::replace_organization_metadata(
-            &self.config,
-            organization_id,
-            public_metadata,
-            private_metadata,
-            options,
-        )
+        crate::methods::organizations::replace_organization_metadata(&self.config, params, options)
     }
     /// Uploads an image file as the logo for an organization. Send the request as `multipart/form-data`; files must be no larger than 10 MB and use a supported image content type. A 200 response returns the organization with its logo URL.
     ///
     /// Set or replace an organization's logo, by uploading an image file. This endpoint uses the `multipart/form-data` request content type and accepts a file of image type. The file size cannot exceed 10MB. Only the following file content types are supported: `image/jpeg`, `image/png`, `image/gif`, `image/webp`.
     pub fn upload_logo(
         &self,
-        organization_id: String,
-        file: crate::client::UploadFile,
-        uploader_user_id: Option<String>,
+        params: crate::methods::organizations::UploadOrganizationLogoParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<OrganizationWithLogo, crate::errors::SdkError> {
-        crate::methods::organizations::upload_organization_logo(
-            &self.config,
-            organization_id,
-            file,
-            uploader_user_id,
-            options,
-        )
+        crate::methods::organizations::upload_organization_logo(&self.config, params, options)
     }
     /// Deletes the logo associated with an organization. Use `organization_id` to identify the organization whose logo you want to remove. A 200 response returns the organization with its updated logo-related fields.
     ///
     /// Delete the organization's logo.
     pub fn delete_logo(
         &self,
-        organization_id: String,
+        params: crate::methods::organizations::DeleteOrganizationLogoParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Organization, crate::errors::SdkError> {
-        crate::methods::organizations::delete_organization_logo(
-            &self.config,
-            organization_id,
-            options,
-        )
+        crate::methods::organizations::delete_organization_logo(&self.config, params, options)
     }
     /// Retrieves the billing subscription for the specified organization. This includes subscription details, active plans, billing information, and payment status. The subscription contains subscription items which represent the individual plans the organization is subscribed to.
     pub fn get_billing_subscription(
         &self,
-        organization_id: String,
+        params: crate::methods::organizations::GetOrganizationBillingSubscriptionParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<CommerceSubscription, crate::errors::SdkError> {
         crate::methods::organizations::get_organization_billing_subscription(
             &self.config,
-            organization_id,
+            params,
             options,
         )
     }
     /// Retrieves the current credit balance for the specified organization. Credits can be applied during checkout to reduce the charge or automatically applied to upcoming recurring charges.
     pub fn get_billing_credit_balance(
         &self,
-        organization_id: String,
+        params: crate::methods::organizations::GetOrganizationBillingCreditBalanceParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<CommerceCreditBalanceResponse, crate::errors::SdkError> {
         crate::methods::organizations::get_organization_billing_credit_balance(
             &self.config,
-            organization_id,
+            params,
             options,
         )
     }
@@ -1955,20 +1614,10 @@ impl OrganizationRolesNamespace {
     /// This request returns the list of organization roles for the instance. Results can be paginated using the optional `limit` and `offset` query parameters. The organization roles are ordered by descending creation date. Most recent roles will be returned first.
     pub fn list(
         &self,
-        query: Option<String>,
-        order_by: Option<String>,
-        limit: Option<i64>,
-        offset: Option<i64>,
+        params: crate::methods::organization_roles::ListOrganizationRolesParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Roles, crate::errors::SdkError> {
-        crate::methods::organization_roles::list_organization_roles(
-            &self.config,
-            query,
-            order_by,
-            limit,
-            offset,
-            options,
-        )
+        crate::methods::organization_roles::list_organization_roles(&self.config, params, options)
     }
     /// Creates a new organization role with the given name and permissions for an instance. The key must be unique for the instance and start with the 'org:' prefix, followed by lowercase alphanumeric characters and underscores only. You can optionally provide a description for the role and specify whether it should be included in the initial role set. Organization roles support permissions that can be assigned to control access within the organization.
     pub fn create(
@@ -1981,14 +1630,10 @@ impl OrganizationRolesNamespace {
     /// Use this request to retrieve an existing organization role by its ID.
     pub fn get(
         &self,
-        organization_role_id: String,
+        params: crate::methods::organization_roles::GetOrganizationRoleParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Role, crate::errors::SdkError> {
-        crate::methods::organization_roles::get_organization_role(
-            &self.config,
-            organization_role_id,
-            options,
-        )
+        crate::methods::organization_roles::get_organization_role(&self.config, params, options)
     }
     /// Updates an existing organization role. You can update the name, key, description, and permissions of the role. All parameters are optional \- you can update only the fields you want to change. If the role is used as a creator role or domain default role, updating the key will cascade the update to the organization settings.
     pub fn update(
@@ -2001,28 +1646,22 @@ impl OrganizationRolesNamespace {
     /// Deletes the organization role. The role cannot be deleted if it is currently used as the default creator role, domain default role, assigned to any members, or exists in any invitations.
     pub fn delete(
         &self,
-        organization_role_id: String,
+        params: crate::methods::organization_roles::DeleteOrganizationRoleParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
-        crate::methods::organization_roles::delete_organization_role(
-            &self.config,
-            organization_role_id,
-            options,
-        )
+        crate::methods::organization_roles::delete_organization_role(&self.config, params, options)
     }
     /// Assigns a permission to an organization role. Use the `organization_role_id` and `permission_id` path parameters to identify the role and permission to link. The response contains the updated role and its permissions.
     ///
     /// Assigns a permission to an organization role
     pub fn assign_permission_to(
         &self,
-        organization_role_id: String,
-        permission_id: String,
+        params: crate::methods::organization_roles::AssignPermissionToOrganizationRoleParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Role, crate::errors::SdkError> {
         crate::methods::organization_roles::assign_permission_to_organization_role(
             &self.config,
-            organization_role_id,
-            permission_id,
+            params,
             options,
         )
     }
@@ -2031,14 +1670,12 @@ impl OrganizationRolesNamespace {
     /// Removes a permission from an organization role
     pub fn remove_permission_from(
         &self,
-        organization_role_id: String,
-        permission_id: String,
+        params: crate::methods::organization_roles::RemovePermissionFromOrganizationRoleParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Role, crate::errors::SdkError> {
         crate::methods::organization_roles::remove_permission_from_organization_role(
             &self.config,
-            organization_role_id,
-            permission_id,
+            params,
             options,
         )
     }
@@ -2083,64 +1720,48 @@ impl OrganizationMembershipsNamespace {
     /// Updates the properties of an existing organization membership
     pub fn update(
         &self,
-        organization_id: String,
-        user_id: String,
-        role: String,
+        params: crate::methods::organization_memberships::UpdateOrganizationMembershipParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<OrganizationMembership, crate::errors::SdkError> {
         crate::methods::organization_memberships::update_organization_membership(
             &self.config,
-            organization_id,
-            user_id,
-            role,
+            params,
             options,
         )
     }
     /// Removes the given membership from the organization
     pub fn delete(
         &self,
-        organization_id: String,
-        user_id: String,
+        params: crate::methods::organization_memberships::DeleteOrganizationMembershipParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<OrganizationMembership, crate::errors::SdkError> {
         crate::methods::organization_memberships::delete_organization_membership(
             &self.config,
-            organization_id,
-            user_id,
+            params,
             options,
         )
     }
     /// Update an organization membership's metadata attributes by merging existing values with the provided parameters. Metadata values will be updated via a deep merge. Deep means that any nested JSON objects will be merged as well. You can remove metadata keys at any level by setting their value to `null`.
     pub fn update_metadata(
         &self,
-        organization_id: String,
-        user_id: String,
-        public_metadata: Option<std::collections::HashMap<String, serde_json::Value>>,
-        private_metadata: Option<std::collections::HashMap<String, serde_json::Value>>,
+        params: crate::methods::organization_memberships::UpdateOrganizationMembershipMetadataParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<OrganizationMembership, crate::errors::SdkError> {
         crate::methods::organization_memberships::update_organization_membership_metadata(
             &self.config,
-            organization_id,
-            user_id,
-            public_metadata,
-            private_metadata,
+            params,
             options,
         )
     }
     /// Retrieves all organization user memberships for the given instance.
     pub fn list_all(
         &self,
-        order_by: Option<String>,
-        limit: Option<i64>,
-        offset: Option<i64>,
+        params: crate::methods::organization_memberships::ListOrganizationMembershipsAllParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<OrganizationMemberships, crate::errors::SdkError> {
         crate::methods::organization_memberships::list_organization_memberships_all(
             &self.config,
-            order_by,
-            limit,
-            offset,
+            params,
             options,
         )
     }
@@ -2161,18 +1782,12 @@ impl OrganizationDomainsNamespace {
     /// Creates a new organization domain. By default the domain is verified, but can be optionally set to unverified.
     pub fn create(
         &self,
-        organization_id: String,
-        name: Option<String>,
-        enrollment_mode: Option<String>,
-        verified: Option<Option<bool>>,
+        params: crate::methods::organization_domains::CreateOrganizationDomainParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<OrganizationDomain, crate::errors::SdkError> {
         crate::methods::organization_domains::create_organization_domain(
             &self.config,
-            organization_id,
-            name,
-            enrollment_mode,
-            verified,
+            params,
             options,
         )
     }
@@ -2193,18 +1808,12 @@ impl OrganizationDomainsNamespace {
     /// Updates the properties of an existing organization domain.
     pub fn update(
         &self,
-        organization_id: String,
-        domain_id: String,
-        enrollment_mode: Option<Option<String>>,
-        verified: Option<Option<bool>>,
+        params: crate::methods::organization_domains::UpdateOrganizationDomainParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<OrganizationDomain, crate::errors::SdkError> {
         crate::methods::organization_domains::update_organization_domain(
             &self.config,
-            organization_id,
-            domain_id,
-            enrollment_mode,
-            verified,
+            params,
             options,
         )
     }
@@ -2213,28 +1822,24 @@ impl OrganizationDomainsNamespace {
     /// Removes the given domain from the organization.
     pub fn delete(
         &self,
-        organization_id: String,
-        domain_id: String,
+        params: crate::methods::organization_domains::DeleteOrganizationDomainParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
         crate::methods::organization_domains::delete_organization_domain(
             &self.config,
-            organization_id,
-            domain_id,
+            params,
             options,
         )
     }
     /// Flips the organization domain's ownership state to verified via the manual override path, bypassing the self-serve TXT DNS challenge. The domain row records strategy=`manual_override` and an `organization_domain.ownership_verified` audit event is emitted with the same strategy. Idempotent: re-calling on an already-verified domain returns the current ownership state without re-emitting the audit event.
     pub fn verify_ownership(
         &self,
-        organization_id: String,
-        domain_id: String,
+        params: crate::methods::organization_domains::VerifyOrganizationDomainOwnershipParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<OrganizationDomain, crate::errors::SdkError> {
         crate::methods::organization_domains::verify_organization_domain_ownership(
             &self.config,
-            organization_id,
-            domain_id,
+            params,
             options,
         )
     }
@@ -2267,16 +1872,10 @@ impl ProxyChecksNamespace {
     /// This endpoint can be used to validate that a proxy-enabled domain is operational. It tries to verify that the proxy URL provided in the parameters maps to a functional proxy that can reach the Clerk Frontend API. You can use this endpoint before you set a proxy URL for a domain. This way you can ensure that switching to proxy-based configuration will not lead to downtime for your instance. The `proxy_url` parameter allows for testing proxy configurations for domains that don't have a proxy URL yet, or operate on a different proxy URL than the one provided. It can also be used to re-validate a domain that is already configured to work with a proxy.
     pub fn verify_domain_proxy(
         &self,
-        domain_id: Option<String>,
-        proxy_url: Option<String>,
+        params: crate::methods::proxy_checks::VerifyDomainProxyParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<ProxyCheck, crate::errors::SdkError> {
-        crate::methods::proxy_checks::verify_domain_proxy(
-            &self.config,
-            domain_id,
-            proxy_url,
-            options,
-        )
+        crate::methods::proxy_checks::verify_domain_proxy(&self.config, params, options)
     }
 }
 
@@ -2295,44 +1894,36 @@ impl RedirectUrlsNamespace {
     /// Lists all whitelisted redirect_urls for the instance
     pub fn list(
         &self,
-        paginated: Option<bool>,
-        limit: Option<i64>,
-        offset: Option<i64>,
+        params: crate::methods::redirect_urls::ListRedirectUrLsParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Vec<RedirectURL>, crate::errors::SdkError> {
-        crate::methods::redirect_urls::list_redirect_ur_ls(
-            &self.config,
-            paginated,
-            limit,
-            offset,
-            options,
-        )
+        crate::methods::redirect_urls::list_redirect_ur_ls(&self.config, params, options)
     }
     /// Creates a redirect URL. When you provide a request body, include `url` as a full URL prefixed with `https://` or a URL using a custom scheme. The response includes the created redirect URL and its timestamps.
     ///
     /// Create a redirect URL
     pub fn create(
         &self,
-        url: String,
+        params: crate::methods::redirect_urls::CreateRedirectUrlParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<RedirectURL, crate::errors::SdkError> {
-        crate::methods::redirect_urls::create_redirect_url(&self.config, url, options)
+        crate::methods::redirect_urls::create_redirect_url(&self.config, params, options)
     }
     /// Retrieve the details of the redirect URL with the given ID
     pub fn get(
         &self,
-        id: String,
+        params: crate::methods::redirect_urls::GetRedirectUrlParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<RedirectURL, crate::errors::SdkError> {
-        crate::methods::redirect_urls::get_redirect_url(&self.config, id, options)
+        crate::methods::redirect_urls::get_redirect_url(&self.config, params, options)
     }
     /// Remove the selected redirect URL from the whitelist of the instance
     pub fn delete(
         &self,
-        id: String,
+        params: crate::methods::redirect_urls::DeleteRedirectUrlParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
-        crate::methods::redirect_urls::delete_redirect_url(&self.config, id, options)
+        crate::methods::redirect_urls::delete_redirect_url(&self.config, params, options)
     }
 }
 
@@ -2351,36 +1942,20 @@ impl SignInTokensNamespace {
     /// Creates a new sign-in token and associates it with the given user. By default, sign-in tokens expire in 30 days. You can optionally supply a different duration in seconds using the `expires_in_seconds` property.
     pub fn create(
         &self,
-        user_id: String,
-        org_id: Option<Option<String>>,
-        expires_in_seconds: Option<Option<i64>>,
-        second_factor_verification: Option<
-            Option<crate::methods::sign_in_tokens::CreateSignInTokenSecondFactorVerificationEnum>,
-        >,
+        params: crate::methods::sign_in_tokens::CreateSignInTokenParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<SignInToken, crate::errors::SdkError> {
-        crate::methods::sign_in_tokens::create_sign_in_token(
-            &self.config,
-            user_id,
-            org_id,
-            expires_in_seconds,
-            second_factor_verification,
-            options,
-        )
+        crate::methods::sign_in_tokens::create_sign_in_token(&self.config, params, options)
     }
     /// Revokes a pending sign-in token. Use the `sign_in_token_id` path parameter to identify the token; a successful response returns the token with its updated status.
     ///
     /// Revokes a pending sign-in token
     pub fn revoke(
         &self,
-        sign_in_token_id: String,
+        params: crate::methods::sign_in_tokens::RevokeSignInTokenParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<SignInToken, crate::errors::SdkError> {
-        crate::methods::sign_in_tokens::revoke_sign_in_token(
-            &self.config,
-            sign_in_token_id,
-            options,
-        )
+        crate::methods::sign_in_tokens::revoke_sign_in_token(&self.config, params, options)
     }
 }
 
@@ -2399,28 +1974,20 @@ impl SignUpsNamespace {
     /// Retrieve the details of the sign-up with the given ID
     pub fn get(
         &self,
-        id: String,
+        params: crate::methods::sign_ups::GetSignUpParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<SignUp, crate::errors::SdkError> {
-        crate::methods::sign_ups::get_sign_up(&self.config, id, options)
+        crate::methods::sign_ups::get_sign_up(&self.config, params, options)
     }
     /// Updates an existing sign-up with the fields you provide. Use `external_id` to associate the sign-up with an identifier from your external system, or set `custom_action` to mark it as a custom action. The response includes the sign-up's current status and verification details.
     ///
     /// Update the sign-up with the given ID
     pub fn update(
         &self,
-        id: String,
-        external_id: Option<Option<String>>,
-        custom_action: Option<Option<bool>>,
+        params: crate::methods::sign_ups::UpdateSignUpParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<SignUp, crate::errors::SdkError> {
-        crate::methods::sign_ups::update_sign_up(
-            &self.config,
-            id,
-            external_id,
-            custom_action,
-            options,
-        )
+        crate::methods::sign_ups::update_sign_up(&self.config, params, options)
     }
 }
 
@@ -2439,20 +2006,10 @@ impl OAuthApplicationsNamespace {
     /// This request returns the list of OAuth applications for an instance. Results can be paginated using the optional `limit` and `offset` query parameters. The OAuth applications are ordered by descending creation date. Most recent OAuth applications will be returned first.
     pub fn list(
         &self,
-        limit: Option<i64>,
-        offset: Option<i64>,
-        order_by: Option<String>,
-        name_query: Option<String>,
+        params: crate::methods::o_auth_applications::ListOauthApplicationsParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<OAuthApplications, crate::errors::SdkError> {
-        crate::methods::o_auth_applications::list_oauth_applications(
-            &self.config,
-            limit,
-            offset,
-            order_by,
-            name_query,
-            options,
-        )
+        crate::methods::o_auth_applications::list_oauth_applications(&self.config, params, options)
     }
     /// Creates a new OAuth application with the given name and callback URL for an instance. The callback URL must be a valid URL. All URL schemes are allowed such as `http://`, `https://`, `myapp://`, etc...
     pub fn create(
@@ -2465,14 +2022,10 @@ impl OAuthApplicationsNamespace {
     /// Fetches the OAuth application whose ID matches the provided `id` in the path.
     pub fn get(
         &self,
-        oauth_application_id: String,
+        params: crate::methods::o_auth_applications::GetOauthApplicationParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<OAuthApplication, crate::errors::SdkError> {
-        crate::methods::o_auth_applications::get_oauth_application(
-            &self.config,
-            oauth_application_id,
-            options,
-        )
+        crate::methods::o_auth_applications::get_oauth_application(&self.config, params, options)
     }
     /// Updates an existing OAuth application with the properties you provide. Use `scopes` to replace the application's complete built-in and custom scope ceiling, rather than adding individual scopes. Include required built-in scopes and use custom scope keys from the instance OAuth scope catalog.
     ///
@@ -2487,56 +2040,46 @@ impl OAuthApplicationsNamespace {
     /// Deletes the given OAuth application. This is not reversible.
     pub fn delete(
         &self,
-        oauth_application_id: String,
+        params: crate::methods::o_auth_applications::DeleteOauthApplicationParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
-        crate::methods::o_auth_applications::delete_oauth_application(
-            &self.config,
-            oauth_application_id,
-            options,
-        )
+        crate::methods::o_auth_applications::delete_oauth_application(&self.config, params, options)
     }
     /// Uploads an image to set or replace an OAuth application's logo. Send the request as `multipart/form-data` with the image in the `file` field; supported types are JPEG, PNG, GIF, and WebP, and the file must not exceed 10 MB. You can provide `uploader_user_id` to credit a user with the upload.
     ///
     /// Set or replace an OAuth application's logo by uploading an image file. This endpoint uses the `multipart/form-data` request content type and accepts a file of image type. The file size cannot exceed 10MB. Only the following file content types are supported: `image/jpeg`, `image/png`, `image/gif`, `image/webp`.
     pub fn upload_logo(
         &self,
-        oauth_application_id: String,
-        file: crate::client::UploadFile,
-        uploader_user_id: Option<String>,
+        params: crate::methods::o_auth_applications::UploadOauthApplicationLogoParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<OAuthApplication, crate::errors::SdkError> {
         crate::methods::o_auth_applications::upload_oauth_application_logo(
             &self.config,
-            oauth_application_id,
-            file,
-            uploader_user_id,
+            params,
             options,
         )
     }
     /// Rotates the OAuth application's client secret. When the client secret is rotated, make sure to update it in authorized OAuth clients.
     pub fn rotate_secret(
         &self,
-        oauth_application_id: String,
+        params: crate::methods::o_auth_applications::RotateOauthApplicationSecretParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<OAuthApplicationWithSecret, crate::errors::SdkError> {
         crate::methods::o_auth_applications::rotate_oauth_application_secret(
             &self.config,
-            oauth_application_id,
+            params,
             options,
         )
     }
     /// Revoke both OAuth access token and refresh token for the associated grant for the given OAuth application. The request may specify either token. JWT access tokens cannot be revoked.
     pub fn revoke_token(
         &self,
-        oauth_application_id: String,
-        token: String,
+        params: crate::methods::o_auth_applications::RevokeOauthApplicationTokenParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<serde_json::Value, crate::errors::SdkError> {
         crate::methods::o_auth_applications::revoke_oauth_application_token(
             &self.config,
-            oauth_application_id,
-            token,
+            params,
             options,
         )
     }
@@ -2585,14 +2128,10 @@ impl SamlConnectionsNamespace {
     /// This operation is deprecated and may be removed in a future release.
     pub fn get(
         &self,
-        saml_connection_id: String,
+        params: crate::methods::saml_connections::GetSamlConnectionParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<SAMLConnection, crate::errors::SdkError> {
-        crate::methods::saml_connections::get_saml_connection(
-            &self.config,
-            saml_connection_id,
-            options,
-        )
+        crate::methods::saml_connections::get_saml_connection(&self.config, params, options)
     }
     /// Updates the SAML Connection whose ID matches the provided `id` in the path. Deprecated: Use the Enterprise Connections API instead. This endpoint will be removed in future versions.
     ///
@@ -2613,14 +2152,10 @@ impl SamlConnectionsNamespace {
     /// This operation is deprecated and may be removed in a future release.
     pub fn delete(
         &self,
-        saml_connection_id: String,
+        params: crate::methods::saml_connections::DeleteSamlConnectionParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
-        crate::methods::saml_connections::delete_saml_connection(
-            &self.config,
-            saml_connection_id,
-            options,
-        )
+        crate::methods::saml_connections::delete_saml_connection(&self.config, params, options)
     }
 }
 
@@ -2639,18 +2174,12 @@ impl EnterpriseConnectionsNamespace {
     /// Returns the list of enterprise connections for the instance. Results can be paginated using the optional `limit` and `offset` query parameters.
     pub fn list(
         &self,
-        limit: Option<i64>,
-        offset: Option<i64>,
-        organization_id: Option<String>,
-        active: Option<bool>,
+        params: crate::methods::enterprise_connections::ListEnterpriseConnectionsParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<EnterpriseConnections, crate::errors::SdkError> {
         crate::methods::enterprise_connections::list_enterprise_connections(
             &self.config,
-            limit,
-            offset,
-            organization_id,
-            active,
+            params,
             options,
         )
     }
@@ -2671,12 +2200,12 @@ impl EnterpriseConnectionsNamespace {
     /// Fetches the enterprise connection whose ID matches the provided `enterprise_connection_id` in the path.
     pub fn get(
         &self,
-        enterprise_connection_id: String,
+        params: crate::methods::enterprise_connections::GetEnterpriseConnectionParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<EnterpriseConnection, crate::errors::SdkError> {
         crate::methods::enterprise_connections::get_enterprise_connection(
             &self.config,
-            enterprise_connection_id,
+            params,
             options,
         )
     }
@@ -2695,44 +2224,36 @@ impl EnterpriseConnectionsNamespace {
     /// Deletes the enterprise connection whose ID matches the provided `enterprise_connection_id` in the path.
     pub fn delete(
         &self,
-        enterprise_connection_id: String,
+        params: crate::methods::enterprise_connections::DeleteEnterpriseConnectionParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
         crate::methods::enterprise_connections::delete_enterprise_connection(
             &self.config,
-            enterprise_connection_id,
+            params,
             options,
         )
     }
     /// Returns a paginated list of SAML or OIDC debug test runs for an enterprise connection.
     pub fn list_test_runs(
         &self,
-        enterprise_connection_id: String,
-        status: Option<
-            Vec<crate::methods::enterprise_connections::ListEnterpriseConnectionTestRunsItemEnum>,
-        >,
-        limit: Option<i64>,
-        offset: Option<i64>,
+        params: crate::methods::enterprise_connections::ListEnterpriseConnectionTestRunsParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<EnterpriseConnectionTestRuns, crate::errors::SdkError> {
         crate::methods::enterprise_connections::list_enterprise_connection_test_runs(
             &self.config,
-            enterprise_connection_id,
-            status,
-            limit,
-            offset,
+            params,
             options,
         )
     }
     /// Returns a short-lived URL that starts the IdP test flow for this connection.
     pub fn create_test_run(
         &self,
-        enterprise_connection_id: String,
+        params: crate::methods::enterprise_connections::CreateEnterpriseConnectionTestRunParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<EnterpriseConnectionTestRunResponse, crate::errors::SdkError> {
         crate::methods::enterprise_connections::create_enterprise_connection_test_run(
             &self.config,
-            enterprise_connection_id,
+            params,
             options,
         )
     }
@@ -2753,30 +2274,26 @@ impl SsoBypassNamespace {
     /// Returns the users who may verify an email code instead of reaching their identity provider when enterprise SSO is unreachable.
     pub fn list_allowlist_users(
         &self,
-        enterprise_connection_id: Option<String>,
+        params: crate::methods::sso_bypass::ListSsoBypassAllowlistUsersParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<SSOBypassAllowlistUsers, crate::errors::SdkError> {
-        crate::methods::sso_bypass::list_sso_bypass_allowlist_users(
-            &self.config,
-            enterprise_connection_id,
-            options,
-        )
+        crate::methods::sso_bypass::list_sso_bypass_allowlist_users(&self.config, params, options)
     }
     /// Puts a user on the allowlist. The request is rejected unless the user holds a verified email address on a domain one of the instance's enterprise connections serves.
     pub fn create_allowlist_user(
         &self,
-        user_id: String,
+        params: crate::methods::sso_bypass::CreateSsoBypassAllowlistUserParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<SSOBypassAllowlistUser, crate::errors::SdkError> {
-        crate::methods::sso_bypass::create_sso_bypass_allowlist_user(&self.config, user_id, options)
+        crate::methods::sso_bypass::create_sso_bypass_allowlist_user(&self.config, params, options)
     }
     /// Removes the user from the allowlist, across every enterprise connection that serves them.
     pub fn delete_allowlist_user(
         &self,
-        user_id: String,
+        params: crate::methods::sso_bypass::DeleteSsoBypassAllowlistUserParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
-        crate::methods::sso_bypass::delete_sso_bypass_allowlist_user(&self.config, user_id, options)
+        crate::methods::sso_bypass::delete_sso_bypass_allowlist_user(&self.config, params, options)
     }
 }
 
@@ -2828,10 +2345,10 @@ impl AgentTasksNamespace {
     /// Revokes a pending agent task.
     pub fn revoke(
         &self,
-        agent_task_id: String,
+        params: crate::methods::agent_tasks::RevokeAgentTaskParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<AgentTask, crate::errors::SdkError> {
-        crate::methods::agent_tasks::revoke_agent_task(&self.config, agent_task_id, options)
+        crate::methods::agent_tasks::revoke_agent_task(&self.config, params, options)
     }
 }
 
@@ -2858,68 +2375,52 @@ impl WaitlistEntriesNamespace {
     /// Creates a new waitlist entry for the given email address. If the email address is already on the waitlist, no new entry will be created and the existing waitlist entry will be returned.
     pub fn create(
         &self,
-        email_address: String,
-        notify: Option<Option<bool>>,
+        params: crate::methods::waitlist_entries::CreateWaitlistEntryParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<WaitlistEntry, crate::errors::SdkError> {
-        crate::methods::waitlist_entries::create_waitlist_entry(
-            &self.config,
-            email_address,
-            notify,
-            options,
-        )
+        crate::methods::waitlist_entries::create_waitlist_entry(&self.config, params, options)
     }
     /// Creates multiple waitlist entries from email addresses in a single request. Each entry requires `email_address`; `notify` defaults to true when omitted. You can submit 1 to 50 entries per request, but duplicate email addresses within the request are not allowed, and existing waitlist entries are returned without creating new entries.
     ///
     /// Creates multiple waitlist entries for the provided email addresses. You can choose whether to send confirmation emails by setting the `notify` parameter to `true` or `false` for each entry. If the `notify` parameter is omitted, it defaults to `true`. If an email address is already on the waitlist, no new entry will be created and the existing waitlist entry will be returned. Duplicate email addresses within the same request are not allowed. This endpoint is limited to a maximum of 50 entries per API call. If you need to add more entries, please make multiple requests.
     pub fn create_bulk(
         &self,
-        body: Option<Vec<crate::methods::waitlist_entries::CreateBulkWaitlistEntriesItem>>,
+        params: crate::methods::waitlist_entries::CreateBulkWaitlistEntriesParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Vec<WaitlistEntry>, crate::errors::SdkError> {
-        crate::methods::waitlist_entries::create_bulk_waitlist_entries(&self.config, body, options)
+        crate::methods::waitlist_entries::create_bulk_waitlist_entries(
+            &self.config,
+            params,
+            options,
+        )
     }
     /// Deletes a pending waitlist entry. Use the `waitlist_entry_id` path parameter to identify the entry to delete. Entries locked while a batch action is processing are unavailable for other actions.
     ///
     /// Delete a pending waitlist entry.
     pub fn delete(
         &self,
-        waitlist_entry_id: String,
+        params: crate::methods::waitlist_entries::DeleteWaitlistEntryParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
-        crate::methods::waitlist_entries::delete_waitlist_entry(
-            &self.config,
-            waitlist_entry_id,
-            options,
-        )
+        crate::methods::waitlist_entries::delete_waitlist_entry(&self.config, params, options)
     }
     /// Send an invite to the email address in a waitlist entry.
     pub fn invite(
         &self,
-        waitlist_entry_id: String,
-        ignore_existing: Option<Option<bool>>,
+        params: crate::methods::waitlist_entries::InviteWaitlistEntryParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<WaitlistEntry, crate::errors::SdkError> {
-        crate::methods::waitlist_entries::invite_waitlist_entry(
-            &self.config,
-            waitlist_entry_id,
-            ignore_existing,
-            options,
-        )
+        crate::methods::waitlist_entries::invite_waitlist_entry(&self.config, params, options)
     }
     /// Rejects a waitlist entry and returns the resulting entry. Use the `waitlist_entry_id` path parameter to identify the entry to reject. Entries locked while a batch action is processing are unavailable for other actions.
     ///
     /// Reject a waitlist entry.
     pub fn reject(
         &self,
-        waitlist_entry_id: String,
+        params: crate::methods::waitlist_entries::RejectWaitlistEntryParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<WaitlistEntry, crate::errors::SdkError> {
-        crate::methods::waitlist_entries::reject_waitlist_entry(
-            &self.config,
-            waitlist_entry_id,
-            options,
-        )
+        crate::methods::waitlist_entries::reject_waitlist_entry(&self.config, params, options)
     }
 }
 
@@ -2938,38 +2439,18 @@ impl BillingNamespace {
     /// Returns a list of all billing plans for the instance. The plans are returned sorted by creation date, with the newest plans appearing first. This includes both free and paid plans. Pagination is supported.
     pub fn get_commerce_plan_list(
         &self,
-        paginated: Option<bool>,
-        limit: Option<i64>,
-        offset: Option<i64>,
-        payer_type: Option<crate::methods::billing::GetCommercePlanListEnum>,
+        params: crate::methods::billing::GetCommercePlanListParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<PaginatedCommercePlanResponse, crate::errors::SdkError> {
-        crate::methods::billing::get_commerce_plan_list(
-            &self.config,
-            paginated,
-            limit,
-            offset,
-            payer_type,
-            options,
-        )
+        crate::methods::billing::get_commerce_plan_list(&self.config, params, options)
     }
     /// Returns a list of all prices for the instance. The prices are returned sorted by amount ascending, then by creation date descending. This includes both default and custom prices. Pagination is supported.
     pub fn get_price_list(
         &self,
-        paginated: Option<bool>,
-        limit: Option<i64>,
-        offset: Option<i64>,
-        plan_id: Option<String>,
+        params: crate::methods::billing::GetBillingPriceListParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<PaginatedBillingPriceResponse, crate::errors::SdkError> {
-        crate::methods::billing::get_billing_price_list(
-            &self.config,
-            paginated,
-            limit,
-            offset,
-            plan_id,
-            options,
-        )
+        crate::methods::billing::get_billing_price_list(&self.config, params, options)
     }
     /// Creates a custom price for a billing plan. Custom prices allow you to offer different pricing to specific customers while maintaining the same plan structure.
     pub fn create_price(
@@ -2990,116 +2471,82 @@ impl BillingNamespace {
     /// Cancel a specific subscription item. The subscription item can be canceled immediately or at the end of the current billing period.
     pub fn cancel_commerce_subscription_item(
         &self,
-        subscription_item_id: String,
-        end_now: Option<bool>,
+        params: crate::methods::billing::CancelCommerceSubscriptionItemParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<CommerceSubscriptionItem, crate::errors::SdkError> {
-        crate::methods::billing::cancel_commerce_subscription_item(
-            &self.config,
-            subscription_item_id,
-            end_now,
-            options,
-        )
+        crate::methods::billing::cancel_commerce_subscription_item(&self.config, params, options)
     }
     /// Extends the free trial period for a specific subscription item to the specified timestamp. The subscription item must be currently in a free trial period, and the plan must support free trials. The timestamp must be in the future and not more than 365 days from the end of the current trial period This operation is idempotent \- repeated requests with the same timestamp will not change the trial period.
     pub fn extend_subscription_item_free_trial(
         &self,
-        subscription_item_id: String,
-        extend_to: String,
+        params: crate::methods::billing::ExtendBillingSubscriptionItemFreeTrialParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<CommerceSubscriptionItem2, crate::errors::SdkError> {
         crate::methods::billing::extend_billing_subscription_item_free_trial(
             &self.config,
-            subscription_item_id,
-            extend_to,
+            params,
             options,
         )
     }
     /// Creates a price transition for the specified subscription item. This may create an upcoming subscription item or activate immediately depending on plan and payer rules.
     pub fn create_price_transition(
         &self,
-        subscription_item_id: String,
-        from_price_id: String,
-        to_price_id: String,
+        params: crate::methods::billing::CreateBillingPriceTransitionParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<CommercePriceTransitionResponse, crate::errors::SdkError> {
-        crate::methods::billing::create_billing_price_transition(
-            &self.config,
-            subscription_item_id,
-            from_price_id,
-            to_price_id,
-            options,
-        )
+        crate::methods::billing::create_billing_price_transition(&self.config, params, options)
     }
     /// Applies an existing discount to a subscription item. Manual application is an override path: self-serve distribution rules are not enforced. At most one active discount is allowed per subscription item; applying a different discount replaces the currently active one. Re-applying the same active discount returns a conflict.
     pub fn apply_subscription_item_discount(
         &self,
-        subscription_item_id: String,
-        discount_id: String,
+        params: crate::methods::billing::ApplyBillingSubscriptionItemDiscountParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<CommerceDiscountRedemptionResponse, crate::errors::SdkError> {
         crate::methods::billing::apply_billing_subscription_item_discount(
             &self.config,
-            subscription_item_id,
-            discount_id,
+            params,
             options,
         )
     }
     /// Removes the active discount from a subscription item. The discount_id must match the subscription item's currently active discount.
     pub fn remove_subscription_item_discount(
         &self,
-        subscription_item_id: String,
-        discount_id: String,
+        params: crate::methods::billing::RemoveBillingSubscriptionItemDiscountParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<CommerceDiscountRedemptionResponse, crate::errors::SdkError> {
         crate::methods::billing::remove_billing_subscription_item_discount(
             &self.config,
-            subscription_item_id,
-            discount_id,
+            params,
             options,
         )
     }
     /// Returns a list of all billing statements for the instance. The statements are returned sorted by creation date, with the newest statements appearing first. Pagination is supported.
     pub fn get_statement_list(
         &self,
-        paginated: Option<bool>,
-        limit: Option<i64>,
-        offset: Option<i64>,
+        params: crate::methods::billing::GetBillingStatementListParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<PaginatedBillingStatementResponse, crate::errors::SdkError> {
-        crate::methods::billing::get_billing_statement_list(
-            &self.config,
-            paginated,
-            limit,
-            offset,
-            options,
-        )
+        crate::methods::billing::get_billing_statement_list(&self.config, params, options)
     }
     /// Retrieves a billing statement by its unique identifier. Use `statementID` to inspect the statement’s payer, current status, totals, and grouped items.
     ///
     /// Retrieves the details of a billing statement.
     pub fn get_statement(
         &self,
-        statement_id: String,
+        params: crate::methods::billing::GetBillingStatementParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<BillingStatement, crate::errors::SdkError> {
-        crate::methods::billing::get_billing_statement(&self.config, statement_id, options)
+        crate::methods::billing::get_billing_statement(&self.config, params, options)
     }
     /// Returns a list of all payment attempts for a specific billing statement. The payment attempts are returned sorted by creation date, with the newest payment attempts appearing first. Pagination is supported.
     pub fn get_statement_payment_attempts(
         &self,
-        statement_id: String,
-        paginated: Option<bool>,
-        limit: Option<i64>,
-        offset: Option<i64>,
+        params: crate::methods::billing::GetBillingStatementPaymentAttemptsParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<PaginatedBillingPaymentAttemptResponse, crate::errors::SdkError> {
         crate::methods::billing::get_billing_statement_payment_attempts(
             &self.config,
-            statement_id,
-            paginated,
-            limit,
-            offset,
+            params,
             options,
         )
     }
@@ -3120,76 +2567,60 @@ impl OrganizationPermissionsNamespace {
     /// Retrieves all organization permissions for the given instance.
     pub fn list(
         &self,
-        query: Option<String>,
-        order_by: Option<String>,
-        limit: Option<i64>,
-        offset: Option<i64>,
+        params: crate::methods::organization_permissions::ListOrganizationPermissionsParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Permissions, crate::errors::SdkError> {
         crate::methods::organization_permissions::list_organization_permissions(
             &self.config,
-            query,
-            order_by,
-            limit,
-            offset,
+            params,
             options,
         )
     }
     /// Creates a new organization permission for the given instance.
     pub fn create(
         &self,
-        name: String,
-        key: String,
-        description: Option<String>,
+        params: crate::methods::organization_permissions::CreateOrganizationPermissionParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Permission, crate::errors::SdkError> {
         crate::methods::organization_permissions::create_organization_permission(
             &self.config,
-            name,
-            key,
-            description,
+            params,
             options,
         )
     }
     /// Retrieves the details of an organization permission.
     pub fn get(
         &self,
-        permission_id: String,
+        params: crate::methods::organization_permissions::GetOrganizationPermissionParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Permission, crate::errors::SdkError> {
         crate::methods::organization_permissions::get_organization_permission(
             &self.config,
-            permission_id,
+            params,
             options,
         )
     }
     /// Updates the properties of an existing organization permission. System permissions cannot be updated.
     pub fn update(
         &self,
-        permission_id: String,
-        name: Option<String>,
-        key: Option<String>,
-        description: Option<String>,
+        params: crate::methods::organization_permissions::UpdateOrganizationPermissionParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Permission, crate::errors::SdkError> {
         crate::methods::organization_permissions::update_organization_permission(
             &self.config,
-            permission_id,
-            name,
-            key,
-            description,
+            params,
             options,
         )
     }
     /// Deletes an organization permission. System permissions cannot be deleted.
     pub fn delete(
         &self,
-        permission_id: String,
+        params: crate::methods::organization_permissions::DeleteOrganizationPermissionParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
         crate::methods::organization_permissions::delete_organization_permission(
             &self.config,
-            permission_id,
+            params,
             options,
         )
     }
@@ -3210,20 +2641,10 @@ impl RoleSetsNamespace {
     /// Returns a list of role sets for the instance. Results can be paginated using the optional `limit` and `offset` query parameters. The role sets are ordered by descending creation date by default.
     pub fn list(
         &self,
-        query: Option<String>,
-        order_by: Option<String>,
-        limit: Option<i64>,
-        offset: Option<i64>,
+        params: crate::methods::role_sets::ListRoleSetsParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<RoleSets, crate::errors::SdkError> {
-        crate::methods::role_sets::list_role_sets(
-            &self.config,
-            query,
-            order_by,
-            limit,
-            offset,
-            options,
-        )
+        crate::methods::role_sets::list_role_sets(&self.config, params, options)
     }
     /// Creates a new role set with the given name and roles. The key must be unique for the instance and start with the 'role_set:' prefix, followed by lowercase alphanumeric characters and underscores only. You must provide at least one role and specify a default role key and creator role key.
     pub fn create(
@@ -3238,10 +2659,10 @@ impl RoleSetsNamespace {
     /// Retrieves an existing role set by its key or ID.
     pub fn get(
         &self,
-        role_set_key_or_id: String,
+        params: crate::methods::role_sets::GetRoleSetParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<RoleSet, crate::errors::SdkError> {
-        crate::methods::role_sets::get_role_set(&self.config, role_set_key_or_id, options)
+        crate::methods::role_sets::get_role_set(&self.config, params, options)
     }
     /// Updates an existing role set. You can update the name, key, description, type, default role, or creator role. All parameters are optional \- you can update only the fields you want to change.
     pub fn update(
@@ -3254,52 +2675,26 @@ impl RoleSetsNamespace {
     /// Replaces a role set with another role set. This is functionally equivalent to deleting the role set but allows for atomic replacement with migration support. Organizations using this role set will be migrated to the destination role set.
     pub fn replace(
         &self,
-        role_set_key_or_id: String,
-        dest_role_set_key: String,
-        reassignment_mappings: Option<ReassignmentMappings>,
+        params: crate::methods::role_sets::ReplaceRoleSetParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
-        crate::methods::role_sets::replace_role_set(
-            &self.config,
-            role_set_key_or_id,
-            dest_role_set_key,
-            reassignment_mappings,
-            options,
-        )
+        crate::methods::role_sets::replace_role_set(&self.config, params, options)
     }
     /// Adds one or more roles to an existing role set. You can optionally update the default role or creator role when adding new roles.
     pub fn add_roles_to(
         &self,
-        role_set_key_or_id: String,
-        role_keys: Vec<String>,
-        default_role_key: Option<String>,
-        creator_role_key: Option<String>,
+        params: crate::methods::role_sets::AddRolesToRoleSetParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<RoleSet, crate::errors::SdkError> {
-        crate::methods::role_sets::add_roles_to_role_set(
-            &self.config,
-            role_set_key_or_id,
-            role_keys,
-            default_role_key,
-            creator_role_key,
-            options,
-        )
+        crate::methods::role_sets::add_roles_to_role_set(&self.config, params, options)
     }
     /// Replaces a role in a role set with another role. This atomically removes the source role and reassigns any members to the destination role.
     pub fn replace_role_in(
         &self,
-        role_set_key_or_id: String,
-        role_key: String,
-        to_role_key: String,
+        params: crate::methods::role_sets::ReplaceRoleInRoleSetParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<RoleSet, crate::errors::SdkError> {
-        crate::methods::role_sets::replace_role_in_role_set(
-            &self.config,
-            role_set_key_or_id,
-            role_key,
-            to_role_key,
-            options,
-        )
+        crate::methods::role_sets::replace_role_in_role_set(&self.config, params, options)
     }
 }
 
@@ -3318,52 +2713,30 @@ impl ScimDirectoriesNamespace {
     /// Returns a list of all directories for the instance.
     pub fn list(
         &self,
-        limit: Option<i64>,
-        offset: Option<i64>,
+        params: crate::methods::scim_directories::ListScimDirectoriesParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<SCIMDirectoryList, crate::errors::SdkError> {
-        crate::methods::scim_directories::list_scim_directories(
-            &self.config,
-            limit,
-            offset,
-            options,
-        )
+        crate::methods::scim_directories::list_scim_directories(&self.config, params, options)
     }
     /// Creates a SCIM directory for the instance and associates it with an enterprise connection. Supply `enterprise_connection_id` and `provider`; you can also include group-to-role mappings to create with the directory. The created directory response includes its SCIM endpoint URL and API key.
     ///
     /// Create a new directory for the instance.
     pub fn create(
         &self,
-        enterprise_connection_id: String,
-        provider: String,
-        name: Option<String>,
-        group_role_mappings: Option<
-            Vec<crate::methods::scim_directories::CreateSCIMDirectoryGroupRoleMappingsItem>,
-        >,
+        params: crate::methods::scim_directories::CreateScimDirectoryParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<SCIMDirectory, crate::errors::SdkError> {
-        crate::methods::scim_directories::create_scim_directory(
-            &self.config,
-            enterprise_connection_id,
-            provider,
-            name,
-            group_role_mappings,
-            options,
-        )
+        crate::methods::scim_directories::create_scim_directory(&self.config, params, options)
     }
     /// Retrieves the configuration for a SCIM directory. Use its identifier to look up details such as its provider, endpoint URL, enabled state, and attribute mappings.
     ///
     /// Returns the details of a directory.
     pub fn get(
         &self,
-        scim_directory_id: String,
+        params: crate::methods::scim_directories::GetScimDirectoryParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<SCIMDirectory, crate::errors::SdkError> {
-        crate::methods::scim_directories::get_scim_directory(
-            &self.config,
-            scim_directory_id,
-            options,
-        )
+        crate::methods::scim_directories::get_scim_directory(&self.config, params, options)
     }
     /// Updates the configuration of a SCIM directory. Supply only the settings you want to change; `attribute_mapping` entries are merged, and setting a key to `null` removes it from the mapping.
     ///
@@ -3378,82 +2751,68 @@ impl ScimDirectoriesNamespace {
     /// Deletes a directory and stops provisioning for it. SCIM requests authenticated with the directory's API key are rejected afterwards.
     pub fn delete(
         &self,
-        scim_directory_id: String,
+        params: crate::methods::scim_directories::DeleteScimDirectoryParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
-        crate::methods::scim_directories::delete_scim_directory(
-            &self.config,
-            scim_directory_id,
-            options,
-        )
+        crate::methods::scim_directories::delete_scim_directory(&self.config, params, options)
     }
     /// Generates a new API key for the directory and returns it in the `api_key` field. This is the only way to obtain the key after creation, so make sure to update it in your identity provider. The previous key remains valid for a short grace period before it expires.
     pub fn rotate_api_key(
         &self,
-        scim_directory_id: String,
+        params: crate::methods::scim_directories::RotateScimDirectoryApiKeyParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<SCIMDirectory, crate::errors::SdkError> {
         crate::methods::scim_directories::rotate_scim_directory_api_key(
             &self.config,
-            scim_directory_id,
+            params,
             options,
         )
     }
     /// Returns the list of SCIM group to organization role mappings for a directory, ordered by precedence.
     pub fn list_scim_group_role_mappings(
         &self,
-        scim_directory_id: String,
+        params: crate::methods::scim_directories::ListScimGroupRoleMappingsParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<SCIMGroupRoleMappingList, crate::errors::SdkError> {
         crate::methods::scim_directories::list_scim_group_role_mappings(
             &self.config,
-            scim_directory_id,
+            params,
             options,
         )
     }
     /// Creates a new SCIM group to organization role mapping for a directory. Mappings can be created while group role mapping is disabled on the directory, but they only take effect once it is enabled.
     pub fn create_scim_group_role_mapping(
         &self,
-        scim_directory_id: String,
-        scim_group_id: String,
-        role_id: String,
-        precedence: Option<i64>,
+        params: crate::methods::scim_directories::CreateScimGroupRoleMappingParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<SCIMGroupRoleMapping, crate::errors::SdkError> {
         crate::methods::scim_directories::create_scim_group_role_mapping(
             &self.config,
-            scim_directory_id,
-            scim_group_id,
-            role_id,
-            precedence,
+            params,
             options,
         )
     }
     /// Replaces the entire set of SCIM group role mappings for a directory. The position of each item in the `mappings` array determines its precedence (the first item gets precedence 1). Passing an empty array removes all mappings. Mappings can be replaced while group role mapping is disabled on the directory, but they only take effect once it is enabled.
     pub fn replace_scim_group_role_mappings(
         &self,
-        scim_directory_id: String,
-        mappings: Vec<crate::methods::scim_directories::ReplaceSCIMGroupRoleMappingsMappingsItem>,
+        params: crate::methods::scim_directories::ReplaceScimGroupRoleMappingsParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<SCIMGroupRoleMappingList, crate::errors::SdkError> {
         crate::methods::scim_directories::replace_scim_group_role_mappings(
             &self.config,
-            scim_directory_id,
-            mappings,
+            params,
             options,
         )
     }
     /// Deletes a single SCIM group role mapping. Mappings can be deleted while group role mapping is disabled on the directory, but the change only takes effect once it is enabled.
     pub fn delete_scim_group_role_mapping(
         &self,
-        scim_directory_id: String,
-        mapping_id: String,
+        params: crate::methods::scim_directories::DeleteScimGroupRoleMappingParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<SCIMGroupRoleMappingDeleted, crate::errors::SdkError> {
         crate::methods::scim_directories::delete_scim_group_role_mapping(
             &self.config,
-            scim_directory_id,
-            mapping_id,
+            params,
             options,
         )
     }
@@ -3474,43 +2833,30 @@ impl DirectoriesNamespace {
     /// Returns a list of all directories for the instance.
     pub fn list(
         &self,
-        limit: Option<i64>,
-        offset: Option<i64>,
+        params: crate::methods::directories::ListDirectoriesParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DirectoryList, crate::errors::SdkError> {
-        crate::methods::directories::list_directories(&self.config, limit, offset, options)
+        crate::methods::directories::list_directories(&self.config, params, options)
     }
     /// Creates a directory for provisioning users from an identity provider and associates it with an enterprise connection. Supply `enterprise_connection_id` and `provider`; optionally include a name and group-to-role mappings to create with the directory. The response includes the directory configuration and its API key.
     ///
     /// Create a new directory for the instance.
     pub fn create(
         &self,
-        enterprise_connection_id: String,
-        provider: String,
-        name: Option<String>,
-        group_role_mappings: Option<
-            Vec<crate::methods::directories::CreateDirectoryGroupRoleMappingsItem>,
-        >,
+        params: crate::methods::directories::CreateDirectoryParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Directory, crate::errors::SdkError> {
-        crate::methods::directories::create_directory(
-            &self.config,
-            enterprise_connection_id,
-            provider,
-            name,
-            group_role_mappings,
-            options,
-        )
+        crate::methods::directories::create_directory(&self.config, params, options)
     }
     /// Retrieves the configuration for a directory used to provision users from an identity provider. Use `directory_id` to identify the directory whose details you need.
     ///
     /// Returns the details of a directory.
     pub fn get(
         &self,
-        directory_id: String,
+        params: crate::methods::directories::GetDirectoryParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Directory, crate::errors::SdkError> {
-        crate::methods::directories::get_directory(&self.config, directory_id, options)
+        crate::methods::directories::get_directory(&self.config, params, options)
     }
     /// Updates configurable properties of a directory used to provision users from an identity provider. Supply only the fields you want to change; `attribute_mapping` entries are merged into the existing mapping, and a key set to `null` is removed.
     ///
@@ -3525,28 +2871,28 @@ impl DirectoriesNamespace {
     /// Deletes a directory and stops provisioning for it. Provisioning requests authenticated with the directory's API key are rejected afterwards.
     pub fn delete(
         &self,
-        directory_id: String,
+        params: crate::methods::directories::DeleteDirectoryParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DeletedObject, crate::errors::SdkError> {
-        crate::methods::directories::delete_directory(&self.config, directory_id, options)
+        crate::methods::directories::delete_directory(&self.config, params, options)
     }
     /// Generates a new API key for the directory and returns it in the `api_key` field. This is the only way to obtain the key after creation, so make sure to update it in your identity provider. The previous key remains valid for a short grace period before it expires.
     pub fn rotate_api_key(
         &self,
-        directory_id: String,
+        params: crate::methods::directories::RotateDirectoryApiKeyParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<Directory, crate::errors::SdkError> {
-        crate::methods::directories::rotate_directory_api_key(&self.config, directory_id, options)
+        crate::methods::directories::rotate_directory_api_key(&self.config, params, options)
     }
     /// Returns the list of directory group to organization role mappings for a directory, ordered by precedence.
     pub fn list_group_role_mappings(
         &self,
-        directory_id: String,
+        params: crate::methods::directories::ListDirectoryGroupRoleMappingsParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DirectoryGroupRoleMappingList, crate::errors::SdkError> {
         crate::methods::directories::list_directory_group_role_mappings(
             &self.config,
-            directory_id,
+            params,
             options,
         )
     }
@@ -3565,28 +2911,24 @@ impl DirectoriesNamespace {
     /// Replaces the entire set of directory group role mappings for a directory. The position of each item in the `mappings` array determines its precedence (the first item gets precedence 1). Passing an empty array removes all mappings. Mappings can be replaced while group role mapping is disabled on the directory, but they only take effect once it is enabled.
     pub fn replace_group_role_mappings(
         &self,
-        directory_id: String,
-        mappings: Vec<crate::methods::directories::ReplaceDirectoryGroupRoleMappingsMappingsItem>,
+        params: crate::methods::directories::ReplaceDirectoryGroupRoleMappingsParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DirectoryGroupRoleMappingList, crate::errors::SdkError> {
         crate::methods::directories::replace_directory_group_role_mappings(
             &self.config,
-            directory_id,
-            mappings,
+            params,
             options,
         )
     }
     /// Deletes a single directory group role mapping. Mappings can be deleted while group role mapping is disabled on the directory, but the change only takes effect once it is enabled.
     pub fn delete_group_role_mapping(
         &self,
-        directory_id: String,
-        mapping_id: String,
+        params: crate::methods::directories::DeleteDirectoryGroupRoleMappingParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<DirectoryGroupRoleMappingDeleted, crate::errors::SdkError> {
         crate::methods::directories::delete_directory_group_role_mapping(
             &self.config,
-            directory_id,
-            mapping_id,
+            params,
             options,
         )
     }
@@ -3607,10 +2949,7 @@ impl AdminPortalLinkTokensNamespace {
     /// Creates a single-use admin portal link token, optionally scoped to an organization and IT contact. Supply `organization_id`, `it_contact_id`, `scopes`, and `seconds_until_expiration` as needed; the expiration defaults to 3600 seconds. Treat the returned token as a secret because it is URL-borne.
     pub fn create(
         &self,
-        organization_id: Option<String>,
-        it_contact_id: Option<String>,
-        scopes: Option<Vec<String>>,
-        seconds_until_expiration: Option<i64>,
+        params: crate::methods::admin_portal_link_tokens::CreateAdminPortalLinkTokenParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<
         crate::methods::admin_portal_link_tokens::CreateAdminPortalLinkTokenResponse,
@@ -3618,18 +2957,14 @@ impl AdminPortalLinkTokensNamespace {
     > {
         crate::methods::admin_portal_link_tokens::create_admin_portal_link_token(
             &self.config,
-            organization_id,
-            it_contact_id,
-            scopes,
-            seconds_until_expiration,
+            params,
             options,
         )
     }
     /// Revokes an admin portal link token identified by its token ID. You can include `revocation_reason` to record why the token was revoked. The response contains the token's updated revocation state.
     pub fn revoke(
         &self,
-        admin_portal_link_token_id: String,
-        revocation_reason: Option<Option<String>>,
+        params: crate::methods::admin_portal_link_tokens::RevokeAdminPortalLinkTokenParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<
         crate::methods::admin_portal_link_tokens::RevokeAdminPortalLinkTokenResponse,
@@ -3637,8 +2972,7 @@ impl AdminPortalLinkTokensNamespace {
     > {
         crate::methods::admin_portal_link_tokens::revoke_admin_portal_link_token(
             &self.config,
-            admin_portal_link_token_id,
-            revocation_reason,
+            params,
             options,
         )
     }
@@ -3675,10 +3009,10 @@ impl ApiKeysNamespace {
     /// Retrieves an API key by its identifier. Supply the key ID in the path using either the `ak_` or `api_key_` prefix followed by 32 hexadecimal characters. The response contains the key's configuration and status.
     pub fn get(
         &self,
-        api_key_id: String,
+        params: crate::methods::api_keys::GetApiKeyParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<crate::methods::api_keys::GetApiKeyResponse, crate::errors::SdkError> {
-        crate::methods::api_keys::get_api_key(&self.config, api_key_id, options)
+        crate::methods::api_keys::get_api_key(&self.config, params, options)
     }
     /// Updates configurable properties of an API key. Include only the fields you want to change, such as `scopes`, `description`, `subject`, or `seconds_until_expiration`. The response contains the updated API key object.
     pub fn update(
@@ -3691,40 +3025,34 @@ impl ApiKeysNamespace {
     /// Deletes an API key identified by its ID. Supply the identifier using the `ak_` or `api_key_` prefix followed by 32 hexadecimal characters. The response confirms that the key was deleted.
     pub fn delete(
         &self,
-        api_key_id: String,
+        params: crate::methods::api_keys::DeleteApiKeyParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<crate::methods::api_keys::DeleteApiKeyResponse, crate::errors::SdkError> {
-        crate::methods::api_keys::delete_api_key(&self.config, api_key_id, options)
+        crate::methods::api_keys::delete_api_key(&self.config, params, options)
     }
     /// Retrieves the secret for an API key by its identifier. Supply the key ID using the `ak_` or `api_key_` prefix followed by 32 hexadecimal characters. Treat the returned secret as a credential.
     pub fn get_secret(
         &self,
-        api_key_id: String,
+        params: crate::methods::api_keys::GetApiKeySecretParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<crate::methods::api_keys::GetApiKeySecretResponse, crate::errors::SdkError> {
-        crate::methods::api_keys::get_api_key_secret(&self.config, api_key_id, options)
+        crate::methods::api_keys::get_api_key_secret(&self.config, params, options)
     }
     /// Revokes an API key identified by its ID. You can include `revocation_reason` to record why the key was revoked. The response contains the API key's updated revocation state.
     pub fn revoke(
         &self,
-        api_key_id: String,
-        revocation_reason: Option<Option<String>>,
+        params: crate::methods::api_keys::RevokeApiKeyParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<crate::methods::api_keys::RevokeApiKeyResponse, crate::errors::SdkError> {
-        crate::methods::api_keys::revoke_api_key(
-            &self.config,
-            api_key_id,
-            revocation_reason,
-            options,
-        )
+        crate::methods::api_keys::revoke_api_key(&self.config, params, options)
     }
     /// Verifies an API key using its secret. Supply the key in the `secret` field to retrieve its metadata and status. The response includes whether the key is revoked or expired and its associated subject and scopes.
     pub fn verify(
         &self,
-        secret: String,
+        params: crate::methods::api_keys::VerifyApiKeyParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<crate::methods::api_keys::VerifyApiKeyResponse, crate::errors::SdkError> {
-        crate::methods::api_keys::verify_api_key(&self.config, secret, options)
+        crate::methods::api_keys::verify_api_key(&self.config, params, options)
     }
 }
 
@@ -3745,20 +3073,10 @@ impl M2MTokensNamespace {
     /// Creates a new M2M Token. Must be authenticated via a Machine Secret Key.
     pub fn create(
         &self,
-        token_format: Option<crate::methods::m2_mtokens::CreateM2MTokenTokenFormatEnum>,
-        seconds_until_expiration: Option<Option<f64>>,
-        claims: Option<Option<serde_json::Value>>,
-        min_remaining_ttl_seconds: Option<i64>,
+        params: crate::methods::m2_mtokens::CreateM2MtokenParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<crate::methods::m2_mtokens::CreateM2MTokenResponse, crate::errors::SdkError> {
-        crate::methods::m2_mtokens::create_m2_mtoken(
-            &self.config,
-            token_format,
-            seconds_until_expiration,
-            claims,
-            min_remaining_ttl_seconds,
-            options,
-        )
+        crate::methods::m2_mtokens::create_m2_mtoken(&self.config, params, options)
     }
     /// Lists stored opaque-format M2M tokens for a specific machine; stateless JWT-format tokens are not included. Use `revoked` and `expired` to filter the results, and `limit` and `offset` to control pagination. Authenticate with a Machine Secret Key to retrieve tokens for its machine, or a Clerk Secret Key to retrieve tokens for any machine in the instance.
     ///
@@ -3775,26 +3093,20 @@ impl M2MTokensNamespace {
     /// Revokes a M2M Token. This endpoint only revokes stored opaque-format M2M tokens. JWT-format M2M tokens are stateless and cannot be revoked. This endpoint can be authenticated by either a Machine Secret Key or by a Clerk Secret Key. \- When revoking a M2M Token with a Machine Secret Key, the token must managed by the Machine associated with the Machine Secret Key. \- When revoking a M2M Token with a Clerk Secret Key, any token on the Instance can be revoked.
     pub fn revoke(
         &self,
-        m2m_token_id: String,
-        revocation_reason: Option<Option<String>>,
+        params: crate::methods::m2_mtokens::RevokeM2MtokenParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<crate::methods::m2_mtokens::RevokeM2MTokenResponse, crate::errors::SdkError> {
-        crate::methods::m2_mtokens::revoke_m2_mtoken(
-            &self.config,
-            m2m_token_id,
-            revocation_reason,
-            options,
-        )
+        crate::methods::m2_mtokens::revoke_m2_mtoken(&self.config, params, options)
     }
     /// Verifies an M2M token and returns its token details when valid. Supply the token in the `token` field. A Machine Secret Key can verify a token only when it grants access to that machine, while a Clerk Secret Key can verify any token in the instance.
     ///
     /// Verifies a M2M Token. This endpoint can be authenticated by either a Machine Secret Key or by a Clerk Secret Key. \- When verifying a M2M Token with a Machine Secret Key, the token must be granted access to the Machine associated with the Machine Secret Key. \- When verifying a M2M Token with a Clerk Secret Key, any token on the Instance can be verified.
     pub fn verify(
         &self,
-        token: String,
+        params: crate::methods::m2_mtokens::VerifyM2MtokenParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<crate::methods::m2_mtokens::VerifyM2MTokenResponse, crate::errors::SdkError> {
-        crate::methods::m2_mtokens::verify_m2_mtoken(&self.config, token, options)
+        crate::methods::m2_mtokens::verify_m2_mtoken(&self.config, params, options)
     }
 }
 
@@ -3813,14 +3125,12 @@ impl OAuthAccessTokensNamespace {
     /// Verifies an OAuth access token and returns its token details or active status. Supply the token in `access_token`; the legacy `secret` field is deprecated. Use this endpoint to check whether an access token is active and retrieve its associated client, subject, and scopes when available.
     pub fn verify(
         &self,
-        access_token: Option<String>,
-        secret: Option<String>,
+        params: crate::methods::o_auth_access_tokens::VerifyOauthAccessTokenParams,
         options: Option<&crate::client::RequestOptions>,
     ) -> Result<VerifyOAuthAccessTokenResponse, crate::errors::SdkError> {
         crate::methods::o_auth_access_tokens::verify_oauth_access_token(
             &self.config,
-            access_token,
-            secret,
+            params,
             options,
         )
     }

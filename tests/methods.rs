@@ -135,9 +135,11 @@ fn add_domain_add_domain_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = domains::add_domain(
         &config,
-        decode(fixture(r#""Example Name""#)),
-        decode(fixture(r#"false"#)),
-        Some(Some(decode(fixture(r#""https://example.com""#)))),
+        domains::AddDomainParams {
+            name: decode(fixture(r#""Example Name""#)),
+            is_satellite: decode(fixture(r#"false"#)),
+            proxy_url: Some(Some(decode(fixture(r#""https://example.com""#)))),
+        },
         None,
     )
     .expect("add_domain request failed");
@@ -164,9 +166,11 @@ fn add_domain_add_domain_400_decodes_declared_error() {
     };
     let result = domains::add_domain(
         &config,
-        decode(fixture(r#""Example Name""#)),
-        decode(fixture(r#"false"#)),
-        Some(Some(decode(fixture(r#""https://example.com""#)))),
+        domains::AddDomainParams {
+            name: decode(fixture(r#""Example Name""#)),
+            is_satellite: decode(fixture(r#"false"#)),
+            proxy_url: Some(Some(decode(fixture(r#""https://example.com""#)))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -191,10 +195,12 @@ fn add_roles_to_role_set_add_roles_to_role_set_reaches_mock_and_decodes_response
     let _ = &config;
     let actual = role_sets::add_roles_to_role_set(
         &config,
-        decode(fixture(r#""role_set_key_or-1""#)),
-        decode(fixture(r#"["role_keys"]"#)),
-        Some(decode(fixture(r#""default_role_key""#))),
-        Some(decode(fixture(r#""creator_role_key""#))),
+        role_sets::AddRolesToRoleSetParams {
+            role_set_key_or_id: decode(fixture(r#""role_set_key_or-1""#)),
+            role_keys: decode(fixture(r#"["role_keys"]"#)),
+            default_role_key: Some(decode(fixture(r#""default_role_key""#))),
+            creator_role_key: Some(decode(fixture(r#""creator_role_key""#))),
+        },
         None,
     )
     .expect("add_roles_to_role_set request failed");
@@ -221,10 +227,12 @@ fn add_roles_to_role_set_add_roles_to_role_set_400_decodes_declared_error() {
     };
     let result = role_sets::add_roles_to_role_set(
         &config,
-        decode(fixture(r#""role_set_key_or-1""#)),
-        decode(fixture(r#"["role_keys"]"#)),
-        Some(decode(fixture(r#""default_role_key""#))),
-        Some(decode(fixture(r#""creator_role_key""#))),
+        role_sets::AddRolesToRoleSetParams {
+            role_set_key_or_id: decode(fixture(r#""role_set_key_or-1""#)),
+            role_keys: decode(fixture(r#"["role_keys"]"#)),
+            default_role_key: Some(decode(fixture(r#""default_role_key""#))),
+            creator_role_key: Some(decode(fixture(r#""creator_role_key""#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -388,8 +396,10 @@ fn apply_billing_subscription_item_discount_apply_billing_subscription_item_disc
     let _ = &config;
     let actual = billing::apply_billing_subscription_item_discount(
         &config,
-        decode(fixture(r#""subscription_item-1""#)),
-        decode(fixture(r#""discount-1""#)),
+        billing::ApplyBillingSubscriptionItemDiscountParams {
+            subscription_item_id: decode(fixture(r#""subscription_item-1""#)),
+            discount_id: decode(fixture(r#""discount-1""#)),
+        },
         None,
     )
     .expect("apply_billing_subscription_item_discount request failed");
@@ -417,8 +427,10 @@ fn apply_billing_subscription_item_discount_apply_billing_subscription_item_disc
     };
     let result = billing::apply_billing_subscription_item_discount(
         &config,
-        decode(fixture(r#""subscription_item-1""#)),
-        decode(fixture(r#""discount-1""#)),
+        billing::ApplyBillingSubscriptionItemDiscountParams {
+            subscription_item_id: decode(fixture(r#""subscription_item-1""#)),
+            discount_id: decode(fixture(r#""discount-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -444,8 +456,10 @@ fn assign_permission_to_organization_role_assign_permission_to_organization_role
     let _ = &config;
     let actual = organization_roles::assign_permission_to_organization_role(
         &config,
-        decode(fixture(r#""organization_role-1""#)),
-        decode(fixture(r#""permission-1""#)),
+        organization_roles::AssignPermissionToOrganizationRoleParams {
+            organization_role_id: decode(fixture(r#""organization_role-1""#)),
+            permission_id: decode(fixture(r#""permission-1""#)),
+        },
         None,
     )
     .expect("assign_permission_to_organization_role request failed");
@@ -473,8 +487,10 @@ fn assign_permission_to_organization_role_assign_permission_to_organization_role
     };
     let result = organization_roles::assign_permission_to_organization_role(
         &config,
-        decode(fixture(r#""organization_role-1""#)),
-        decode(fixture(r#""permission-1""#)),
+        organization_roles::AssignPermissionToOrganizationRoleParams {
+            organization_role_id: decode(fixture(r#""organization_role-1""#)),
+            permission_id: decode(fixture(r#""permission-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -500,9 +516,11 @@ fn attempt_email_address_verification_attempt_email_address_verification_reaches
     let _ = &config;
     let actual = email_addresses::attempt_email_address_verification(
         &config,
-        decode(fixture(r#""email_address-1""#)),
-        decode(fixture(r#""verification-1""#)),
-        decode(fixture(r#""user@example.com""#)),
+        email_addresses::AttemptEmailAddressVerificationParams {
+            email_address_id: decode(fixture(r#""email_address-1""#)),
+            verification_id: decode(fixture(r#""verification-1""#)),
+            code: decode(fixture(r#""user@example.com""#)),
+        },
         None,
     )
     .expect("attempt_email_address_verification request failed");
@@ -530,9 +548,11 @@ fn attempt_email_address_verification_attempt_email_address_verification_400_dec
     };
     let result = email_addresses::attempt_email_address_verification(
         &config,
-        decode(fixture(r#""email_address-1""#)),
-        decode(fixture(r#""verification-1""#)),
-        decode(fixture(r#""user@example.com""#)),
+        email_addresses::AttemptEmailAddressVerificationParams {
+            email_address_id: decode(fixture(r#""email_address-1""#)),
+            verification_id: decode(fixture(r#""verification-1""#)),
+            code: decode(fixture(r#""user@example.com""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -558,9 +578,11 @@ fn attempt_phone_number_verification_attempt_phone_number_verification_reaches_m
     let _ = &config;
     let actual = phone_numbers::attempt_phone_number_verification(
         &config,
-        decode(fixture(r#""phone_number-1""#)),
-        decode(fixture(r#""verification-1""#)),
-        decode(fixture(r#""code""#)),
+        phone_numbers::AttemptPhoneNumberVerificationParams {
+            phone_number_id: decode(fixture(r#""phone_number-1""#)),
+            verification_id: decode(fixture(r#""verification-1""#)),
+            code: decode(fixture(r#""code""#)),
+        },
         None,
     )
     .expect("attempt_phone_number_verification request failed");
@@ -588,9 +610,11 @@ fn attempt_phone_number_verification_attempt_phone_number_verification_400_decod
     };
     let result = phone_numbers::attempt_phone_number_verification(
         &config,
-        decode(fixture(r#""phone_number-1""#)),
-        decode(fixture(r#""verification-1""#)),
-        decode(fixture(r#""code""#)),
+        phone_numbers::AttemptPhoneNumberVerificationParams {
+            phone_number_id: decode(fixture(r#""phone_number-1""#)),
+            verification_id: decode(fixture(r#""verification-1""#)),
+            code: decode(fixture(r#""code""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -613,8 +637,14 @@ fn ban_user_ban_user_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = users::ban_user(&config, decode(fixture(r#""user-1""#)), None)
-        .expect("ban_user request failed");
+    let actual = users::ban_user(
+        &config,
+        users::BanUserParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    )
+    .expect("ban_user request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"id":"id-1","object":"user","external_id":"external-1","primary_email_address_id":"primary_email_address-1","primary_phone_number_id":"primary_phone_number-1","primary_web3_wallet_id":"primary_web3_wallet-1","username":"Example Name","first_name":"Example Name","last_name":"Example Name","locale":"locale","timezone":"2024-01-01T00:00:00Z","profile_image_url":"https://example.com","image_url":"https://example.com","has_image":false,"public_metadata":{},"private_metadata":{},"unsafe_metadata":{},"email_addresses":[{"id":"id-1","object":"email_address","email_address":"user@example.com","reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"matches_sso_connection":false,"created_at":1,"updated_at":1}],"phone_numbers":[{"id":"id-1","object":"phone_number","phone_number":"+15555550100","reserved_for_second_factor":false,"default_second_factor":false,"reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"backup_codes":["backup_codes"],"created_at":1,"updated_at":1}],"web3_wallets":[{"id":"id-1","object":"web3_wallet","web3_wallet":"web3_wallet","verification":{"object":"verification_web3","status":"unverified","strategy":"web3_metamask_signature","nonce":"nonce","message":"example text","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"},"created_at":1,"updated_at":1}],"passkeys":[{"id":"id-1","object":"passkey","name":"Example Name","last_used_at":1,"verification":{"object":"verification_passkey","status":"verified","strategy":"passkey","nonce":"nonce","message":"example text","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"}}],"password_enabled":false,"two_factor_enabled":false,"totp_enabled":false,"backup_code_enabled":false,"mfa_enabled_at":1,"mfa_disabled_at":1,"password_last_updated_at":1,"external_accounts":[{"object":"external_account","id":"id-1","provider":"provider","identification_id":"identification-1","provider_user_id":"provider_user-1","approved_scopes":"approved_scopes","email_address":"user@example.com","email_address_verified":false,"first_name":"Example Name","last_name":"Example Name","avatar_url":"https://example.com","image_url":"https://example.com","username":"Example Name","phone_number":"+15555550100","public_metadata":{},"label":"label","created_at":1,"updated_at":1,"verification":{"object":"verification_oauth","status":"unverified","strategy":"oauth_a","external_verification_redirect_url":"https://example.com","error":{"message":"example text","long_message":"example text","code":"code","meta":{}},"expire_at":1,"attempts":1,"verified_at_client":"verified_at_client"}}],"saml_accounts":[{"id":"id-1","object":"saml_account","provider":"provider","active":false,"email_address":"user@example.com","first_name":"Example Name","last_name":"Example Name","provider_user_id":"provider_user-1","last_authenticated_at":1,"public_metadata":{},"verification":{"object":"verification_saml","status":"unverified","strategy":"saml","external_verification_redirect_url":"https://example.com","error":{"message":"example text","long_message":"example text","code":"code","meta":{}},"expire_at":1,"attempts":1,"verified_at_client":"verified_at_client"},"saml_connection":{"id":"id-1","name":"Example Name","domain":"domain","domains":["domains"],"active":false,"provider":"provider","sync_user_attributes":false,"allow_subdomains":false,"allow_idp_initiated":false,"disable_additional_identifications":false,"created_at":1,"updated_at":1}}],"enterprise_accounts":[{"id":"id-1","object":"enterprise_account","protocol":"oauth","provider":"provider","active":false,"email_address":"user@example.com","first_name":"Example Name","last_name":"Example Name","provider_user_id":"provider_user-1","enterprise_connection_id":"enterprise_connection-1","public_metadata":{},"verification":{"object":"verification_ticket","status":"unverified","strategy":"ticket","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"},"enterprise_connection":{"id":"id-1","protocol":"protocol","provider":"provider","name":"Example Name","logo_public_url":"https://example.com","domain":"domain","domains":["domains"],"active":false,"sync_user_attributes":false,"allow_subdomains":false,"allow_idp_initiated":false,"disable_additional_identifications":false,"created_at":1,"updated_at":1},"last_authenticated_at":1}],"organization_memberships":[{"id":"id-1","object":"organization_membership","role":"role","role_name":"Example Name","permissions":["permissions"],"public_metadata":{},"private_metadata":{},"organization":{"object":"organization","id":"id-1","name":"Example Name","slug":"slug","image_url":"https://example.com","has_image":false,"members_count":1,"missing_member_with_elevated_permissions":false,"pending_invitations_count":1,"max_allowed_memberships":1,"admin_delete_enabled":false,"self_serve_sso_enabled":false,"self_serve_directory_sync_enabled":false,"public_metadata":{},"private_metadata":{},"created_by":"created_by","created_at":1,"updated_at":1,"last_active_at":1,"role_set_key":"role_set_key"},"public_user_data":{"user_id":"user-1","first_name":"Example Name","last_name":"Example Name","profile_image_url":"https://example.com","image_url":"https://example.com","has_image":false,"identifier":"identifier","username":"Example Name","banned":false,"deprovisioned":false},"created_at":1,"updated_at":1}],"last_sign_in_at":1,"banned":false,"locked":false,"deprovisioned":false,"lockout_expires_in_seconds":1,"verification_attempts_remaining":1,"updated_at":1,"created_at":1,"delete_self_enabled":false,"create_organization_enabled":false,"create_organizations_limit":1,"last_active_at":1700690400000,"legal_accepted_at":1700690400000,"bypass_client_trust":false,"directories":[{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"}],"directory":{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"},"scim":{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"}}"#,
@@ -636,7 +666,13 @@ fn ban_user_ban_user_402_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/402")),
         ..config
     };
-    let result = users::ban_user(&config, decode(fixture(r#""user-1""#)), None);
+    let result = users::ban_user(
+        &config,
+        users::BanUserParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("ban_user did not fail with SdkError::Http on 402");
     };
@@ -657,8 +693,14 @@ fn ban_users_bulk_ban_users_bulk_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = users::ban_users_bulk(&config, decode(fixture(r#"["user_ids"]"#)), None)
-        .expect("ban_users_bulk request failed");
+    let actual = users::ban_users_bulk(
+        &config,
+        users::BanUsersBulkParams {
+            user_ids: decode(fixture(r#"["user_ids"]"#)),
+        },
+        None,
+    )
+    .expect("ban_users_bulk request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"[{"id":"id-1","object":"user","external_id":"external-1","primary_email_address_id":"primary_email_address-1","primary_phone_number_id":"primary_phone_number-1","primary_web3_wallet_id":"primary_web3_wallet-1","username":"Example Name","first_name":"Example Name","last_name":"Example Name","locale":"locale","timezone":"2024-01-01T00:00:00Z","profile_image_url":"https://example.com","image_url":"https://example.com","has_image":false,"public_metadata":{},"private_metadata":{},"unsafe_metadata":{},"email_addresses":[{"id":"id-1","object":"email_address","email_address":"user@example.com","reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"matches_sso_connection":false,"created_at":1,"updated_at":1}],"phone_numbers":[{"id":"id-1","object":"phone_number","phone_number":"+15555550100","reserved_for_second_factor":false,"default_second_factor":false,"reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"backup_codes":["backup_codes"],"created_at":1,"updated_at":1}],"web3_wallets":[{"id":"id-1","object":"web3_wallet","web3_wallet":"web3_wallet","verification":{"object":"verification_web3","status":"unverified","strategy":"web3_metamask_signature","nonce":"nonce","message":"example text","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"},"created_at":1,"updated_at":1}],"passkeys":[{"id":"id-1","object":"passkey","name":"Example Name","last_used_at":1,"verification":{"object":"verification_passkey","status":"verified","strategy":"passkey","nonce":"nonce","message":"example text","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"}}],"password_enabled":false,"two_factor_enabled":false,"totp_enabled":false,"backup_code_enabled":false,"mfa_enabled_at":1,"mfa_disabled_at":1,"password_last_updated_at":1,"external_accounts":[{"object":"external_account","id":"id-1","provider":"provider","identification_id":"identification-1","provider_user_id":"provider_user-1","approved_scopes":"approved_scopes","email_address":"user@example.com","email_address_verified":false,"first_name":"Example Name","last_name":"Example Name","avatar_url":"https://example.com","image_url":"https://example.com","username":"Example Name","phone_number":"+15555550100","public_metadata":{},"label":"label","created_at":1,"updated_at":1,"verification":{"object":"verification_oauth","status":"unverified","strategy":"oauth_a","external_verification_redirect_url":"https://example.com","error":{"message":"example text","long_message":"example text","code":"code","meta":{}},"expire_at":1,"attempts":1,"verified_at_client":"verified_at_client"}}],"saml_accounts":[{"id":"id-1","object":"saml_account","provider":"provider","active":false,"email_address":"user@example.com","first_name":"Example Name","last_name":"Example Name","provider_user_id":"provider_user-1","last_authenticated_at":1,"public_metadata":{},"verification":{"object":"verification_saml","status":"unverified","strategy":"saml","external_verification_redirect_url":"https://example.com","error":{"message":"example text","long_message":"example text","code":"code","meta":{}},"expire_at":1,"attempts":1,"verified_at_client":"verified_at_client"},"saml_connection":{"id":"id-1","name":"Example Name","domain":"domain","domains":["domains"],"active":false,"provider":"provider","sync_user_attributes":false,"allow_subdomains":false,"allow_idp_initiated":false,"disable_additional_identifications":false,"created_at":1,"updated_at":1}}],"enterprise_accounts":[{"id":"id-1","object":"enterprise_account","protocol":"oauth","provider":"provider","active":false,"email_address":"user@example.com","first_name":"Example Name","last_name":"Example Name","provider_user_id":"provider_user-1","enterprise_connection_id":"enterprise_connection-1","public_metadata":{},"verification":{"object":"verification_ticket","status":"unverified","strategy":"ticket","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"},"enterprise_connection":{"id":"id-1","protocol":"protocol","provider":"provider","name":"Example Name","logo_public_url":"https://example.com","domain":"domain","domains":["domains"],"active":false,"sync_user_attributes":false,"allow_subdomains":false,"allow_idp_initiated":false,"disable_additional_identifications":false,"created_at":1,"updated_at":1},"last_authenticated_at":1}],"organization_memberships":[{"id":"id-1","object":"organization_membership","role":"role","role_name":"Example Name","permissions":["permissions"],"public_metadata":{},"private_metadata":{},"organization":{"object":"organization","id":"id-1","name":"Example Name","slug":"slug","image_url":"https://example.com","has_image":false,"members_count":1,"missing_member_with_elevated_permissions":false,"pending_invitations_count":1,"max_allowed_memberships":1,"admin_delete_enabled":false,"self_serve_sso_enabled":false,"self_serve_directory_sync_enabled":false,"public_metadata":{},"private_metadata":{},"created_by":"created_by","created_at":1,"updated_at":1,"last_active_at":1,"role_set_key":"role_set_key"},"public_user_data":{"user_id":"user-1","first_name":"Example Name","last_name":"Example Name","profile_image_url":"https://example.com","image_url":"https://example.com","has_image":false,"identifier":"identifier","username":"Example Name","banned":false,"deprovisioned":false},"created_at":1,"updated_at":1}],"last_sign_in_at":1,"banned":false,"locked":false,"deprovisioned":false,"lockout_expires_in_seconds":1,"verification_attempts_remaining":1,"updated_at":1,"created_at":1,"delete_self_enabled":false,"create_organization_enabled":false,"create_organizations_limit":1,"last_active_at":1700690400000,"legal_accepted_at":1700690400000,"bypass_client_trust":false,"directories":[{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"}],"directory":{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"},"scim":{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"}}]"#,
@@ -680,7 +722,13 @@ fn ban_users_bulk_ban_users_bulk_400_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result = users::ban_users_bulk(&config, decode(fixture(r#"["user_ids"]"#)), None);
+    let result = users::ban_users_bulk(
+        &config,
+        users::BanUsersBulkParams {
+            user_ids: decode(fixture(r#"["user_ids"]"#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("ban_users_bulk did not fail with SdkError::Http on 400");
     };
@@ -704,8 +752,10 @@ fn cancel_commerce_subscription_item_cancel_commerce_subscription_item_reaches_m
     let _ = &config;
     let actual = billing::cancel_commerce_subscription_item(
         &config,
-        decode(fixture(r#""subscription_item-1""#)),
-        Some(decode(fixture(r#"false"#))),
+        billing::CancelCommerceSubscriptionItemParams {
+            subscription_item_id: decode(fixture(r#""subscription_item-1""#)),
+            end_now: Some(decode(fixture(r#"false"#))),
+        },
         None,
     )
     .expect("cancel_commerce_subscription_item request failed");
@@ -733,8 +783,10 @@ fn cancel_commerce_subscription_item_cancel_commerce_subscription_item_400_decod
     };
     let result = billing::cancel_commerce_subscription_item(
         &config,
-        decode(fixture(r#""subscription_item-1""#)),
-        Some(decode(fixture(r#"false"#))),
+        billing::CancelCommerceSubscriptionItemParams {
+            subscription_item_id: decode(fixture(r#""subscription_item-1""#)),
+            end_now: Some(decode(fixture(r#"false"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -760,8 +812,10 @@ fn change_production_instance_domain_change_production_instance_domain_reaches_m
     let _ = &config;
     beta_features::change_production_instance_domain(
         &config,
-        Some(decode(fixture(r#""https://example.com""#))),
-        Some(decode(fixture(r#"false"#))),
+        beta_features::ChangeProductionInstanceDomainParams {
+            home_url: Some(decode(fixture(r#""https://example.com""#))),
+            is_secondary: Some(decode(fixture(r#"false"#))),
+        },
         None,
     )
     .expect("change_production_instance_domain request failed");
@@ -781,8 +835,10 @@ fn change_production_instance_domain_change_production_instance_domain_400_decod
     };
     let result = beta_features::change_production_instance_domain(
         &config,
-        Some(decode(fixture(r#""https://example.com""#))),
-        Some(decode(fixture(r#"false"#))),
+        beta_features::ChangeProductionInstanceDomainParams {
+            home_url: Some(decode(fixture(r#""https://example.com""#))),
+            is_secondary: Some(decode(fixture(r#"false"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -807,10 +863,12 @@ fn create_actor_token_create_actor_token_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = actor_tokens::create_actor_token(
         &config,
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#"{"sub":"user_2OEpKhcCN1Lat9NQ0G6puh7q5Rb"}"#)),
-        Some(decode(fixture(r#"3600"#))),
-        Some(decode(fixture(r#"1800"#))),
+        actor_tokens::CreateActorTokenParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            actor: decode(fixture(r#"{"sub":"user_2OEpKhcCN1Lat9NQ0G6puh7q5Rb"}"#)),
+            expires_in_seconds: Some(decode(fixture(r#"3600"#))),
+            session_max_duration_in_seconds: Some(decode(fixture(r#"1800"#))),
+        },
         None,
     )
     .expect("create_actor_token request failed");
@@ -837,10 +895,12 @@ fn create_actor_token_create_actor_token_400_decodes_declared_error() {
     };
     let result = actor_tokens::create_actor_token(
         &config,
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#"{"sub":"user_2OEpKhcCN1Lat9NQ0G6puh7q5Rb"}"#)),
-        Some(decode(fixture(r#"3600"#))),
-        Some(decode(fixture(r#"1800"#))),
+        actor_tokens::CreateActorTokenParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            actor: decode(fixture(r#"{"sub":"user_2OEpKhcCN1Lat9NQ0G6puh7q5Rb"}"#)),
+            expires_in_seconds: Some(decode(fixture(r#"3600"#))),
+            session_max_duration_in_seconds: Some(decode(fixture(r#"1800"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -866,10 +926,12 @@ fn create_admin_portal_link_token_create_admin_portal_link_token_reaches_mock_an
     let _ = &config;
     let actual = admin_portal_link_tokens::create_admin_portal_link_token(
         &config,
-        Some(decode(fixture(r#""org_aaaaaaaaaaaaaaaaaaaaaaaaaaa""#))),
-        Some(decode(fixture(r#""it_contact-1""#))),
-        Some(decode(fixture(r#"["x"]"#))),
-        Some(decode(fixture(r#"3600"#))),
+        admin_portal_link_tokens::CreateAdminPortalLinkTokenParams {
+            organization_id: Some(decode(fixture(r#""org_aaaaaaaaaaaaaaaaaaaaaaaaaaa""#))),
+            it_contact_id: Some(decode(fixture(r#""it_contact-1""#))),
+            scopes: Some(decode(fixture(r#"["x"]"#))),
+            seconds_until_expiration: Some(decode(fixture(r#"3600"#))),
+        },
         None,
     )
     .expect("create_admin_portal_link_token request failed");
@@ -961,8 +1023,10 @@ fn create_allowlist_identifier_create_allowlist_identifier_reaches_mock_and_deco
     let _ = &config;
     let actual = allow_list_block_list::create_allowlist_identifier(
         &config,
-        decode(fixture(r#""user@example.com""#)),
-        Some(decode(fixture(r#"false"#))),
+        allow_list_block_list::CreateAllowlistIdentifierParams {
+            identifier: decode(fixture(r#""user@example.com""#)),
+            notify: Some(decode(fixture(r#"false"#))),
+        },
         None,
     )
     .expect("create_allowlist_identifier request failed");
@@ -989,8 +1053,10 @@ fn create_allowlist_identifier_create_allowlist_identifier_400_decodes_declared_
     };
     let result = allow_list_block_list::create_allowlist_identifier(
         &config,
-        decode(fixture(r#""user@example.com""#)),
-        Some(decode(fixture(r#"false"#))),
+        allow_list_block_list::CreateAllowlistIdentifierParams {
+            identifier: decode(fixture(r#""user@example.com""#)),
+            notify: Some(decode(fixture(r#"false"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -1115,9 +1181,11 @@ fn create_billing_price_transition_create_billing_price_transition_reaches_mock_
     let _ = &config;
     let actual = billing::create_billing_price_transition(
         &config,
-        decode(fixture(r#""subscription_item-1""#)),
-        decode(fixture(r#""from_price-1""#)),
-        decode(fixture(r#""to_price-1""#)),
+        billing::CreateBillingPriceTransitionParams {
+            subscription_item_id: decode(fixture(r#""subscription_item-1""#)),
+            from_price_id: decode(fixture(r#""from_price-1""#)),
+            to_price_id: decode(fixture(r#""to_price-1""#)),
+        },
         None,
     )
     .expect("create_billing_price_transition request failed");
@@ -1144,9 +1212,11 @@ fn create_billing_price_transition_create_billing_price_transition_400_decodes_d
     };
     let result = billing::create_billing_price_transition(
         &config,
-        decode(fixture(r#""subscription_item-1""#)),
-        decode(fixture(r#""from_price-1""#)),
-        decode(fixture(r#""to_price-1""#)),
+        billing::CreateBillingPriceTransitionParams {
+            subscription_item_id: decode(fixture(r#""subscription_item-1""#)),
+            from_price_id: decode(fixture(r#""from_price-1""#)),
+            to_price_id: decode(fixture(r#""to_price-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -1171,7 +1241,9 @@ fn create_blocklist_identifier_create_blocklist_identifier_reaches_mock_and_deco
     let _ = &config;
     let actual = allow_list_block_list::create_blocklist_identifier(
         &config,
-        decode(fixture(r#""user@example.com""#)),
+        allow_list_block_list::CreateBlocklistIdentifierParams {
+            identifier: decode(fixture(r#""user@example.com""#)),
+        },
         None,
     )
     .expect("create_blocklist_identifier request failed");
@@ -1198,7 +1270,9 @@ fn create_blocklist_identifier_create_blocklist_identifier_400_decodes_declared_
     };
     let result = allow_list_block_list::create_blocklist_identifier(
         &config,
-        decode(fixture(r#""user@example.com""#)),
+        allow_list_block_list::CreateBlocklistIdentifierParams {
+            identifier: decode(fixture(r#""user@example.com""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -1223,7 +1297,9 @@ fn create_bulk_invitations_create_bulk_invitations_reaches_mock_and_decodes_resp
     let _ = &config;
     let actual = invitations::create_bulk_invitations(
         &config,
-        Some(decode(fixture(r#"[{"email_address":"user@example.com","public_metadata":{},"redirect_url":"https://example.com","notify":true,"ignore_existing":false,"expires_in_days":1,"template_slug":"invitation"}]"#))),
+        invitations::CreateBulkInvitationsParams {
+            body: Some(decode(fixture(r#"[{"email_address":"user@example.com","public_metadata":{},"redirect_url":"https://example.com","notify":true,"ignore_existing":false,"expires_in_days":1,"template_slug":"invitation"}]"#))),
+        },
         None,
     )
     .expect("create_bulk_invitations request failed");
@@ -1250,9 +1326,11 @@ fn create_bulk_invitations_create_bulk_invitations_400_decodes_declared_error() 
     };
     let result = invitations::create_bulk_invitations(
         &config,
-        Some(decode(fixture(
-            r#"[{"email_address":"user@example.com","public_metadata":{},"redirect_url":"https://example.com","notify":true,"ignore_existing":false,"expires_in_days":1,"template_slug":"invitation"}]"#,
-        ))),
+        invitations::CreateBulkInvitationsParams {
+            body: Some(decode(fixture(
+                r#"[{"email_address":"user@example.com","public_metadata":{},"redirect_url":"https://example.com","notify":true,"ignore_existing":false,"expires_in_days":1,"template_slug":"invitation"}]"#,
+            ))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -1277,9 +1355,11 @@ fn create_bulk_waitlist_entries_create_bulk_waitlist_entries_reaches_mock_and_de
     let _ = &config;
     let actual = waitlist_entries::create_bulk_waitlist_entries(
         &config,
-        Some(decode(fixture(
-            r#"[{"email_address":"user@example.com","notify":true}]"#,
-        ))),
+        waitlist_entries::CreateBulkWaitlistEntriesParams {
+            body: Some(decode(fixture(
+                r#"[{"email_address":"user@example.com","notify":true}]"#,
+            ))),
+        },
         None,
     )
     .expect("create_bulk_waitlist_entries request failed");
@@ -1306,9 +1386,11 @@ fn create_bulk_waitlist_entries_create_bulk_waitlist_entries_400_decodes_declare
     };
     let result = waitlist_entries::create_bulk_waitlist_entries(
         &config,
-        Some(decode(fixture(
-            r#"[{"email_address":"user@example.com","notify":true}]"#,
-        ))),
+        waitlist_entries::CreateBulkWaitlistEntriesParams {
+            body: Some(decode(fixture(
+                r#"[{"email_address":"user@example.com","notify":true}]"#,
+            ))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -1333,10 +1415,12 @@ fn create_directory_create_directory_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = directories::create_directory(
         &config,
-        decode(fixture(r#""enterprise_connection-1""#)),
-        decode(fixture(r#""provider""#)),
-        Some(decode(fixture(r#""Example Name""#))),
-        Some(decode(fixture(r#"[{"directory_group_id":"directory_group-1","scim_group_id":"scim_group-1","directory_group_display_name":"Example Name","scim_group_display_name":"Example Name","role_id":"role-1","precedence":1}]"#))),
+        directories::CreateDirectoryParams {
+            enterprise_connection_id: decode(fixture(r#""enterprise_connection-1""#)),
+            provider: decode(fixture(r#""provider""#)),
+            name: Some(decode(fixture(r#""Example Name""#))),
+            group_role_mappings: Some(decode(fixture(r#"[{"directory_group_id":"directory_group-1","scim_group_id":"scim_group-1","directory_group_display_name":"Example Name","scim_group_display_name":"Example Name","role_id":"role-1","precedence":1}]"#))),
+        },
         None,
     )
     .expect("create_directory request failed");
@@ -1363,12 +1447,14 @@ fn create_directory_create_directory_400_decodes_declared_error() {
     };
     let result = directories::create_directory(
         &config,
-        decode(fixture(r#""enterprise_connection-1""#)),
-        decode(fixture(r#""provider""#)),
-        Some(decode(fixture(r#""Example Name""#))),
-        Some(decode(fixture(
-            r#"[{"directory_group_id":"directory_group-1","scim_group_id":"scim_group-1","directory_group_display_name":"Example Name","scim_group_display_name":"Example Name","role_id":"role-1","precedence":1}]"#,
-        ))),
+        directories::CreateDirectoryParams {
+            enterprise_connection_id: decode(fixture(r#""enterprise_connection-1""#)),
+            provider: decode(fixture(r#""provider""#)),
+            name: Some(decode(fixture(r#""Example Name""#))),
+            group_role_mappings: Some(decode(fixture(
+                r#"[{"directory_group_id":"directory_group-1","scim_group_id":"scim_group-1","directory_group_display_name":"Example Name","scim_group_display_name":"Example Name","role_id":"role-1","precedence":1}]"#,
+            ))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -1602,7 +1688,9 @@ fn create_enterprise_connection_test_run_create_enterprise_connection_test_run_r
     let _ = &config;
     let actual = enterprise_connections::create_enterprise_connection_test_run(
         &config,
-        decode(fixture(r#""enterprise_connection-1""#)),
+        enterprise_connections::CreateEnterpriseConnectionTestRunParams {
+            enterprise_connection_id: decode(fixture(r#""enterprise_connection-1""#)),
+        },
         None,
     )
     .expect("create_enterprise_connection_test_run request failed");
@@ -1628,7 +1716,9 @@ fn create_enterprise_connection_test_run_create_enterprise_connection_test_run_4
     };
     let result = enterprise_connections::create_enterprise_connection_test_run(
         &config,
-        decode(fixture(r#""enterprise_connection-1""#)),
+        enterprise_connections::CreateEnterpriseConnectionTestRunParams {
+            enterprise_connection_id: decode(fixture(r#""enterprise_connection-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -1789,10 +1879,12 @@ fn create_m2_mtoken_create_m2_mtoken_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = m2_mtokens::create_m2_mtoken(
         &config,
-        Some(decode(fixture(r#""opaque""#))),
-        Some(Some(decode(fixture(r#"0.1"#)))),
-        None,
-        Some(decode(fixture(r#"240"#))),
+        m2_mtokens::CreateM2MtokenParams {
+            token_format: Some(decode(fixture(r#""opaque""#))),
+            seconds_until_expiration: Some(Some(decode(fixture(r#"0.1"#)))),
+            claims: None,
+            min_remaining_ttl_seconds: Some(decode(fixture(r#"240"#))),
+        },
         None,
     )
     .expect("create_m2_mtoken request failed");
@@ -1814,9 +1906,11 @@ fn create_machine_create_machine_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = machines::create_machine(
         &config,
-        decode(fixture(r#""Example Name""#)),
-        Some(decode(fixture(r#"["scoped_machines"]"#))),
-        Some(decode(fixture(r#"3600"#))),
+        machines::CreateMachineParams {
+            name: decode(fixture(r#""Example Name""#)),
+            scoped_machines: Some(decode(fixture(r#"["scoped_machines"]"#))),
+            default_token_ttl: Some(decode(fixture(r#"3600"#))),
+        },
         None,
     )
     .expect("create_machine request failed");
@@ -1843,9 +1937,11 @@ fn create_machine_create_machine_400_decodes_declared_error() {
     };
     let result = machines::create_machine(
         &config,
-        decode(fixture(r#""Example Name""#)),
-        Some(decode(fixture(r#"["scoped_machines"]"#))),
-        Some(decode(fixture(r#"3600"#))),
+        machines::CreateMachineParams {
+            name: decode(fixture(r#""Example Name""#)),
+            scoped_machines: Some(decode(fixture(r#"["scoped_machines"]"#))),
+            default_token_ttl: Some(decode(fixture(r#"3600"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -1870,8 +1966,10 @@ fn create_machine_scope_create_machine_scope_reaches_mock_and_decodes_response()
     let _ = &config;
     let actual = machines::create_machine_scope(
         &config,
-        decode(fixture(r#""machine-1""#)),
-        decode(fixture(r#""to_machine-1""#)),
+        machines::CreateMachineScopeParams {
+            machine_id: decode(fixture(r#""machine-1""#)),
+            to_machine_id: decode(fixture(r#""to_machine-1""#)),
+        },
         None,
     )
     .expect("create_machine_scope request failed");
@@ -1898,8 +1996,10 @@ fn create_machine_scope_create_machine_scope_400_decodes_declared_error() {
     };
     let result = machines::create_machine_scope(
         &config,
-        decode(fixture(r#""machine-1""#)),
-        decode(fixture(r#""to_machine-1""#)),
+        machines::CreateMachineScopeParams {
+            machine_id: decode(fixture(r#""machine-1""#)),
+            to_machine_id: decode(fixture(r#""to_machine-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -2070,10 +2170,12 @@ fn create_organization_domain_create_organization_domain_reaches_mock_and_decode
     let _ = &config;
     let actual = organization_domains::create_organization_domain(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        Some(decode(fixture(r#""Example Name""#))),
-        Some(decode(fixture(r#""enrollment_mode""#))),
-        Some(Some(decode(fixture(r#"false"#)))),
+        organization_domains::CreateOrganizationDomainParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            name: Some(decode(fixture(r#""Example Name""#))),
+            enrollment_mode: Some(decode(fixture(r#""enrollment_mode""#))),
+            verified: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     )
     .expect("create_organization_domain request failed");
@@ -2100,10 +2202,12 @@ fn create_organization_domain_create_organization_domain_400_decodes_declared_er
     };
     let result = organization_domains::create_organization_domain(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        Some(decode(fixture(r#""Example Name""#))),
-        Some(decode(fixture(r#""enrollment_mode""#))),
-        Some(Some(decode(fixture(r#"false"#)))),
+        organization_domains::CreateOrganizationDomainParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            name: Some(decode(fixture(r#""Example Name""#))),
+            enrollment_mode: Some(decode(fixture(r#""enrollment_mode""#))),
+            verified: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -2202,8 +2306,10 @@ fn create_organization_invitation_bulk_create_organization_invitation_bulk_reach
     let _ = &config;
     let actual = organization_invitations::create_organization_invitation_bulk(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        decode(fixture(r#"[{"email_address":"user@example.com","inviter_user_id":"inviter_user-1","role":"role","public_metadata":{},"private_metadata":{},"redirect_url":"https://example.com","expires_in_days":1,"notify":true}]"#)),
+        organization_invitations::CreateOrganizationInvitationBulkParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            body: decode(fixture(r#"[{"email_address":"user@example.com","inviter_user_id":"inviter_user-1","role":"role","public_metadata":{},"private_metadata":{},"redirect_url":"https://example.com","expires_in_days":1,"notify":true}]"#)),
+        },
         None,
     )
     .expect("create_organization_invitation_bulk request failed");
@@ -2231,10 +2337,12 @@ fn create_organization_invitation_bulk_create_organization_invitation_bulk_400_d
     };
     let result = organization_invitations::create_organization_invitation_bulk(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        decode(fixture(
-            r#"[{"email_address":"user@example.com","inviter_user_id":"inviter_user-1","role":"role","public_metadata":{},"private_metadata":{},"redirect_url":"https://example.com","expires_in_days":1,"notify":true}]"#,
-        )),
+        organization_invitations::CreateOrganizationInvitationBulkParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            body: decode(fixture(
+                r#"[{"email_address":"user@example.com","inviter_user_id":"inviter_user-1","role":"role","public_metadata":{},"private_metadata":{},"redirect_url":"https://example.com","expires_in_days":1,"notify":true}]"#,
+            )),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -2325,9 +2433,11 @@ fn create_organization_permission_create_organization_permission_reaches_mock_an
     let _ = &config;
     let actual = organization_permissions::create_organization_permission(
         &config,
-        decode(fixture(r#""Example Name""#)),
-        decode(fixture(r#""key""#)),
-        Some(decode(fixture(r#""example text""#))),
+        organization_permissions::CreateOrganizationPermissionParams {
+            name: decode(fixture(r#""Example Name""#)),
+            key: decode(fixture(r#""key""#)),
+            description: Some(decode(fixture(r#""example text""#))),
+        },
         None,
     )
     .expect("create_organization_permission request failed");
@@ -2354,9 +2464,11 @@ fn create_organization_permission_create_organization_permission_400_decodes_dec
     };
     let result = organization_permissions::create_organization_permission(
         &config,
-        decode(fixture(r#""Example Name""#)),
-        decode(fixture(r#""key""#)),
-        Some(decode(fixture(r#""example text""#))),
+        organization_permissions::CreateOrganizationPermissionParams {
+            name: decode(fixture(r#""Example Name""#)),
+            key: decode(fixture(r#""key""#)),
+            description: Some(decode(fixture(r#""example text""#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -2509,7 +2621,9 @@ fn create_redirect_url_create_redirect_url_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = redirect_urls::create_redirect_url(
         &config,
-        decode(fixture(r#""https://example.com""#)),
+        redirect_urls::CreateRedirectUrlParams {
+            url: decode(fixture(r#""https://example.com""#)),
+        },
         None,
     )
     .expect("create_redirect_url request failed");
@@ -2536,7 +2650,9 @@ fn create_redirect_url_create_redirect_url_400_decodes_declared_error() {
     };
     let result = redirect_urls::create_redirect_url(
         &config,
-        decode(fixture(r#""https://example.com""#)),
+        redirect_urls::CreateRedirectUrlParams {
+            url: decode(fixture(r#""https://example.com""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -2715,10 +2831,12 @@ fn create_scim_directory_create_scim_directory_reaches_mock_and_decodes_response
     let _ = &config;
     let actual = scim_directories::create_scim_directory(
         &config,
-        decode(fixture(r#""enterprise_connection-1""#)),
-        decode(fixture(r#""provider""#)),
-        Some(decode(fixture(r#""Example Name""#))),
-        Some(decode(fixture(r#"[{"scim_group_id":"scim_group-1","scim_group_display_name":"Example Name","role_id":"role-1","precedence":1}]"#))),
+        scim_directories::CreateScimDirectoryParams {
+            enterprise_connection_id: decode(fixture(r#""enterprise_connection-1""#)),
+            provider: decode(fixture(r#""provider""#)),
+            name: Some(decode(fixture(r#""Example Name""#))),
+            group_role_mappings: Some(decode(fixture(r#"[{"scim_group_id":"scim_group-1","scim_group_display_name":"Example Name","role_id":"role-1","precedence":1}]"#))),
+        },
         None,
     )
     .expect("create_scim_directory request failed");
@@ -2745,12 +2863,14 @@ fn create_scim_directory_create_scim_directory_400_decodes_declared_error() {
     };
     let result = scim_directories::create_scim_directory(
         &config,
-        decode(fixture(r#""enterprise_connection-1""#)),
-        decode(fixture(r#""provider""#)),
-        Some(decode(fixture(r#""Example Name""#))),
-        Some(decode(fixture(
-            r#"[{"scim_group_id":"scim_group-1","scim_group_display_name":"Example Name","role_id":"role-1","precedence":1}]"#,
-        ))),
+        scim_directories::CreateScimDirectoryParams {
+            enterprise_connection_id: decode(fixture(r#""enterprise_connection-1""#)),
+            provider: decode(fixture(r#""provider""#)),
+            name: Some(decode(fixture(r#""Example Name""#))),
+            group_role_mappings: Some(decode(fixture(
+                r#"[{"scim_group_id":"scim_group-1","scim_group_display_name":"Example Name","role_id":"role-1","precedence":1}]"#,
+            ))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -2776,10 +2896,12 @@ fn create_scim_group_role_mapping_create_scim_group_role_mapping_reaches_mock_an
     let _ = &config;
     let actual = scim_directories::create_scim_group_role_mapping(
         &config,
-        decode(fixture(r#""scim_directory-1""#)),
-        decode(fixture(r#""scim_group-1""#)),
-        decode(fixture(r#""role-1""#)),
-        Some(decode(fixture(r#"1"#))),
+        scim_directories::CreateScimGroupRoleMappingParams {
+            scim_directory_id: decode(fixture(r#""scim_directory-1""#)),
+            scim_group_id: decode(fixture(r#""scim_group-1""#)),
+            role_id: decode(fixture(r#""role-1""#)),
+            precedence: Some(decode(fixture(r#"1"#))),
+        },
         None,
     )
     .expect("create_scim_group_role_mapping request failed");
@@ -2806,10 +2928,12 @@ fn create_scim_group_role_mapping_create_scim_group_role_mapping_400_decodes_dec
     };
     let result = scim_directories::create_scim_group_role_mapping(
         &config,
-        decode(fixture(r#""scim_directory-1""#)),
-        decode(fixture(r#""scim_group-1""#)),
-        decode(fixture(r#""role-1""#)),
-        Some(decode(fixture(r#"1"#))),
+        scim_directories::CreateScimGroupRoleMappingParams {
+            scim_directory_id: decode(fixture(r#""scim_directory-1""#)),
+            scim_group_id: decode(fixture(r#""scim_group-1""#)),
+            role_id: decode(fixture(r#""role-1""#)),
+            precedence: Some(decode(fixture(r#"1"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -2834,8 +2958,10 @@ fn create_session_create_session_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = sessions::create_session(
         &config,
-        decode(fixture(r#""user-1""#)),
-        Some(decode(fixture(r#""active_organization-1""#))),
+        sessions::CreateSessionParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            active_organization_id: Some(decode(fixture(r#""active_organization-1""#))),
+        },
         None,
     )
     .expect("create_session request failed");
@@ -2862,8 +2988,10 @@ fn create_session_create_session_400_decodes_declared_error() {
     };
     let result = sessions::create_session(
         &config,
-        decode(fixture(r#""user-1""#)),
-        Some(decode(fixture(r#""active_organization-1""#))),
+        sessions::CreateSessionParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            active_organization_id: Some(decode(fixture(r#""active_organization-1""#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -2888,8 +3016,10 @@ fn create_session_token_create_session_token_reaches_mock_and_decodes_response()
     let _ = &config;
     let actual = sessions::create_session_token(
         &config,
-        decode(fixture(r#""session-1""#)),
-        Some(Some(decode(fixture(r#"30"#)))),
+        sessions::CreateSessionTokenParams {
+            session_id: decode(fixture(r#""session-1""#)),
+            expires_in_seconds: Some(Some(decode(fixture(r#"30"#)))),
+        },
         None,
     )
     .expect("create_session_token request failed");
@@ -2914,8 +3044,10 @@ fn create_session_token_create_session_token_401_decodes_declared_error() {
     };
     let result = sessions::create_session_token(
         &config,
-        decode(fixture(r#""session-1""#)),
-        Some(Some(decode(fixture(r#"30"#)))),
+        sessions::CreateSessionTokenParams {
+            session_id: decode(fixture(r#""session-1""#)),
+            expires_in_seconds: Some(Some(decode(fixture(r#"30"#)))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -2941,9 +3073,11 @@ fn create_session_token_from_template_create_session_token_from_template_reaches
     let _ = &config;
     let actual = sessions::create_session_token_from_template(
         &config,
-        decode(fixture(r#""session-1""#)),
-        decode(fixture(r#""Example Name""#)),
-        Some(Some(decode(fixture(r#"30"#)))),
+        sessions::CreateSessionTokenFromTemplateParams {
+            session_id: decode(fixture(r#""session-1""#)),
+            template_name: decode(fixture(r#""Example Name""#)),
+            expires_in_seconds: Some(Some(decode(fixture(r#"30"#)))),
+        },
         None,
     )
     .expect("create_session_token_from_template request failed");
@@ -2969,9 +3103,11 @@ fn create_session_token_from_template_create_session_token_from_template_401_dec
     };
     let result = sessions::create_session_token_from_template(
         &config,
-        decode(fixture(r#""session-1""#)),
-        decode(fixture(r#""Example Name""#)),
-        Some(Some(decode(fixture(r#"30"#)))),
+        sessions::CreateSessionTokenFromTemplateParams {
+            session_id: decode(fixture(r#""session-1""#)),
+            template_name: decode(fixture(r#""Example Name""#)),
+            expires_in_seconds: Some(Some(decode(fixture(r#"30"#)))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -2996,10 +3132,12 @@ fn create_sign_in_token_create_sign_in_token_reaches_mock_and_decodes_response()
     let _ = &config;
     let actual = sign_in_tokens::create_sign_in_token(
         &config,
-        decode(fixture(r#""user-1""#)),
-        Some(Some(decode(fixture(r#""org-1""#)))),
-        Some(Some(decode(fixture(r#"1"#)))),
-        Some(Some(decode(fixture(r#""fresh""#)))),
+        sign_in_tokens::CreateSignInTokenParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            org_id: Some(Some(decode(fixture(r#""org-1""#)))),
+            expires_in_seconds: Some(Some(decode(fixture(r#"1"#)))),
+            second_factor_verification: Some(Some(decode(fixture(r#""fresh""#)))),
+        },
         None,
     )
     .expect("create_sign_in_token request failed");
@@ -3026,10 +3164,12 @@ fn create_sign_in_token_create_sign_in_token_403_decodes_declared_error() {
     };
     let result = sign_in_tokens::create_sign_in_token(
         &config,
-        decode(fixture(r#""user-1""#)),
-        Some(Some(decode(fixture(r#""org-1""#)))),
-        Some(Some(decode(fixture(r#"1"#)))),
-        Some(Some(decode(fixture(r#""fresh""#)))),
+        sign_in_tokens::CreateSignInTokenParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            org_id: Some(Some(decode(fixture(r#""org-1""#)))),
+            expires_in_seconds: Some(Some(decode(fixture(r#"1"#)))),
+            second_factor_verification: Some(Some(decode(fixture(r#""fresh""#)))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -3053,9 +3193,14 @@ fn create_sso_bypass_allowlist_user_create_sso_bypass_allowlist_user_reaches_moc
         return;
     };
     let _ = &config;
-    let actual =
-        sso_bypass::create_sso_bypass_allowlist_user(&config, decode(fixture(r#""user-1""#)), None)
-            .expect("create_sso_bypass_allowlist_user request failed");
+    let actual = sso_bypass::create_sso_bypass_allowlist_user(
+        &config,
+        sso_bypass::CreateSsoBypassAllowlistUserParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    )
+    .expect("create_sso_bypass_allowlist_user request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"sso_bypass_allowlist_user","user_id":"user-1","public_user_data":{"first_name":"Example Name","last_name":"Example Name","image_url":"https://example.com","has_image":false,"identifier":"identifier","username":"Example Name","profile_image_url":"https://example.com"},"created_at":1,"updated_at":1}"#,
@@ -3077,8 +3222,13 @@ fn create_sso_bypass_allowlist_user_create_sso_bypass_allowlist_user_402_decodes
             .map(|base_url| format!("{base_url}/__mockStatus/402")),
         ..config
     };
-    let result =
-        sso_bypass::create_sso_bypass_allowlist_user(&config, decode(fixture(r#""user-1""#)), None);
+    let result = sso_bypass::create_sso_bypass_allowlist_user(
+        &config,
+        sso_bypass::CreateSsoBypassAllowlistUserParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("create_sso_bypass_allowlist_user did not fail with SdkError::Http on 402");
     };
@@ -3278,8 +3428,10 @@ fn create_waitlist_entry_create_waitlist_entry_reaches_mock_and_decodes_response
     let _ = &config;
     let actual = waitlist_entries::create_waitlist_entry(
         &config,
-        decode(fixture(r#""user@example.com""#)),
-        Some(Some(decode(fixture(r#"true"#)))),
+        waitlist_entries::CreateWaitlistEntryParams {
+            email_address: decode(fixture(r#""user@example.com""#)),
+            notify: Some(Some(decode(fixture(r#"true"#)))),
+        },
         None,
     )
     .expect("create_waitlist_entry request failed");
@@ -3306,8 +3458,10 @@ fn create_waitlist_entry_create_waitlist_entry_400_decodes_declared_error() {
     };
     let result = waitlist_entries::create_waitlist_entry(
         &config,
-        decode(fixture(r#""user@example.com""#)),
-        Some(Some(decode(fixture(r#"true"#)))),
+        waitlist_entries::CreateWaitlistEntryParams {
+            email_address: decode(fixture(r#""user@example.com""#)),
+            notify: Some(Some(decode(fixture(r#"true"#)))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -3332,7 +3486,9 @@ fn delete_allowlist_identifier_delete_allowlist_identifier_reaches_mock_and_deco
     let _ = &config;
     let actual = allow_list_block_list::delete_allowlist_identifier(
         &config,
-        decode(fixture(r#""identifier-1""#)),
+        allow_list_block_list::DeleteAllowlistIdentifierParams {
+            identifier_id: decode(fixture(r#""identifier-1""#)),
+        },
         None,
     )
     .expect("delete_allowlist_identifier request failed");
@@ -3359,7 +3515,9 @@ fn delete_allowlist_identifier_delete_allowlist_identifier_402_decodes_declared_
     };
     let result = allow_list_block_list::delete_allowlist_identifier(
         &config,
-        decode(fixture(r#""identifier-1""#)),
+        allow_list_block_list::DeleteAllowlistIdentifierParams {
+            identifier_id: decode(fixture(r#""identifier-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -3384,7 +3542,9 @@ fn delete_api_key_delete_api_key_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = api_keys::delete_api_key(
         &config,
-        decode(fixture(r#""ak_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa""#)),
+        api_keys::DeleteApiKeyParams {
+            api_key_id: decode(fixture(r#""ak_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa""#)),
+        },
         None,
     )
     .expect("delete_api_key request failed");
@@ -3404,8 +3564,14 @@ fn delete_backup_code_delete_backup_code_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = users::delete_backup_code(&config, decode(fixture(r#""user-1""#)), None)
-        .expect("delete_backup_code request failed");
+    let actual = users::delete_backup_code(
+        &config,
+        users::DeleteBackupCodeParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    )
+    .expect("delete_backup_code request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(r#"{"user_id":"user-1"}"#);
     assert!(
@@ -3425,7 +3591,13 @@ fn delete_backup_code_delete_backup_code_404_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/404")),
         ..config
     };
-    let result = users::delete_backup_code(&config, decode(fixture(r#""user-1""#)), None);
+    let result = users::delete_backup_code(
+        &config,
+        users::DeleteBackupCodeParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("delete_backup_code did not fail with SdkError::Http on 404");
     };
@@ -3448,7 +3620,9 @@ fn delete_blocklist_identifier_delete_blocklist_identifier_reaches_mock_and_deco
     let _ = &config;
     let actual = allow_list_block_list::delete_blocklist_identifier(
         &config,
-        decode(fixture(r#""identifier-1""#)),
+        allow_list_block_list::DeleteBlocklistIdentifierParams {
+            identifier_id: decode(fixture(r#""identifier-1""#)),
+        },
         None,
     )
     .expect("delete_blocklist_identifier request failed");
@@ -3475,7 +3649,9 @@ fn delete_blocklist_identifier_delete_blocklist_identifier_402_decodes_declared_
     };
     let result = allow_list_block_list::delete_blocklist_identifier(
         &config,
-        decode(fixture(r#""identifier-1""#)),
+        allow_list_block_list::DeleteBlocklistIdentifierParams {
+            identifier_id: decode(fixture(r#""identifier-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -3498,8 +3674,14 @@ fn delete_directory_delete_directory_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = directories::delete_directory(&config, decode(fixture(r#""directory-1""#)), None)
-        .expect("delete_directory request failed");
+    let actual = directories::delete_directory(
+        &config,
+        directories::DeleteDirectoryParams {
+            directory_id: decode(fixture(r#""directory-1""#)),
+        },
+        None,
+    )
+    .expect("delete_directory request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"object","id":"id-1","slug":"slug","deleted":false,"external_id":"external-1"}"#,
@@ -3521,7 +3703,13 @@ fn delete_directory_delete_directory_401_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/401")),
         ..config
     };
-    let result = directories::delete_directory(&config, decode(fixture(r#""directory-1""#)), None);
+    let result = directories::delete_directory(
+        &config,
+        directories::DeleteDirectoryParams {
+            directory_id: decode(fixture(r#""directory-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("delete_directory did not fail with SdkError::Http on 401");
     };
@@ -3545,8 +3733,10 @@ fn delete_directory_group_role_mapping_delete_directory_group_role_mapping_reach
     let _ = &config;
     let actual = directories::delete_directory_group_role_mapping(
         &config,
-        decode(fixture(r#""directory-1""#)),
-        decode(fixture(r#""mapping-1""#)),
+        directories::DeleteDirectoryGroupRoleMappingParams {
+            directory_id: decode(fixture(r#""directory-1""#)),
+            mapping_id: decode(fixture(r#""mapping-1""#)),
+        },
         None,
     )
     .expect("delete_directory_group_role_mapping request failed");
@@ -3573,8 +3763,10 @@ fn delete_directory_group_role_mapping_delete_directory_group_role_mapping_400_d
     };
     let result = directories::delete_directory_group_role_mapping(
         &config,
-        decode(fixture(r#""directory-1""#)),
-        decode(fixture(r#""mapping-1""#)),
+        directories::DeleteDirectoryGroupRoleMappingParams {
+            directory_id: decode(fixture(r#""directory-1""#)),
+            mapping_id: decode(fixture(r#""mapping-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -3597,8 +3789,14 @@ fn delete_domain_delete_domain_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = domains::delete_domain(&config, decode(fixture(r#""domain-1""#)), None)
-        .expect("delete_domain request failed");
+    let actual = domains::delete_domain(
+        &config,
+        domains::DeleteDomainParams {
+            domain_id: decode(fixture(r#""domain-1""#)),
+        },
+        None,
+    )
+    .expect("delete_domain request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"object","id":"id-1","slug":"slug","deleted":false,"external_id":"external-1"}"#,
@@ -3620,7 +3818,13 @@ fn delete_domain_delete_domain_403_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/403")),
         ..config
     };
-    let result = domains::delete_domain(&config, decode(fixture(r#""domain-1""#)), None);
+    let result = domains::delete_domain(
+        &config,
+        domains::DeleteDomainParams {
+            domain_id: decode(fixture(r#""domain-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("delete_domain did not fail with SdkError::Http on 403");
     };
@@ -3643,7 +3847,9 @@ fn delete_email_address_delete_email_address_reaches_mock_and_decodes_response()
     let _ = &config;
     let actual = email_addresses::delete_email_address(
         &config,
-        decode(fixture(r#""email_address-1""#)),
+        email_addresses::DeleteEmailAddressParams {
+            email_address_id: decode(fixture(r#""email_address-1""#)),
+        },
         None,
     )
     .expect("delete_email_address request failed");
@@ -3670,7 +3876,9 @@ fn delete_email_address_delete_email_address_400_decodes_declared_error() {
     };
     let result = email_addresses::delete_email_address(
         &config,
-        decode(fixture(r#""email_address-1""#)),
+        email_addresses::DeleteEmailAddressParams {
+            email_address_id: decode(fixture(r#""email_address-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -3695,7 +3903,9 @@ fn delete_enterprise_connection_delete_enterprise_connection_reaches_mock_and_de
     let _ = &config;
     let actual = enterprise_connections::delete_enterprise_connection(
         &config,
-        decode(fixture(r#""enterprise_connection-1""#)),
+        enterprise_connections::DeleteEnterpriseConnectionParams {
+            enterprise_connection_id: decode(fixture(r#""enterprise_connection-1""#)),
+        },
         None,
     )
     .expect("delete_enterprise_connection request failed");
@@ -3722,7 +3932,9 @@ fn delete_enterprise_connection_delete_enterprise_connection_402_decodes_declare
     };
     let result = enterprise_connections::delete_enterprise_connection(
         &config,
-        decode(fixture(r#""enterprise_connection-1""#)),
+        enterprise_connections::DeleteEnterpriseConnectionParams {
+            enterprise_connection_id: decode(fixture(r#""enterprise_connection-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -3747,8 +3959,10 @@ fn delete_external_account_delete_external_account_reaches_mock_and_decodes_resp
     let _ = &config;
     let actual = users::delete_external_account(
         &config,
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#""external_account-1""#)),
+        users::DeleteExternalAccountParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            external_account_id: decode(fixture(r#""external_account-1""#)),
+        },
         None,
     )
     .expect("delete_external_account request failed");
@@ -3775,8 +3989,10 @@ fn delete_external_account_delete_external_account_400_decodes_declared_error() 
     };
     let result = users::delete_external_account(
         &config,
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#""external_account-1""#)),
+        users::DeleteExternalAccountParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            external_account_id: decode(fixture(r#""external_account-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -3799,9 +4015,14 @@ fn delete_invitation_delete_invitation_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual =
-        invitations::delete_invitation(&config, decode(fixture(r#""invitation-1""#)), None)
-            .expect("delete_invitation request failed");
+    let actual = invitations::delete_invitation(
+        &config,
+        invitations::DeleteInvitationParams {
+            invitation_id: decode(fixture(r#""invitation-1""#)),
+        },
+        None,
+    )
+    .expect("delete_invitation request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"object","id":"id-1","slug":"slug","deleted":false,"external_id":"external-1"}"#,
@@ -3823,8 +4044,13 @@ fn delete_invitation_delete_invitation_404_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/404")),
         ..config
     };
-    let result =
-        invitations::delete_invitation(&config, decode(fixture(r#""invitation-1""#)), None);
+    let result = invitations::delete_invitation(
+        &config,
+        invitations::DeleteInvitationParams {
+            invitation_id: decode(fixture(r#""invitation-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("delete_invitation did not fail with SdkError::Http on 404");
     };
@@ -3845,9 +4071,14 @@ fn delete_jwt_template_delete_jwt_template_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual =
-        jwt_templates::delete_jwt_template(&config, decode(fixture(r#""template-1""#)), None)
-            .expect("delete_jwt_template request failed");
+    let actual = jwt_templates::delete_jwt_template(
+        &config,
+        jwt_templates::DeleteJwtTemplateParams {
+            template_id: decode(fixture(r#""template-1""#)),
+        },
+        None,
+    )
+    .expect("delete_jwt_template request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"object","id":"id-1","slug":"slug","deleted":false,"external_id":"external-1"}"#,
@@ -3869,8 +4100,13 @@ fn delete_jwt_template_delete_jwt_template_403_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/403")),
         ..config
     };
-    let result =
-        jwt_templates::delete_jwt_template(&config, decode(fixture(r#""template-1""#)), None);
+    let result = jwt_templates::delete_jwt_template(
+        &config,
+        jwt_templates::DeleteJwtTemplateParams {
+            template_id: decode(fixture(r#""template-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("delete_jwt_template did not fail with SdkError::Http on 403");
     };
@@ -3891,8 +4127,14 @@ fn delete_machine_delete_machine_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = machines::delete_machine(&config, decode(fixture(r#""machine-1""#)), None)
-        .expect("delete_machine request failed");
+    let actual = machines::delete_machine(
+        &config,
+        machines::DeleteMachineParams {
+            machine_id: decode(fixture(r#""machine-1""#)),
+        },
+        None,
+    )
+    .expect("delete_machine request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(r#"{"object":"machine","id":"id-1","deleted":true}"#);
     assert!(
@@ -3912,7 +4154,13 @@ fn delete_machine_delete_machine_400_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result = machines::delete_machine(&config, decode(fixture(r#""machine-1""#)), None);
+    let result = machines::delete_machine(
+        &config,
+        machines::DeleteMachineParams {
+            machine_id: decode(fixture(r#""machine-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("delete_machine did not fail with SdkError::Http on 400");
     };
@@ -3935,8 +4183,10 @@ fn delete_machine_scope_delete_machine_scope_reaches_mock_and_decodes_response()
     let _ = &config;
     let actual = machines::delete_machine_scope(
         &config,
-        decode(fixture(r#""machine-1""#)),
-        decode(fixture(r#""other_machine-1""#)),
+        machines::DeleteMachineScopeParams {
+            machine_id: decode(fixture(r#""machine-1""#)),
+            other_machine_id: decode(fixture(r#""other_machine-1""#)),
+        },
         None,
     )
     .expect("delete_machine_scope request failed");
@@ -3963,8 +4213,10 @@ fn delete_machine_scope_delete_machine_scope_400_decodes_declared_error() {
     };
     let result = machines::delete_machine_scope(
         &config,
-        decode(fixture(r#""machine-1""#)),
-        decode(fixture(r#""other_machine-1""#)),
+        machines::DeleteMachineScopeParams {
+            machine_id: decode(fixture(r#""machine-1""#)),
+            other_machine_id: decode(fixture(r#""other_machine-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -3989,7 +4241,9 @@ fn delete_oauth_application_delete_oauth_application_reaches_mock_and_decodes_re
     let _ = &config;
     let actual = o_auth_applications::delete_oauth_application(
         &config,
-        decode(fixture(r#""oauth_application-1""#)),
+        o_auth_applications::DeleteOauthApplicationParams {
+            oauth_application_id: decode(fixture(r#""oauth_application-1""#)),
+        },
         None,
     )
     .expect("delete_oauth_application request failed");
@@ -4016,7 +4270,9 @@ fn delete_oauth_application_delete_oauth_application_403_decodes_declared_error(
     };
     let result = o_auth_applications::delete_oauth_application(
         &config,
-        decode(fixture(r#""oauth_application-1""#)),
+        o_auth_applications::DeleteOauthApplicationParams {
+            oauth_application_id: decode(fixture(r#""oauth_application-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -4039,9 +4295,14 @@ fn delete_organization_delete_organization_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual =
-        organizations::delete_organization(&config, decode(fixture(r#""organization-1""#)), None)
-            .expect("delete_organization request failed");
+    let actual = organizations::delete_organization(
+        &config,
+        organizations::DeleteOrganizationParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+        },
+        None,
+    )
+    .expect("delete_organization request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"object","id":"id-1","slug":"slug","deleted":false,"external_id":"external-1"}"#,
@@ -4063,8 +4324,13 @@ fn delete_organization_delete_organization_404_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/404")),
         ..config
     };
-    let result =
-        organizations::delete_organization(&config, decode(fixture(r#""organization-1""#)), None);
+    let result = organizations::delete_organization(
+        &config,
+        organizations::DeleteOrganizationParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("delete_organization did not fail with SdkError::Http on 404");
     };
@@ -4087,8 +4353,10 @@ fn delete_organization_domain_delete_organization_domain_reaches_mock_and_decode
     let _ = &config;
     let actual = organization_domains::delete_organization_domain(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        decode(fixture(r#""domain-1""#)),
+        organization_domains::DeleteOrganizationDomainParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            domain_id: decode(fixture(r#""domain-1""#)),
+        },
         None,
     )
     .expect("delete_organization_domain request failed");
@@ -4115,8 +4383,10 @@ fn delete_organization_domain_delete_organization_domain_400_decodes_declared_er
     };
     let result = organization_domains::delete_organization_domain(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        decode(fixture(r#""domain-1""#)),
+        organization_domains::DeleteOrganizationDomainParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            domain_id: decode(fixture(r#""domain-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -4141,7 +4411,9 @@ fn delete_organization_logo_delete_organization_logo_reaches_mock_and_decodes_re
     let _ = &config;
     let actual = organizations::delete_organization_logo(
         &config,
-        decode(fixture(r#""organization-1""#)),
+        organizations::DeleteOrganizationLogoParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+        },
         None,
     )
     .expect("delete_organization_logo request failed");
@@ -4168,7 +4440,9 @@ fn delete_organization_logo_delete_organization_logo_404_decodes_declared_error(
     };
     let result = organizations::delete_organization_logo(
         &config,
-        decode(fixture(r#""organization-1""#)),
+        organizations::DeleteOrganizationLogoParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -4194,8 +4468,10 @@ fn delete_organization_membership_delete_organization_membership_reaches_mock_an
     let _ = &config;
     let actual = organization_memberships::delete_organization_membership(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        decode(fixture(r#""user-1""#)),
+        organization_memberships::DeleteOrganizationMembershipParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            user_id: decode(fixture(r#""user-1""#)),
+        },
         None,
     )
     .expect("delete_organization_membership request failed");
@@ -4222,8 +4498,10 @@ fn delete_organization_membership_delete_organization_membership_401_decodes_dec
     };
     let result = organization_memberships::delete_organization_membership(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        decode(fixture(r#""user-1""#)),
+        organization_memberships::DeleteOrganizationMembershipParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            user_id: decode(fixture(r#""user-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -4249,7 +4527,9 @@ fn delete_organization_permission_delete_organization_permission_reaches_mock_an
     let _ = &config;
     let actual = organization_permissions::delete_organization_permission(
         &config,
-        decode(fixture(r#""permission-1""#)),
+        organization_permissions::DeleteOrganizationPermissionParams {
+            permission_id: decode(fixture(r#""permission-1""#)),
+        },
         None,
     )
     .expect("delete_organization_permission request failed");
@@ -4276,7 +4556,9 @@ fn delete_organization_permission_delete_organization_permission_401_decodes_dec
     };
     let result = organization_permissions::delete_organization_permission(
         &config,
-        decode(fixture(r#""permission-1""#)),
+        organization_permissions::DeleteOrganizationPermissionParams {
+            permission_id: decode(fixture(r#""permission-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -4301,7 +4583,9 @@ fn delete_organization_role_delete_organization_role_reaches_mock_and_decodes_re
     let _ = &config;
     let actual = organization_roles::delete_organization_role(
         &config,
-        decode(fixture(r#""organization_role-1""#)),
+        organization_roles::DeleteOrganizationRoleParams {
+            organization_role_id: decode(fixture(r#""organization_role-1""#)),
+        },
         None,
     )
     .expect("delete_organization_role request failed");
@@ -4328,7 +4612,9 @@ fn delete_organization_role_delete_organization_role_401_decodes_declared_error(
     };
     let result = organization_roles::delete_organization_role(
         &config,
-        decode(fixture(r#""organization_role-1""#)),
+        organization_roles::DeleteOrganizationRoleParams {
+            organization_role_id: decode(fixture(r#""organization_role-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -4351,9 +4637,14 @@ fn delete_phone_number_delete_phone_number_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual =
-        phone_numbers::delete_phone_number(&config, decode(fixture(r#""phone_number-1""#)), None)
-            .expect("delete_phone_number request failed");
+    let actual = phone_numbers::delete_phone_number(
+        &config,
+        phone_numbers::DeletePhoneNumberParams {
+            phone_number_id: decode(fixture(r#""phone_number-1""#)),
+        },
+        None,
+    )
+    .expect("delete_phone_number request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"object","id":"id-1","slug":"slug","deleted":false,"external_id":"external-1"}"#,
@@ -4375,8 +4666,13 @@ fn delete_phone_number_delete_phone_number_400_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result =
-        phone_numbers::delete_phone_number(&config, decode(fixture(r#""phone_number-1""#)), None);
+    let result = phone_numbers::delete_phone_number(
+        &config,
+        phone_numbers::DeletePhoneNumberParams {
+            phone_number_id: decode(fixture(r#""phone_number-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("delete_phone_number did not fail with SdkError::Http on 400");
     };
@@ -4397,8 +4693,14 @@ fn delete_redirect_url_delete_redirect_url_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = redirect_urls::delete_redirect_url(&config, decode(fixture(r#""id-1""#)), None)
-        .expect("delete_redirect_url request failed");
+    let actual = redirect_urls::delete_redirect_url(
+        &config,
+        redirect_urls::DeleteRedirectUrlParams {
+            id: decode(fixture(r#""id-1""#)),
+        },
+        None,
+    )
+    .expect("delete_redirect_url request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"object","id":"id-1","slug":"slug","deleted":false,"external_id":"external-1"}"#,
@@ -4420,7 +4722,13 @@ fn delete_redirect_url_delete_redirect_url_404_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/404")),
         ..config
     };
-    let result = redirect_urls::delete_redirect_url(&config, decode(fixture(r#""id-1""#)), None);
+    let result = redirect_urls::delete_redirect_url(
+        &config,
+        redirect_urls::DeleteRedirectUrlParams {
+            id: decode(fixture(r#""id-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("delete_redirect_url did not fail with SdkError::Http on 404");
     };
@@ -4443,7 +4751,9 @@ fn delete_saml_connection_delete_saml_connection_reaches_mock_and_decodes_respon
     let _ = &config;
     let actual = saml_connections::delete_saml_connection(
         &config,
-        decode(fixture(r#""saml_connection-1""#)),
+        saml_connections::DeleteSamlConnectionParams {
+            saml_connection_id: decode(fixture(r#""saml_connection-1""#)),
+        },
         None,
     )
     .expect("delete_saml_connection request failed");
@@ -4470,7 +4780,9 @@ fn delete_saml_connection_delete_saml_connection_402_decodes_declared_error() {
     };
     let result = saml_connections::delete_saml_connection(
         &config,
-        decode(fixture(r#""saml_connection-1""#)),
+        saml_connections::DeleteSamlConnectionParams {
+            saml_connection_id: decode(fixture(r#""saml_connection-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -4495,7 +4807,9 @@ fn delete_scim_directory_delete_scim_directory_reaches_mock_and_decodes_response
     let _ = &config;
     let actual = scim_directories::delete_scim_directory(
         &config,
-        decode(fixture(r#""scim_directory-1""#)),
+        scim_directories::DeleteScimDirectoryParams {
+            scim_directory_id: decode(fixture(r#""scim_directory-1""#)),
+        },
         None,
     )
     .expect("delete_scim_directory request failed");
@@ -4522,7 +4836,9 @@ fn delete_scim_directory_delete_scim_directory_401_decodes_declared_error() {
     };
     let result = scim_directories::delete_scim_directory(
         &config,
-        decode(fixture(r#""scim_directory-1""#)),
+        scim_directories::DeleteScimDirectoryParams {
+            scim_directory_id: decode(fixture(r#""scim_directory-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -4548,8 +4864,10 @@ fn delete_scim_group_role_mapping_delete_scim_group_role_mapping_reaches_mock_an
     let _ = &config;
     let actual = scim_directories::delete_scim_group_role_mapping(
         &config,
-        decode(fixture(r#""scim_directory-1""#)),
-        decode(fixture(r#""mapping-1""#)),
+        scim_directories::DeleteScimGroupRoleMappingParams {
+            scim_directory_id: decode(fixture(r#""scim_directory-1""#)),
+            mapping_id: decode(fixture(r#""mapping-1""#)),
+        },
         None,
     )
     .expect("delete_scim_group_role_mapping request failed");
@@ -4574,8 +4892,10 @@ fn delete_scim_group_role_mapping_delete_scim_group_role_mapping_400_decodes_dec
     };
     let result = scim_directories::delete_scim_group_role_mapping(
         &config,
-        decode(fixture(r#""scim_directory-1""#)),
-        decode(fixture(r#""mapping-1""#)),
+        scim_directories::DeleteScimGroupRoleMappingParams {
+            scim_directory_id: decode(fixture(r#""scim_directory-1""#)),
+            mapping_id: decode(fixture(r#""mapping-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -4599,9 +4919,14 @@ fn delete_sso_bypass_allowlist_user_delete_sso_bypass_allowlist_user_reaches_moc
         return;
     };
     let _ = &config;
-    let actual =
-        sso_bypass::delete_sso_bypass_allowlist_user(&config, decode(fixture(r#""user-1""#)), None)
-            .expect("delete_sso_bypass_allowlist_user request failed");
+    let actual = sso_bypass::delete_sso_bypass_allowlist_user(
+        &config,
+        sso_bypass::DeleteSsoBypassAllowlistUserParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    )
+    .expect("delete_sso_bypass_allowlist_user request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"object","id":"id-1","slug":"slug","deleted":false,"external_id":"external-1"}"#,
@@ -4623,8 +4948,13 @@ fn delete_sso_bypass_allowlist_user_delete_sso_bypass_allowlist_user_403_decodes
             .map(|base_url| format!("{base_url}/__mockStatus/403")),
         ..config
     };
-    let result =
-        sso_bypass::delete_sso_bypass_allowlist_user(&config, decode(fixture(r#""user-1""#)), None);
+    let result = sso_bypass::delete_sso_bypass_allowlist_user(
+        &config,
+        sso_bypass::DeleteSsoBypassAllowlistUserParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("delete_sso_bypass_allowlist_user did not fail with SdkError::Http on 403");
     };
@@ -4680,8 +5010,14 @@ fn delete_totp_delete_totp_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = users::delete_totp(&config, decode(fixture(r#""user-1""#)), None)
-        .expect("delete_totp request failed");
+    let actual = users::delete_totp(
+        &config,
+        users::DeleteTotpParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    )
+    .expect("delete_totp request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(r#"{"user_id":"user-1"}"#);
     assert!(
@@ -4701,7 +5037,13 @@ fn delete_totp_delete_totp_404_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/404")),
         ..config
     };
-    let result = users::delete_totp(&config, decode(fixture(r#""user-1""#)), None);
+    let result = users::delete_totp(
+        &config,
+        users::DeleteTotpParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("delete_totp did not fail with SdkError::Http on 404");
     };
@@ -4722,8 +5064,14 @@ fn delete_user_delete_user_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = users::delete_user(&config, decode(fixture(r#""user-1""#)), None)
-        .expect("delete_user request failed");
+    let actual = users::delete_user(
+        &config,
+        users::DeleteUserParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    )
+    .expect("delete_user request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"object","id":"id-1","slug":"slug","deleted":false,"external_id":"external-1"}"#,
@@ -4745,7 +5093,13 @@ fn delete_user_delete_user_400_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result = users::delete_user(&config, decode(fixture(r#""user-1""#)), None);
+    let result = users::delete_user(
+        &config,
+        users::DeleteUserParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("delete_user did not fail with SdkError::Http on 400");
     };
@@ -4761,13 +5115,77 @@ fn delete_user_delete_user_400_decodes_declared_error() {
 }
 
 #[test]
+fn delete_user_passkey_delete_user_passkey_reaches_mock_and_decodes_response() {
+    let Some(config) = configured_client() else {
+        return;
+    };
+    let _ = &config;
+    let actual = users::delete_user_passkey(
+        &config,
+        users::DeleteUserPasskeyParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            passkey_identification_id: decode(fixture(r#""passkey_identification-1""#)),
+        },
+        None,
+    )
+    .expect("delete_user_passkey request failed");
+    let actual = serde_json::to_value(actual).expect("serialize generated response");
+    let expected = fixture(
+        r#"{"object":"object","id":"id-1","slug":"slug","deleted":false,"external_id":"external-1"}"#,
+    );
+    assert!(
+        representative(&actual, &expected),
+        "delete_user_passkey decoded {actual}, expected representative {expected}"
+    );
+}
+
+#[test]
+fn delete_user_passkey_delete_user_passkey_403_decodes_declared_error() {
+    let Some(config) = configured_client() else {
+        return;
+    };
+    let config = ClientConfig {
+        base_url: config
+            .base_url
+            .map(|base_url| format!("{base_url}/__mockStatus/403")),
+        ..config
+    };
+    let result = users::delete_user_passkey(
+        &config,
+        users::DeleteUserPasskeyParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            passkey_identification_id: decode(fixture(r#""passkey_identification-1""#)),
+        },
+        None,
+    );
+    let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
+        panic!("delete_user_passkey did not fail with SdkError::Http on 403");
+    };
+    assert_eq!(error.status_code, 403);
+    let actual = serde_json::to_value(&error.data).expect("serialize declared error body");
+    let expected = fixture(
+        r#"{"errors":[{"message":"example text","long_message":"example text","code":"code","meta":{}}],"meta":{},"clerk_trace_id":"clerk_trace-1"}"#,
+    );
+    assert!(
+        representative(&actual, &expected),
+        "delete_user_passkey decoded error body {actual}, expected representative {expected}"
+    );
+}
+
+#[test]
 fn delete_user_profile_image_delete_user_profile_image_reaches_mock_and_decodes_response() {
     let Some(config) = configured_client() else {
         return;
     };
     let _ = &config;
-    let actual = users::delete_user_profile_image(&config, decode(fixture(r#""user-1""#)), None)
-        .expect("delete_user_profile_image request failed");
+    let actual = users::delete_user_profile_image(
+        &config,
+        users::DeleteUserProfileImageParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    )
+    .expect("delete_user_profile_image request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"id":"id-1","object":"user","external_id":"external-1","primary_email_address_id":"primary_email_address-1","primary_phone_number_id":"primary_phone_number-1","primary_web3_wallet_id":"primary_web3_wallet-1","username":"Example Name","first_name":"Example Name","last_name":"Example Name","locale":"locale","timezone":"2024-01-01T00:00:00Z","profile_image_url":"https://example.com","image_url":"https://example.com","has_image":false,"public_metadata":{},"private_metadata":{},"unsafe_metadata":{},"email_addresses":[{"id":"id-1","object":"email_address","email_address":"user@example.com","reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"matches_sso_connection":false,"created_at":1,"updated_at":1}],"phone_numbers":[{"id":"id-1","object":"phone_number","phone_number":"+15555550100","reserved_for_second_factor":false,"default_second_factor":false,"reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"backup_codes":["backup_codes"],"created_at":1,"updated_at":1}],"web3_wallets":[{"id":"id-1","object":"web3_wallet","web3_wallet":"web3_wallet","verification":{"object":"verification_web3","status":"unverified","strategy":"web3_metamask_signature","nonce":"nonce","message":"example text","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"},"created_at":1,"updated_at":1}],"passkeys":[{"id":"id-1","object":"passkey","name":"Example Name","last_used_at":1,"verification":{"object":"verification_passkey","status":"verified","strategy":"passkey","nonce":"nonce","message":"example text","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"}}],"password_enabled":false,"two_factor_enabled":false,"totp_enabled":false,"backup_code_enabled":false,"mfa_enabled_at":1,"mfa_disabled_at":1,"password_last_updated_at":1,"external_accounts":[{"object":"external_account","id":"id-1","provider":"provider","identification_id":"identification-1","provider_user_id":"provider_user-1","approved_scopes":"approved_scopes","email_address":"user@example.com","email_address_verified":false,"first_name":"Example Name","last_name":"Example Name","avatar_url":"https://example.com","image_url":"https://example.com","username":"Example Name","phone_number":"+15555550100","public_metadata":{},"label":"label","created_at":1,"updated_at":1,"verification":{"object":"verification_oauth","status":"unverified","strategy":"oauth_a","external_verification_redirect_url":"https://example.com","error":{"message":"example text","long_message":"example text","code":"code","meta":{}},"expire_at":1,"attempts":1,"verified_at_client":"verified_at_client"}}],"saml_accounts":[{"id":"id-1","object":"saml_account","provider":"provider","active":false,"email_address":"user@example.com","first_name":"Example Name","last_name":"Example Name","provider_user_id":"provider_user-1","last_authenticated_at":1,"public_metadata":{},"verification":{"object":"verification_saml","status":"unverified","strategy":"saml","external_verification_redirect_url":"https://example.com","error":{"message":"example text","long_message":"example text","code":"code","meta":{}},"expire_at":1,"attempts":1,"verified_at_client":"verified_at_client"},"saml_connection":{"id":"id-1","name":"Example Name","domain":"domain","domains":["domains"],"active":false,"provider":"provider","sync_user_attributes":false,"allow_subdomains":false,"allow_idp_initiated":false,"disable_additional_identifications":false,"created_at":1,"updated_at":1}}],"enterprise_accounts":[{"id":"id-1","object":"enterprise_account","protocol":"oauth","provider":"provider","active":false,"email_address":"user@example.com","first_name":"Example Name","last_name":"Example Name","provider_user_id":"provider_user-1","enterprise_connection_id":"enterprise_connection-1","public_metadata":{},"verification":{"object":"verification_ticket","status":"unverified","strategy":"ticket","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"},"enterprise_connection":{"id":"id-1","protocol":"protocol","provider":"provider","name":"Example Name","logo_public_url":"https://example.com","domain":"domain","domains":["domains"],"active":false,"sync_user_attributes":false,"allow_subdomains":false,"allow_idp_initiated":false,"disable_additional_identifications":false,"created_at":1,"updated_at":1},"last_authenticated_at":1}],"organization_memberships":[{"id":"id-1","object":"organization_membership","role":"role","role_name":"Example Name","permissions":["permissions"],"public_metadata":{},"private_metadata":{},"organization":{"object":"organization","id":"id-1","name":"Example Name","slug":"slug","image_url":"https://example.com","has_image":false,"members_count":1,"missing_member_with_elevated_permissions":false,"pending_invitations_count":1,"max_allowed_memberships":1,"admin_delete_enabled":false,"self_serve_sso_enabled":false,"self_serve_directory_sync_enabled":false,"public_metadata":{},"private_metadata":{},"created_by":"created_by","created_at":1,"updated_at":1,"last_active_at":1,"role_set_key":"role_set_key"},"public_user_data":{"user_id":"user-1","first_name":"Example Name","last_name":"Example Name","profile_image_url":"https://example.com","image_url":"https://example.com","has_image":false,"identifier":"identifier","username":"Example Name","banned":false,"deprovisioned":false},"created_at":1,"updated_at":1}],"last_sign_in_at":1,"banned":false,"locked":false,"deprovisioned":false,"lockout_expires_in_seconds":1,"verification_attempts_remaining":1,"updated_at":1,"created_at":1,"delete_self_enabled":false,"create_organization_enabled":false,"create_organizations_limit":1,"last_active_at":1700690400000,"legal_accepted_at":1700690400000,"bypass_client_trust":false,"directories":[{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"}],"directory":{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"},"scim":{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"}}"#,
@@ -4789,7 +5207,13 @@ fn delete_user_profile_image_delete_user_profile_image_404_decodes_declared_erro
             .map(|base_url| format!("{base_url}/__mockStatus/404")),
         ..config
     };
-    let result = users::delete_user_profile_image(&config, decode(fixture(r#""user-1""#)), None);
+    let result = users::delete_user_profile_image(
+        &config,
+        users::DeleteUserProfileImageParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("delete_user_profile_image did not fail with SdkError::Http on 404");
     };
@@ -4805,60 +5229,6 @@ fn delete_user_profile_image_delete_user_profile_image_404_decodes_declared_erro
 }
 
 #[test]
-fn delete_users_passkey_delete_users_passkey_reaches_mock_and_decodes_response() {
-    let Some(config) = configured_client() else {
-        return;
-    };
-    let _ = &config;
-    let actual = users::delete_users_passkey(
-        &config,
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#""passkey_identification-1""#)),
-        None,
-    )
-    .expect("delete_users_passkey request failed");
-    let actual = serde_json::to_value(actual).expect("serialize generated response");
-    let expected = fixture(
-        r#"{"object":"object","id":"id-1","slug":"slug","deleted":false,"external_id":"external-1"}"#,
-    );
-    assert!(
-        representative(&actual, &expected),
-        "delete_users_passkey decoded {actual}, expected representative {expected}"
-    );
-}
-
-#[test]
-fn delete_users_passkey_delete_users_passkey_403_decodes_declared_error() {
-    let Some(config) = configured_client() else {
-        return;
-    };
-    let config = ClientConfig {
-        base_url: config
-            .base_url
-            .map(|base_url| format!("{base_url}/__mockStatus/403")),
-        ..config
-    };
-    let result = users::delete_users_passkey(
-        &config,
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#""passkey_identification-1""#)),
-        None,
-    );
-    let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
-        panic!("delete_users_passkey did not fail with SdkError::Http on 403");
-    };
-    assert_eq!(error.status_code, 403);
-    let actual = serde_json::to_value(&error.data).expect("serialize declared error body");
-    let expected = fixture(
-        r#"{"errors":[{"message":"example text","long_message":"example text","code":"code","meta":{}}],"meta":{},"clerk_trace_id":"clerk_trace-1"}"#,
-    );
-    assert!(
-        representative(&actual, &expected),
-        "delete_users_passkey decoded error body {actual}, expected representative {expected}"
-    );
-}
-
-#[test]
 fn delete_users_web3_wallet_delete_users_web3_wallet_reaches_mock_and_decodes_response() {
     let Some(config) = configured_client() else {
         return;
@@ -4866,8 +5236,10 @@ fn delete_users_web3_wallet_delete_users_web3_wallet_reaches_mock_and_decodes_re
     let _ = &config;
     let actual = users::delete_users_web3_wallet(
         &config,
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#""web3_wallet_identification-1""#)),
+        users::DeleteUsersWeb3WalletParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            web3_wallet_identification_id: decode(fixture(r#""web3_wallet_identification-1""#)),
+        },
         None,
     )
     .expect("delete_users_web3_wallet request failed");
@@ -4894,8 +5266,10 @@ fn delete_users_web3_wallet_delete_users_web3_wallet_400_decodes_declared_error(
     };
     let result = users::delete_users_web3_wallet(
         &config,
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#""web3_wallet_identification-1""#)),
+        users::DeleteUsersWeb3WalletParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            web3_wallet_identification_id: decode(fixture(r#""web3_wallet_identification-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -4920,7 +5294,9 @@ fn delete_waitlist_entry_delete_waitlist_entry_reaches_mock_and_decodes_response
     let _ = &config;
     let actual = waitlist_entries::delete_waitlist_entry(
         &config,
-        decode(fixture(r#""waitlist_entry-1""#)),
+        waitlist_entries::DeleteWaitlistEntryParams {
+            waitlist_entry_id: decode(fixture(r#""waitlist_entry-1""#)),
+        },
         None,
     )
     .expect("delete_waitlist_entry request failed");
@@ -4947,7 +5323,9 @@ fn delete_waitlist_entry_delete_waitlist_entry_400_decodes_declared_error() {
     };
     let result = waitlist_entries::delete_waitlist_entry(
         &config,
-        decode(fixture(r#""waitlist_entry-1""#)),
+        waitlist_entries::DeleteWaitlistEntryParams {
+            waitlist_entry_id: decode(fixture(r#""waitlist_entry-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -4970,8 +5348,14 @@ fn disable_mfa_disable_mfa_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = users::disable_mfa(&config, decode(fixture(r#""user-1""#)), None)
-        .expect("disable_mfa request failed");
+    let actual = users::disable_mfa(
+        &config,
+        users::DisableMfaParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    )
+    .expect("disable_mfa request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(r#"{"user_id":"user-1"}"#);
     assert!(
@@ -4991,7 +5375,13 @@ fn disable_mfa_disable_mfa_404_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/404")),
         ..config
     };
-    let result = users::disable_mfa(&config, decode(fixture(r#""user-1""#)), None);
+    let result = users::disable_mfa(
+        &config,
+        users::DisableMfaParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("disable_mfa did not fail with SdkError::Http on 404");
     };
@@ -5015,8 +5405,10 @@ fn extend_billing_subscription_item_free_trial_extend_billing_subscription_item_
     let _ = &config;
     let actual = billing::extend_billing_subscription_item_free_trial(
         &config,
-        decode(fixture(r#""subscription_item-1""#)),
-        decode(fixture(r#""2026-01-08T00:00:00Z""#)),
+        billing::ExtendBillingSubscriptionItemFreeTrialParams {
+            subscription_item_id: decode(fixture(r#""subscription_item-1""#)),
+            extend_to: decode(fixture(r#""2026-01-08T00:00:00Z""#)),
+        },
         None,
     )
     .expect("extend_billing_subscription_item_free_trial request failed");
@@ -5044,8 +5436,10 @@ fn extend_billing_subscription_item_free_trial_extend_billing_subscription_item_
     };
     let result = billing::extend_billing_subscription_item_free_trial(
         &config,
-        decode(fixture(r#""subscription_item-1""#)),
-        decode(fixture(r#""2026-01-08T00:00:00Z""#)),
+        billing::ExtendBillingSubscriptionItemFreeTrialParams {
+            subscription_item_id: decode(fixture(r#""subscription_item-1""#)),
+            extend_to: decode(fixture(r#""2026-01-08T00:00:00Z""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -5114,7 +5508,9 @@ fn get_api_key_get_api_key_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = api_keys::get_api_key(
         &config,
-        decode(fixture(r#""ak_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa""#)),
+        api_keys::GetApiKeyParams {
+            api_key_id: decode(fixture(r#""ak_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa""#)),
+        },
         None,
     )
     .expect("get_api_key request failed");
@@ -5136,7 +5532,9 @@ fn get_api_key_secret_get_api_key_secret_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = api_keys::get_api_key_secret(
         &config,
-        decode(fixture(r#""ak_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa""#)),
+        api_keys::GetApiKeySecretParams {
+            api_key_id: decode(fixture(r#""ak_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa""#)),
+        },
         None,
     )
     .expect("get_api_key_secret request failed");
@@ -5156,10 +5554,12 @@ fn get_billing_price_list_get_billing_price_list_reaches_mock_and_decodes_respon
     let _ = &config;
     let actual = billing::get_billing_price_list(
         &config,
-        Some(decode(fixture(r#"false"#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
-        Some(decode(fixture(r#""plan-1""#))),
+        billing::GetBillingPriceListParams {
+            paginated: Some(decode(fixture(r#"false"#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+            plan_id: Some(decode(fixture(r#""plan-1""#))),
+        },
         None,
     )
     .expect("get_billing_price_list request failed");
@@ -5186,10 +5586,12 @@ fn get_billing_price_list_get_billing_price_list_400_decodes_declared_error() {
     };
     let result = billing::get_billing_price_list(
         &config,
-        Some(decode(fixture(r#"false"#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
-        Some(decode(fixture(r#""plan-1""#))),
+        billing::GetBillingPriceListParams {
+            paginated: Some(decode(fixture(r#"false"#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+            plan_id: Some(decode(fixture(r#""plan-1""#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -5212,8 +5614,14 @@ fn get_billing_statement_get_billing_statement_reaches_mock_and_decodes_response
         return;
     };
     let _ = &config;
-    let actual = billing::get_billing_statement(&config, decode(fixture(r#""statement-1""#)), None)
-        .expect("get_billing_statement request failed");
+    let actual = billing::get_billing_statement(
+        &config,
+        billing::GetBillingStatementParams {
+            statement_id: decode(fixture(r#""statement-1""#)),
+        },
+        None,
+    )
+    .expect("get_billing_statement request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"commerce_statement","id":"id-1","instance_id":"instance-1","timestamp":1,"payer":{"object":"commerce_payer","id":"id-1","instance_id":"instance-1","user_id":"user-1","first_name":"Example Name","last_name":"Example Name","email":"user@example.com","organization_id":"organization-1","organization_name":"Example Name","image_url":"https://example.com","credits_balance":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"created_at":1,"updated_at":1},"status":"open","totals":{"grand_total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"subtotal":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"base_fee":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"tax_total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}},"groups":[{"object":"commerce_statement_group","timestamp":1,"items":[{"object":"commerce_payment","id":"id-1","payment_id":"payment-1","instance_id":"instance-1","charge_type":"charge_type","payee_id":"payee-1","payee":{},"payer_id":"payer-1","payer":{"object":"commerce_payer","id":"id-1","instance_id":"instance-1","user_id":"user-1","first_name":"Example Name","last_name":"Example Name","email":"user@example.com","organization_id":"organization-1","organization_name":"Example Name","image_url":"https://example.com","credits_balance":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"created_at":1,"updated_at":1},"subscription_item_id":"subscription_item-1","subscription_item":{},"amount":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"totals":{"subtotal":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"base_fee":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"tax_total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"grand_total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"per_unit_totals":[{"name":"Example Name","block_size":1,"tiers":[{"quantity":1,"fee_per_block":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}}]}],"credits":{"proration":{"amount":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"cycle_days_remaining":1,"cycle_days_total":100,"cycle_remaining_percent":1},"payer":{"remaining_balance":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"applied_amount":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}},"total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}},"discounts":{"proration":{"amount":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"cycle_days_passed":1,"cycle_days_total":100,"cycle_passed_percent":1},"total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}}},"payment_method_id":"payment_method-1","payment_method":{"object":"commerce_payment_method","id":"id-1","payer_id":"payer-1","payment_type":"card","is_default":false,"gateway":"gateway","gateway_external_id":"gateway_external-1","gateway_external_account_id":"gateway_external_account-1","last4":"last4","status":"active","wallet_type":"wallet_type","card_type":"card_type","expiry_year":1,"expiry_month":1,"created_at":1,"updated_at":1,"is_removable":false},"statement_id":"statement-1","gateway_external_id":"gateway_external-1","gateway_external_url":"https://example.com","status":"pending","paid_at":1,"failed_at":1,"created_at":1,"updated_at":1}]}]}"#,
@@ -5235,7 +5643,13 @@ fn get_billing_statement_get_billing_statement_400_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result = billing::get_billing_statement(&config, decode(fixture(r#""statement-1""#)), None);
+    let result = billing::get_billing_statement(
+        &config,
+        billing::GetBillingStatementParams {
+            statement_id: decode(fixture(r#""statement-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("get_billing_statement did not fail with SdkError::Http on 400");
     };
@@ -5258,9 +5672,11 @@ fn get_billing_statement_list_get_billing_statement_list_reaches_mock_and_decode
     let _ = &config;
     let actual = billing::get_billing_statement_list(
         &config,
-        Some(decode(fixture(r#"false"#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        billing::GetBillingStatementListParams {
+            paginated: Some(decode(fixture(r#"false"#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     )
     .expect("get_billing_statement_list request failed");
@@ -5287,9 +5703,11 @@ fn get_billing_statement_list_get_billing_statement_list_400_decodes_declared_er
     };
     let result = billing::get_billing_statement_list(
         &config,
-        Some(decode(fixture(r#"false"#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        billing::GetBillingStatementListParams {
+            paginated: Some(decode(fixture(r#"false"#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -5315,10 +5733,12 @@ fn get_billing_statement_payment_attempts_get_billing_statement_payment_attempts
     let _ = &config;
     let actual = billing::get_billing_statement_payment_attempts(
         &config,
-        decode(fixture(r#""statement-1""#)),
-        Some(decode(fixture(r#"false"#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        billing::GetBillingStatementPaymentAttemptsParams {
+            statement_id: decode(fixture(r#""statement-1""#)),
+            paginated: Some(decode(fixture(r#"false"#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     )
     .expect("get_billing_statement_payment_attempts request failed");
@@ -5346,10 +5766,12 @@ fn get_billing_statement_payment_attempts_get_billing_statement_payment_attempts
     };
     let result = billing::get_billing_statement_payment_attempts(
         &config,
-        decode(fixture(r#""statement-1""#)),
-        Some(decode(fixture(r#"false"#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        billing::GetBillingStatementPaymentAttemptsParams {
+            statement_id: decode(fixture(r#""statement-1""#)),
+            paginated: Some(decode(fixture(r#"false"#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -5372,8 +5794,14 @@ fn get_client_get_client_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = clients::get_client(&config, decode(fixture(r#""client-1""#)), None)
-        .expect("get_client request failed");
+    let actual = clients::get_client(
+        &config,
+        clients::GetClientParams {
+            client_id: decode(fixture(r#""client-1""#)),
+        },
+        None,
+    )
+    .expect("get_client request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"client","id":"id-1","session_ids":["session_ids"],"sessions":[{"object":"session","id":"id-1","user_id":"user-1","client_id":"client-1","actor":{},"status":"active","last_active_organization_id":"last_active_organization-1","last_active_at":1,"latest_activity":{"object":"object","id":"id-1","device_type":"device_type","is_mobile":false,"browser_name":"Example Name","browser_version":"browser_version","ip_address":"ip_address","city":"city","country":"country"},"expire_at":1,"abandon_at":1,"updated_at":1,"created_at":1,"tasks":[{"key":"key"}]}],"sign_in_id":"sign_in-1","sign_up_id":"sign_up-1","last_active_session_id":"last_active_session-1","last_authentication_strategy":"last_authentication_strategy","updated_at":1,"created_at":1}"#,
@@ -5395,7 +5823,13 @@ fn get_client_get_client_400_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result = clients::get_client(&config, decode(fixture(r#""client-1""#)), None);
+    let result = clients::get_client(
+        &config,
+        clients::GetClientParams {
+            client_id: decode(fixture(r#""client-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("get_client did not fail with SdkError::Http on 400");
     };
@@ -5418,10 +5852,12 @@ fn get_commerce_plan_list_get_commerce_plan_list_reaches_mock_and_decodes_respon
     let _ = &config;
     let actual = billing::get_commerce_plan_list(
         &config,
-        Some(decode(fixture(r#"false"#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
-        Some(decode(fixture(r#""user""#))),
+        billing::GetCommercePlanListParams {
+            paginated: Some(decode(fixture(r#"false"#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+            payer_type: Some(decode(fixture(r#""user""#))),
+        },
         None,
     )
     .expect("get_commerce_plan_list request failed");
@@ -5448,10 +5884,12 @@ fn get_commerce_plan_list_get_commerce_plan_list_400_decodes_declared_error() {
     };
     let result = billing::get_commerce_plan_list(
         &config,
-        Some(decode(fixture(r#"false"#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
-        Some(decode(fixture(r#""user""#))),
+        billing::GetCommercePlanListParams {
+            paginated: Some(decode(fixture(r#"false"#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+            payer_type: Some(decode(fixture(r#""user""#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -5546,8 +5984,14 @@ fn get_directory_get_directory_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = directories::get_directory(&config, decode(fixture(r#""directory-1""#)), None)
-        .expect("get_directory request failed");
+    let actual = directories::get_directory(
+        &config,
+        directories::GetDirectoryParams {
+            directory_id: decode(fixture(r#""directory-1""#)),
+        },
+        None,
+    )
+    .expect("get_directory request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"directory","id":"id-1","name":"Example Name","enterprise_connection_id":"enterprise_connection-1","endpoint_url":"https://example.com","provider":"provider","enabled":false,"group_role_mapping_enabled":false,"attribute_mapping":{"key":"key"},"custom_attributes":[{"name":"Example Name","key":"key","sso_path":"sso_path","scim_path":"scim_path","directory_path":"directory_path","multi_valued":false}],"api_key":"api_key","created_at":1,"updated_at":1}"#,
@@ -5569,7 +6013,13 @@ fn get_directory_get_directory_401_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/401")),
         ..config
     };
-    let result = directories::get_directory(&config, decode(fixture(r#""directory-1""#)), None);
+    let result = directories::get_directory(
+        &config,
+        directories::GetDirectoryParams {
+            directory_id: decode(fixture(r#""directory-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("get_directory did not fail with SdkError::Http on 401");
     };
@@ -5590,9 +6040,14 @@ fn get_email_address_get_email_address_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual =
-        email_addresses::get_email_address(&config, decode(fixture(r#""email_address-1""#)), None)
-            .expect("get_email_address request failed");
+    let actual = email_addresses::get_email_address(
+        &config,
+        email_addresses::GetEmailAddressParams {
+            email_address_id: decode(fixture(r#""email_address-1""#)),
+        },
+        None,
+    )
+    .expect("get_email_address request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"id":"id-1","object":"email_address","email_address":"user@example.com","reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"matches_sso_connection":false,"created_at":1,"updated_at":1}"#,
@@ -5614,8 +6069,13 @@ fn get_email_address_get_email_address_400_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result =
-        email_addresses::get_email_address(&config, decode(fixture(r#""email_address-1""#)), None);
+    let result = email_addresses::get_email_address(
+        &config,
+        email_addresses::GetEmailAddressParams {
+            email_address_id: decode(fixture(r#""email_address-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("get_email_address did not fail with SdkError::Http on 400");
     };
@@ -5638,7 +6098,9 @@ fn get_enterprise_connection_get_enterprise_connection_reaches_mock_and_decodes_
     let _ = &config;
     let actual = enterprise_connections::get_enterprise_connection(
         &config,
-        decode(fixture(r#""enterprise_connection-1""#)),
+        enterprise_connections::GetEnterpriseConnectionParams {
+            enterprise_connection_id: decode(fixture(r#""enterprise_connection-1""#)),
+        },
         None,
     )
     .expect("get_enterprise_connection request failed");
@@ -5665,7 +6127,9 @@ fn get_enterprise_connection_get_enterprise_connection_402_decodes_declared_erro
     };
     let result = enterprise_connections::get_enterprise_connection(
         &config,
-        decode(fixture(r#""enterprise_connection-1""#)),
+        enterprise_connections::GetEnterpriseConnectionParams {
+            enterprise_connection_id: decode(fixture(r#""enterprise_connection-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -5824,8 +6288,14 @@ fn get_jwt_template_get_jwt_template_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = jwt_templates::get_jwt_template(&config, decode(fixture(r#""template-1""#)), None)
-        .expect("get_jwt_template request failed");
+    let actual = jwt_templates::get_jwt_template(
+        &config,
+        jwt_templates::GetJwtTemplateParams {
+            template_id: decode(fixture(r#""template-1""#)),
+        },
+        None,
+    )
+    .expect("get_jwt_template request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"jwt_template","id":"id-1","name":"Example Name","claims":{},"lifetime":1,"allowed_clock_skew":1,"custom_signing_key":false,"signing_algorithm":"signing_algorithm","created_at":1,"updated_at":1}"#,
@@ -5847,7 +6317,13 @@ fn get_jwt_template_get_jwt_template_404_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/404")),
         ..config
     };
-    let result = jwt_templates::get_jwt_template(&config, decode(fixture(r#""template-1""#)), None);
+    let result = jwt_templates::get_jwt_template(
+        &config,
+        jwt_templates::GetJwtTemplateParams {
+            template_id: decode(fixture(r#""template-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("get_jwt_template did not fail with SdkError::Http on 404");
     };
@@ -5896,8 +6372,14 @@ fn get_machine_get_machine_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = machines::get_machine(&config, decode(fixture(r#""machine-1""#)), None)
-        .expect("get_machine request failed");
+    let actual = machines::get_machine(
+        &config,
+        machines::GetMachineParams {
+            machine_id: decode(fixture(r#""machine-1""#)),
+        },
+        None,
+    )
+    .expect("get_machine request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"machine","id":"id-1","name":"Example Name","instance_id":"instance-1","created_at":1,"updated_at":1,"default_token_ttl":3600,"scoped_machines":[{"object":"machine","id":"id-1","name":"Example Name","instance_id":"instance-1","created_at":1,"updated_at":1,"default_token_ttl":3600}]}"#,
@@ -5919,7 +6401,13 @@ fn get_machine_get_machine_400_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result = machines::get_machine(&config, decode(fixture(r#""machine-1""#)), None);
+    let result = machines::get_machine(
+        &config,
+        machines::GetMachineParams {
+            machine_id: decode(fixture(r#""machine-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("get_machine did not fail with SdkError::Http on 400");
     };
@@ -5940,8 +6428,14 @@ fn get_machine_secret_key_get_machine_secret_key_reaches_mock_and_decodes_respon
         return;
     };
     let _ = &config;
-    let actual = machines::get_machine_secret_key(&config, decode(fixture(r#""machine-1""#)), None)
-        .expect("get_machine_secret_key request failed");
+    let actual = machines::get_machine_secret_key(
+        &config,
+        machines::GetMachineSecretKeyParams {
+            machine_id: decode(fixture(r#""machine-1""#)),
+        },
+        None,
+    )
+    .expect("get_machine_secret_key request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(r#"{"object":"machine_secret_key","secret":"secret"}"#);
     assert!(
@@ -5961,7 +6455,13 @@ fn get_machine_secret_key_get_machine_secret_key_400_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result = machines::get_machine_secret_key(&config, decode(fixture(r#""machine-1""#)), None);
+    let result = machines::get_machine_secret_key(
+        &config,
+        machines::GetMachineSecretKeyParams {
+            machine_id: decode(fixture(r#""machine-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("get_machine_secret_key did not fail with SdkError::Http on 400");
     };
@@ -6048,7 +6548,9 @@ fn get_oauth_application_get_oauth_application_reaches_mock_and_decodes_response
     let _ = &config;
     let actual = o_auth_applications::get_oauth_application(
         &config,
-        decode(fixture(r#""oauth_application-1""#)),
+        o_auth_applications::GetOauthApplicationParams {
+            oauth_application_id: decode(fixture(r#""oauth_application-1""#)),
+        },
         None,
     )
     .expect("get_oauth_application request failed");
@@ -6075,7 +6577,9 @@ fn get_oauth_application_get_oauth_application_403_decodes_declared_error() {
     };
     let result = o_auth_applications::get_oauth_application(
         &config,
-        decode(fixture(r#""oauth_application-1""#)),
+        o_auth_applications::GetOauthApplicationParams {
+            oauth_application_id: decode(fixture(r#""oauth_application-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -6100,9 +6604,11 @@ fn get_organization_get_organization_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = organizations::get_organization(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        Some(decode(fixture(r#"false"#))),
-        Some(decode(fixture(r#"false"#))),
+        organizations::GetOrganizationParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            include_members_count: Some(decode(fixture(r#"false"#))),
+            include_missing_member_with_elevated_permissions: Some(decode(fixture(r#"false"#))),
+        },
         None,
     )
     .expect("get_organization request failed");
@@ -6129,9 +6635,11 @@ fn get_organization_get_organization_403_decodes_declared_error() {
     };
     let result = organizations::get_organization(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        Some(decode(fixture(r#"false"#))),
-        Some(decode(fixture(r#"false"#))),
+        organizations::GetOrganizationParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            include_members_count: Some(decode(fixture(r#"false"#))),
+            include_missing_member_with_elevated_permissions: Some(decode(fixture(r#"false"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -6157,7 +6665,9 @@ fn get_organization_billing_credit_balance_get_organization_billing_credit_balan
     let _ = &config;
     let actual = organizations::get_organization_billing_credit_balance(
         &config,
-        decode(fixture(r#""organization-1""#)),
+        organizations::GetOrganizationBillingCreditBalanceParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+        },
         None,
     )
     .expect("get_organization_billing_credit_balance request failed");
@@ -6185,7 +6695,9 @@ fn get_organization_billing_credit_balance_get_organization_billing_credit_balan
     };
     let result = organizations::get_organization_billing_credit_balance(
         &config,
-        decode(fixture(r#""organization-1""#)),
+        organizations::GetOrganizationBillingCreditBalanceParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -6211,7 +6723,9 @@ fn get_organization_billing_subscription_get_organization_billing_subscription_r
     let _ = &config;
     let actual = organizations::get_organization_billing_subscription(
         &config,
-        decode(fixture(r#""organization-1""#)),
+        organizations::GetOrganizationBillingSubscriptionParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+        },
         None,
     )
     .expect("get_organization_billing_subscription request failed");
@@ -6239,7 +6753,9 @@ fn get_organization_billing_subscription_get_organization_billing_subscription_4
     };
     let result = organizations::get_organization_billing_subscription(
         &config,
-        decode(fixture(r#""organization-1""#)),
+        organizations::GetOrganizationBillingSubscriptionParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -6264,8 +6780,10 @@ fn get_organization_invitation_get_organization_invitation_reaches_mock_and_deco
     let _ = &config;
     let actual = organization_invitations::get_organization_invitation(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        decode(fixture(r#""invitation-1""#)),
+        organization_invitations::GetOrganizationInvitationParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            invitation_id: decode(fixture(r#""invitation-1""#)),
+        },
         None,
     )
     .expect("get_organization_invitation request failed");
@@ -6292,8 +6810,10 @@ fn get_organization_invitation_get_organization_invitation_400_decodes_declared_
     };
     let result = organization_invitations::get_organization_invitation(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        decode(fixture(r#""invitation-1""#)),
+        organization_invitations::GetOrganizationInvitationParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            invitation_id: decode(fixture(r#""invitation-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -6318,7 +6838,9 @@ fn get_organization_permission_get_organization_permission_reaches_mock_and_deco
     let _ = &config;
     let actual = organization_permissions::get_organization_permission(
         &config,
-        decode(fixture(r#""permission-1""#)),
+        organization_permissions::GetOrganizationPermissionParams {
+            permission_id: decode(fixture(r#""permission-1""#)),
+        },
         None,
     )
     .expect("get_organization_permission request failed");
@@ -6345,7 +6867,9 @@ fn get_organization_permission_get_organization_permission_401_decodes_declared_
     };
     let result = organization_permissions::get_organization_permission(
         &config,
-        decode(fixture(r#""permission-1""#)),
+        organization_permissions::GetOrganizationPermissionParams {
+            permission_id: decode(fixture(r#""permission-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -6370,7 +6894,9 @@ fn get_organization_role_get_organization_role_reaches_mock_and_decodes_response
     let _ = &config;
     let actual = organization_roles::get_organization_role(
         &config,
-        decode(fixture(r#""organization_role-1""#)),
+        organization_roles::GetOrganizationRoleParams {
+            organization_role_id: decode(fixture(r#""organization_role-1""#)),
+        },
         None,
     )
     .expect("get_organization_role request failed");
@@ -6397,7 +6923,9 @@ fn get_organization_role_get_organization_role_401_decodes_declared_error() {
     };
     let result = organization_roles::get_organization_role(
         &config,
-        decode(fixture(r#""organization_role-1""#)),
+        organization_roles::GetOrganizationRoleParams {
+            organization_role_id: decode(fixture(r#""organization_role-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -6420,9 +6948,14 @@ fn get_phone_number_get_phone_number_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual =
-        phone_numbers::get_phone_number(&config, decode(fixture(r#""phone_number-1""#)), None)
-            .expect("get_phone_number request failed");
+    let actual = phone_numbers::get_phone_number(
+        &config,
+        phone_numbers::GetPhoneNumberParams {
+            phone_number_id: decode(fixture(r#""phone_number-1""#)),
+        },
+        None,
+    )
+    .expect("get_phone_number request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"id":"id-1","object":"phone_number","phone_number":"+15555550100","reserved_for_second_factor":false,"default_second_factor":false,"reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"backup_codes":["backup_codes"],"created_at":1,"updated_at":1}"#,
@@ -6444,8 +6977,13 @@ fn get_phone_number_get_phone_number_400_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result =
-        phone_numbers::get_phone_number(&config, decode(fixture(r#""phone_number-1""#)), None);
+    let result = phone_numbers::get_phone_number(
+        &config,
+        phone_numbers::GetPhoneNumberParams {
+            phone_number_id: decode(fixture(r#""phone_number-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("get_phone_number did not fail with SdkError::Http on 400");
     };
@@ -6488,8 +7026,14 @@ fn get_redirect_url_get_redirect_url_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = redirect_urls::get_redirect_url(&config, decode(fixture(r#""id-1""#)), None)
-        .expect("get_redirect_url request failed");
+    let actual = redirect_urls::get_redirect_url(
+        &config,
+        redirect_urls::GetRedirectUrlParams {
+            id: decode(fixture(r#""id-1""#)),
+        },
+        None,
+    )
+    .expect("get_redirect_url request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"redirect_url","id":"id-1","url":"https://example.com","created_at":1,"updated_at":1}"#,
@@ -6511,7 +7055,13 @@ fn get_redirect_url_get_redirect_url_404_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/404")),
         ..config
     };
-    let result = redirect_urls::get_redirect_url(&config, decode(fixture(r#""id-1""#)), None);
+    let result = redirect_urls::get_redirect_url(
+        &config,
+        redirect_urls::GetRedirectUrlParams {
+            id: decode(fixture(r#""id-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("get_redirect_url did not fail with SdkError::Http on 404");
     };
@@ -6534,8 +7084,10 @@ fn get_reverification_get_reverification_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = sessions::get_reverification(
         &config,
-        decode(fixture(r#""session-1""#)),
-        decode(fixture(r#""reverification-1""#)),
+        sessions::GetReverificationParams {
+            session_id: decode(fixture(r#""session-1""#)),
+            reverification_id: decode(fixture(r#""reverification-1""#)),
+        },
         None,
     )
     .expect("get_reverification request failed");
@@ -6562,8 +7114,10 @@ fn get_reverification_get_reverification_400_decodes_declared_error() {
     };
     let result = sessions::get_reverification(
         &config,
-        decode(fixture(r#""session-1""#)),
-        decode(fixture(r#""reverification-1""#)),
+        sessions::GetReverificationParams {
+            session_id: decode(fixture(r#""session-1""#)),
+            reverification_id: decode(fixture(r#""reverification-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -6586,8 +7140,14 @@ fn get_role_set_get_role_set_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = role_sets::get_role_set(&config, decode(fixture(r#""role_set_key_or-1""#)), None)
-        .expect("get_role_set request failed");
+    let actual = role_sets::get_role_set(
+        &config,
+        role_sets::GetRoleSetParams {
+            role_set_key_or_id: decode(fixture(r#""role_set_key_or-1""#)),
+        },
+        None,
+    )
+    .expect("get_role_set request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"role_set","id":"id-1","name":"Example Name","key":"key","description":"example text","roles":[{"object":"role_set_item","id":"id-1","name":"Example Name","key":"key","description":"example text","members_count":1,"has_members":false,"created_at":1,"updated_at":1}],"default_role":{"object":"role_set_item","id":"id-1","name":"Example Name","key":"key","description":"example text","members_count":1,"has_members":false,"created_at":1,"updated_at":1},"creator_role":{"object":"role_set_item","id":"id-1","name":"Example Name","key":"key","description":"example text","members_count":1,"has_members":false,"created_at":1,"updated_at":1},"type":"initial","role_set_migration":{"object":"role_set_migration","id":"id-1","organization_id":"organization-1","instance_id":"instance-1","source_role_set_id":"source_role_set-1","dest_role_set_id":"dest_role_set-1","trigger_type":"trigger_type","status":"active","migrated_members":1,"mappings":{"key":"key"},"started_at":1,"completed_at":1,"created_at":1,"updated_at":1},"created_at":1,"updated_at":1}"#,
@@ -6609,7 +7169,13 @@ fn get_role_set_get_role_set_401_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/401")),
         ..config
     };
-    let result = role_sets::get_role_set(&config, decode(fixture(r#""role_set_key_or-1""#)), None);
+    let result = role_sets::get_role_set(
+        &config,
+        role_sets::GetRoleSetParams {
+            role_set_key_or_id: decode(fixture(r#""role_set_key_or-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("get_role_set did not fail with SdkError::Http on 401");
     };
@@ -6632,7 +7198,9 @@ fn get_saml_connection_get_saml_connection_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = saml_connections::get_saml_connection(
         &config,
-        decode(fixture(r#""saml_connection-1""#)),
+        saml_connections::GetSamlConnectionParams {
+            saml_connection_id: decode(fixture(r#""saml_connection-1""#)),
+        },
         None,
     )
     .expect("get_saml_connection request failed");
@@ -6659,7 +7227,9 @@ fn get_saml_connection_get_saml_connection_402_decodes_declared_error() {
     };
     let result = saml_connections::get_saml_connection(
         &config,
-        decode(fixture(r#""saml_connection-1""#)),
+        saml_connections::GetSamlConnectionParams {
+            saml_connection_id: decode(fixture(r#""saml_connection-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -6684,7 +7254,9 @@ fn get_scim_directory_get_scim_directory_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = scim_directories::get_scim_directory(
         &config,
-        decode(fixture(r#""scim_directory-1""#)),
+        scim_directories::GetScimDirectoryParams {
+            scim_directory_id: decode(fixture(r#""scim_directory-1""#)),
+        },
         None,
     )
     .expect("get_scim_directory request failed");
@@ -6711,7 +7283,9 @@ fn get_scim_directory_get_scim_directory_401_decodes_declared_error() {
     };
     let result = scim_directories::get_scim_directory(
         &config,
-        decode(fixture(r#""scim_directory-1""#)),
+        scim_directories::GetScimDirectoryParams {
+            scim_directory_id: decode(fixture(r#""scim_directory-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -6734,8 +7308,14 @@ fn get_session_get_session_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = sessions::get_session(&config, decode(fixture(r#""session-1""#)), None)
-        .expect("get_session request failed");
+    let actual = sessions::get_session(
+        &config,
+        sessions::GetSessionParams {
+            session_id: decode(fixture(r#""session-1""#)),
+        },
+        None,
+    )
+    .expect("get_session request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"session","id":"id-1","user_id":"user-1","client_id":"client-1","actor":{},"status":"active","last_active_organization_id":"last_active_organization-1","last_active_at":1,"latest_activity":{"object":"object","id":"id-1","device_type":"device_type","is_mobile":false,"browser_name":"Example Name","browser_version":"browser_version","ip_address":"ip_address","city":"city","country":"country"},"expire_at":1,"abandon_at":1,"updated_at":1,"created_at":1,"tasks":[{"key":"key"}]}"#,
@@ -6757,7 +7337,13 @@ fn get_session_get_session_400_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result = sessions::get_session(&config, decode(fixture(r#""session-1""#)), None);
+    let result = sessions::get_session(
+        &config,
+        sessions::GetSessionParams {
+            session_id: decode(fixture(r#""session-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("get_session did not fail with SdkError::Http on 400");
     };
@@ -6778,8 +7364,14 @@ fn get_sign_up_get_sign_up_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = sign_ups::get_sign_up(&config, decode(fixture(r#""id-1""#)), None)
-        .expect("get_sign_up request failed");
+    let actual = sign_ups::get_sign_up(
+        &config,
+        sign_ups::GetSignUpParams {
+            id: decode(fixture(r#""id-1""#)),
+        },
+        None,
+    )
+    .expect("get_sign_up request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"sign_up_attempt","id":"id-1","status":"missing_requirements","required_fields":["required_fields"],"optional_fields":["optional_fields"],"missing_fields":["missing_fields"],"unverified_fields":["unverified_fields"],"verifications":{"email_address":{"next_action":"needs_prepare","supported_strategies":["supported_strategies"]},"phone_number":{"next_action":"needs_prepare","supported_strategies":["supported_strategies"]},"web3_wallet":{"next_action":"needs_prepare","supported_strategies":["supported_strategies"]},"external_account":{}},"username":"Example Name","email_address":"user@example.com","phone_number":"+15555550100","web3_wallet":"web3_wallet","password_enabled":false,"first_name":"Example Name","last_name":"Example Name","unsafe_metadata":{},"public_metadata":{},"custom_action":false,"external_id":"external-1","created_session_id":"created_session-1","created_user_id":"created_user-1","abandon_at":1700690400000,"legal_accepted_at":1700690400000,"timezone":"America/New_York","locale":"en-US","external_account":{}}"#,
@@ -6801,7 +7393,13 @@ fn get_sign_up_get_sign_up_403_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/403")),
         ..config
     };
-    let result = sign_ups::get_sign_up(&config, decode(fixture(r#""id-1""#)), None);
+    let result = sign_ups::get_sign_up(
+        &config,
+        sign_ups::GetSignUpParams {
+            id: decode(fixture(r#""id-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("get_sign_up did not fail with SdkError::Http on 403");
     };
@@ -6824,8 +7422,10 @@ fn get_template_get_template_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = email_sms_templates::get_template(
         &config,
-        decode(fixture(r#""email""#)),
-        decode(fixture(r#""slug""#)),
+        email_sms_templates::GetTemplateParams {
+            template_type: decode(fixture(r#""email""#)),
+            slug: decode(fixture(r#""slug""#)),
+        },
         None,
     )
     .expect("get_template request failed");
@@ -6852,8 +7452,10 @@ fn get_template_get_template_400_decodes_declared_error() {
     };
     let result = email_sms_templates::get_template(
         &config,
-        decode(fixture(r#""email""#)),
-        decode(fixture(r#""slug""#)),
+        email_sms_templates::GetTemplateParams {
+            template_type: decode(fixture(r#""email""#)),
+            slug: decode(fixture(r#""slug""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -6878,10 +7480,12 @@ fn get_template_list_get_template_list_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = email_sms_templates::get_template_list(
         &config,
-        decode(fixture(r#""email""#)),
-        Some(decode(fixture(r#"false"#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        email_sms_templates::GetTemplateListParams {
+            template_type: decode(fixture(r#""email""#)),
+            paginated: Some(decode(fixture(r#"false"#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     )
     .expect("get_template_list request failed");
@@ -6908,10 +7512,12 @@ fn get_template_list_get_template_list_400_decodes_declared_error() {
     };
     let result = email_sms_templates::get_template_list(
         &config,
-        decode(fixture(r#""email""#)),
-        Some(decode(fixture(r#"false"#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        email_sms_templates::GetTemplateListParams {
+            template_type: decode(fixture(r#""email""#)),
+            paginated: Some(decode(fixture(r#"false"#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -6934,8 +7540,14 @@ fn get_user_get_user_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = users::get_user(&config, decode(fixture(r#""user-1""#)), None)
-        .expect("get_user request failed");
+    let actual = users::get_user(
+        &config,
+        users::GetUserParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    )
+    .expect("get_user request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"id":"id-1","object":"user","external_id":"external-1","primary_email_address_id":"primary_email_address-1","primary_phone_number_id":"primary_phone_number-1","primary_web3_wallet_id":"primary_web3_wallet-1","username":"Example Name","first_name":"Example Name","last_name":"Example Name","locale":"locale","timezone":"2024-01-01T00:00:00Z","profile_image_url":"https://example.com","image_url":"https://example.com","has_image":false,"public_metadata":{},"private_metadata":{},"unsafe_metadata":{},"email_addresses":[{"id":"id-1","object":"email_address","email_address":"user@example.com","reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"matches_sso_connection":false,"created_at":1,"updated_at":1}],"phone_numbers":[{"id":"id-1","object":"phone_number","phone_number":"+15555550100","reserved_for_second_factor":false,"default_second_factor":false,"reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"backup_codes":["backup_codes"],"created_at":1,"updated_at":1}],"web3_wallets":[{"id":"id-1","object":"web3_wallet","web3_wallet":"web3_wallet","verification":{"object":"verification_web3","status":"unverified","strategy":"web3_metamask_signature","nonce":"nonce","message":"example text","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"},"created_at":1,"updated_at":1}],"passkeys":[{"id":"id-1","object":"passkey","name":"Example Name","last_used_at":1,"verification":{"object":"verification_passkey","status":"verified","strategy":"passkey","nonce":"nonce","message":"example text","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"}}],"password_enabled":false,"two_factor_enabled":false,"totp_enabled":false,"backup_code_enabled":false,"mfa_enabled_at":1,"mfa_disabled_at":1,"password_last_updated_at":1,"external_accounts":[{"object":"external_account","id":"id-1","provider":"provider","identification_id":"identification-1","provider_user_id":"provider_user-1","approved_scopes":"approved_scopes","email_address":"user@example.com","email_address_verified":false,"first_name":"Example Name","last_name":"Example Name","avatar_url":"https://example.com","image_url":"https://example.com","username":"Example Name","phone_number":"+15555550100","public_metadata":{},"label":"label","created_at":1,"updated_at":1,"verification":{"object":"verification_oauth","status":"unverified","strategy":"oauth_a","external_verification_redirect_url":"https://example.com","error":{"message":"example text","long_message":"example text","code":"code","meta":{}},"expire_at":1,"attempts":1,"verified_at_client":"verified_at_client"}}],"saml_accounts":[{"id":"id-1","object":"saml_account","provider":"provider","active":false,"email_address":"user@example.com","first_name":"Example Name","last_name":"Example Name","provider_user_id":"provider_user-1","last_authenticated_at":1,"public_metadata":{},"verification":{"object":"verification_saml","status":"unverified","strategy":"saml","external_verification_redirect_url":"https://example.com","error":{"message":"example text","long_message":"example text","code":"code","meta":{}},"expire_at":1,"attempts":1,"verified_at_client":"verified_at_client"},"saml_connection":{"id":"id-1","name":"Example Name","domain":"domain","domains":["domains"],"active":false,"provider":"provider","sync_user_attributes":false,"allow_subdomains":false,"allow_idp_initiated":false,"disable_additional_identifications":false,"created_at":1,"updated_at":1}}],"enterprise_accounts":[{"id":"id-1","object":"enterprise_account","protocol":"oauth","provider":"provider","active":false,"email_address":"user@example.com","first_name":"Example Name","last_name":"Example Name","provider_user_id":"provider_user-1","enterprise_connection_id":"enterprise_connection-1","public_metadata":{},"verification":{"object":"verification_ticket","status":"unverified","strategy":"ticket","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"},"enterprise_connection":{"id":"id-1","protocol":"protocol","provider":"provider","name":"Example Name","logo_public_url":"https://example.com","domain":"domain","domains":["domains"],"active":false,"sync_user_attributes":false,"allow_subdomains":false,"allow_idp_initiated":false,"disable_additional_identifications":false,"created_at":1,"updated_at":1},"last_authenticated_at":1}],"organization_memberships":[{"id":"id-1","object":"organization_membership","role":"role","role_name":"Example Name","permissions":["permissions"],"public_metadata":{},"private_metadata":{},"organization":{"object":"organization","id":"id-1","name":"Example Name","slug":"slug","image_url":"https://example.com","has_image":false,"members_count":1,"missing_member_with_elevated_permissions":false,"pending_invitations_count":1,"max_allowed_memberships":1,"admin_delete_enabled":false,"self_serve_sso_enabled":false,"self_serve_directory_sync_enabled":false,"public_metadata":{},"private_metadata":{},"created_by":"created_by","created_at":1,"updated_at":1,"last_active_at":1,"role_set_key":"role_set_key"},"public_user_data":{"user_id":"user-1","first_name":"Example Name","last_name":"Example Name","profile_image_url":"https://example.com","image_url":"https://example.com","has_image":false,"identifier":"identifier","username":"Example Name","banned":false,"deprovisioned":false},"created_at":1,"updated_at":1}],"last_sign_in_at":1,"banned":false,"locked":false,"deprovisioned":false,"lockout_expires_in_seconds":1,"verification_attempts_remaining":1,"updated_at":1,"created_at":1,"delete_self_enabled":false,"create_organization_enabled":false,"create_organizations_limit":1,"last_active_at":1700690400000,"legal_accepted_at":1700690400000,"bypass_client_trust":false,"directories":[{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"}],"directory":{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"},"scim":{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"}}"#,
@@ -6957,7 +7569,13 @@ fn get_user_get_user_400_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result = users::get_user(&config, decode(fixture(r#""user-1""#)), None);
+    let result = users::get_user(
+        &config,
+        users::GetUserParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("get_user did not fail with SdkError::Http on 400");
     };
@@ -6979,9 +7597,14 @@ fn get_user_billing_credit_balance_get_user_billing_credit_balance_reaches_mock_
         return;
     };
     let _ = &config;
-    let actual =
-        users::get_user_billing_credit_balance(&config, decode(fixture(r#""user-1""#)), None)
-            .expect("get_user_billing_credit_balance request failed");
+    let actual = users::get_user_billing_credit_balance(
+        &config,
+        users::GetUserBillingCreditBalanceParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    )
+    .expect("get_user_billing_credit_balance request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"object","balance":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}}"#,
@@ -7003,8 +7626,13 @@ fn get_user_billing_credit_balance_get_user_billing_credit_balance_400_decodes_d
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result =
-        users::get_user_billing_credit_balance(&config, decode(fixture(r#""user-1""#)), None);
+    let result = users::get_user_billing_credit_balance(
+        &config,
+        users::GetUserBillingCreditBalanceParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("get_user_billing_credit_balance did not fail with SdkError::Http on 400");
     };
@@ -7025,9 +7653,14 @@ fn get_user_billing_subscription_get_user_billing_subscription_reaches_mock_and_
         return;
     };
     let _ = &config;
-    let actual =
-        users::get_user_billing_subscription(&config, decode(fixture(r#""user-1""#)), None)
-            .expect("get_user_billing_subscription request failed");
+    let actual = users::get_user_billing_subscription(
+        &config,
+        users::GetUserBillingSubscriptionParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    )
+    .expect("get_user_billing_subscription request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"commerce_subscription","id":"id-1","instance_id":"instance-1","status":"active","payer_id":"payer-1","created_at":1,"updated_at":1,"active_at":1,"past_due_at":1,"subscription_items":[{"object":"commerce_subscription_item","id":"id-1","instance_id":"instance-1","status":"active","credit":{"amount":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"cycle_remaining_percent":1},"credits":{"proration":{"amount":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"cycle_days_remaining":1,"cycle_days_total":100,"cycle_remaining_percent":1},"payer":{"remaining_balance":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"applied_amount":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}},"total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}},"plan_id":"plan-1","price_id":"price-1","plan":{"object":"commerce_plan","id":"id-1","name":"Example Name","fee":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"annual_monthly_fee":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"annual_fee":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"description":"example text","product_id":"product-1","is_default":false,"is_recurring":false,"publicly_visible":false,"has_base_fee":false,"for_payer_type":"for_payer_type","slug":"slug","avatar_url":"https://example.com","features":[{"object":"feature","id":"id-1","name":"Example Name","description":"example text","slug":"slug","avatar_url":"https://example.com"}],"free_trial_enabled":false,"free_trial_days":1,"unit_prices":[{"name":"Example Name","block_size":1,"tiers":[{"starts_at_block":1,"ends_after_block":1,"fee_per_block":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}}]}]},"plan_period":"month","payment_method":{"object":"commerce_payment_method","id":"id-1","payer_id":"payer-1","payment_type":"card","is_default":false,"gateway":"gateway","gateway_external_id":"gateway_external-1","gateway_external_account_id":"gateway_external_account-1","last4":"last4","status":"active","wallet_type":"wallet_type","card_type":"card_type","expiry_year":1,"expiry_month":1,"created_at":1,"updated_at":1,"is_removable":false},"lifetime_paid":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"next_payment":{"amount":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"date":1,"per_unit_totals":[{"name":"Example Name","block_size":1,"tiers":[{"quantity":1,"fee_per_block":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}}]}],"totals":{"subtotal":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"base_fee":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"tax_total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"grand_total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"per_unit_totals":[{"name":"Example Name","block_size":1,"tiers":[{"quantity":1,"fee_per_block":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}}]}],"credits":{"proration":{"amount":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"cycle_days_remaining":1,"cycle_days_total":100,"cycle_remaining_percent":1},"payer":{"remaining_balance":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"applied_amount":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}},"total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}},"discounts":{"proration":{"amount":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"cycle_days_passed":1,"cycle_days_total":100,"cycle_passed_percent":1},"total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}}}},"payer_id":"payer-1","payer":{"object":"commerce_payer","id":"id-1","instance_id":"instance-1","user_id":"user-1","first_name":"Example Name","last_name":"Example Name","email":"user@example.com","organization_id":"organization-1","organization_name":"Example Name","image_url":"https://example.com","credits_balance":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"created_at":1,"updated_at":1},"is_free_trial":false,"period_start":1,"period_end":1,"proration_date":"2024-01-01","canceled_at":1,"past_due_at":1,"ended_at":1,"created_at":1,"updated_at":1,"seats":{"quantity":1,"tiers":[{"quantity":1,"fee_per_block":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}}]},"totals":{"subtotal":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"base_fee":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"tax_total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"grand_total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"per_unit_totals":[{"name":"Example Name","block_size":1,"tiers":[{"quantity":1,"fee_per_block":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}}]}],"credits":{"proration":{"amount":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"cycle_days_remaining":1,"cycle_days_total":100,"cycle_remaining_percent":1},"payer":{"remaining_balance":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"applied_amount":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}},"total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}},"discounts":{"proration":{"amount":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"cycle_days_passed":1,"cycle_days_total":100,"cycle_passed_percent":1},"total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}}}}],"next_payment":{"date":1,"amount":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"per_unit_totals":[{"name":"Example Name","block_size":1,"tiers":[{"quantity":1,"fee_per_block":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}}]}],"totals":{"subtotal":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"base_fee":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"tax_total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"grand_total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"per_unit_totals":[{"name":"Example Name","block_size":1,"tiers":[{"quantity":1,"fee_per_block":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}}]}],"credits":{"proration":{"amount":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"cycle_days_remaining":1,"cycle_days_total":100,"cycle_remaining_percent":1},"payer":{"remaining_balance":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"applied_amount":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}},"total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}},"discounts":{"proration":{"amount":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"},"cycle_days_passed":1,"cycle_days_total":100,"cycle_passed_percent":1},"total":{"amount":100,"amount_formatted":"amount_formatted","currency":"currency","currency_symbol":"currency_symbol"}}}},"eligible_for_free_trial":false}"#,
@@ -7049,8 +7682,13 @@ fn get_user_billing_subscription_get_user_billing_subscription_400_decodes_decla
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result =
-        users::get_user_billing_subscription(&config, decode(fixture(r#""user-1""#)), None);
+    let result = users::get_user_billing_subscription(
+        &config,
+        users::GetUserBillingSubscriptionParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("get_user_billing_subscription did not fail with SdkError::Http on 400");
     };
@@ -7169,8 +7807,10 @@ fn invite_waitlist_entry_invite_waitlist_entry_reaches_mock_and_decodes_response
     let _ = &config;
     let actual = waitlist_entries::invite_waitlist_entry(
         &config,
-        decode(fixture(r#""waitlist_entry-1""#)),
-        Some(Some(decode(fixture(r#"false"#)))),
+        waitlist_entries::InviteWaitlistEntryParams {
+            waitlist_entry_id: decode(fixture(r#""waitlist_entry-1""#)),
+            ignore_existing: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     )
     .expect("invite_waitlist_entry request failed");
@@ -7197,8 +7837,10 @@ fn invite_waitlist_entry_invite_waitlist_entry_400_decodes_declared_error() {
     };
     let result = waitlist_entries::invite_waitlist_entry(
         &config,
-        decode(fixture(r#""waitlist_entry-1""#)),
-        Some(Some(decode(fixture(r#"false"#)))),
+        waitlist_entries::InviteWaitlistEntryParams {
+            waitlist_entry_id: decode(fixture(r#""waitlist_entry-1""#)),
+            ignore_existing: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -7293,9 +7935,11 @@ fn list_allowlist_identifiers_list_allowlist_identifiers_reaches_mock_and_decode
     let _ = &config;
     let actual = allow_list_block_list::list_allowlist_identifiers(
         &config,
-        Some(decode(fixture(r#"false"#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        allow_list_block_list::ListAllowlistIdentifiersParams {
+            paginated: Some(decode(fixture(r#"false"#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     )
     .expect("list_allowlist_identifiers request failed");
@@ -7322,9 +7966,11 @@ fn list_allowlist_identifiers_list_allowlist_identifiers_401_decodes_declared_er
     };
     let result = allow_list_block_list::list_allowlist_identifiers(
         &config,
-        Some(decode(fixture(r#"false"#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        allow_list_block_list::ListAllowlistIdentifiersParams {
+            paginated: Some(decode(fixture(r#"false"#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -7422,9 +8068,11 @@ fn list_clients_list_clients_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = clients::list_clients(
         &config,
-        Some(decode(fixture(r#"false"#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        clients::ListClientsParams {
+            paginated: Some(decode(fixture(r#"false"#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     )
     .expect("list_clients request failed");
@@ -7451,9 +8099,11 @@ fn list_clients_list_clients_400_decodes_declared_error() {
     };
     let result = clients::list_clients(
         &config,
-        Some(decode(fixture(r#"false"#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        clients::ListClientsParams {
+            paginated: Some(decode(fixture(r#"false"#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -7478,8 +8128,10 @@ fn list_directories_list_directories_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = directories::list_directories(
         &config,
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        directories::ListDirectoriesParams {
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     )
     .expect("list_directories request failed");
@@ -7506,8 +8158,10 @@ fn list_directories_list_directories_401_decodes_declared_error() {
     };
     let result = directories::list_directories(
         &config,
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        directories::ListDirectoriesParams {
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -7533,7 +8187,9 @@ fn list_directory_group_role_mappings_list_directory_group_role_mappings_reaches
     let _ = &config;
     let actual = directories::list_directory_group_role_mappings(
         &config,
-        decode(fixture(r#""directory-1""#)),
+        directories::ListDirectoryGroupRoleMappingsParams {
+            directory_id: decode(fixture(r#""directory-1""#)),
+        },
         None,
     )
     .expect("list_directory_group_role_mappings request failed");
@@ -7561,7 +8217,9 @@ fn list_directory_group_role_mappings_list_directory_group_role_mappings_401_dec
     };
     let result = directories::list_directory_group_role_mappings(
         &config,
-        decode(fixture(r#""directory-1""#)),
+        directories::ListDirectoryGroupRoleMappingsParams {
+            directory_id: decode(fixture(r#""directory-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -7603,10 +8261,12 @@ fn list_enterprise_connections_list_enterprise_connections_reaches_mock_and_deco
     let _ = &config;
     let actual = enterprise_connections::list_enterprise_connections(
         &config,
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
-        Some(decode(fixture(r#""organization-1""#))),
-        Some(decode(fixture(r#"false"#))),
+        enterprise_connections::ListEnterpriseConnectionsParams {
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+            organization_id: Some(decode(fixture(r#""organization-1""#))),
+            active: Some(decode(fixture(r#"false"#))),
+        },
         None,
     )
     .expect("list_enterprise_connections request failed");
@@ -7633,10 +8293,12 @@ fn list_enterprise_connections_list_enterprise_connections_402_decodes_declared_
     };
     let result = enterprise_connections::list_enterprise_connections(
         &config,
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
-        Some(decode(fixture(r#""organization-1""#))),
-        Some(decode(fixture(r#"false"#))),
+        enterprise_connections::ListEnterpriseConnectionsParams {
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+            organization_id: Some(decode(fixture(r#""organization-1""#))),
+            active: Some(decode(fixture(r#"false"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -7662,10 +8324,12 @@ fn list_enterprise_connection_test_runs_list_enterprise_connection_test_runs_rea
     let _ = &config;
     let actual = enterprise_connections::list_enterprise_connection_test_runs(
         &config,
-        decode(fixture(r#""enterprise_connection-1""#)),
-        Some(decode(fixture(r#"["pending"]"#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        enterprise_connections::ListEnterpriseConnectionTestRunsParams {
+            enterprise_connection_id: decode(fixture(r#""enterprise_connection-1""#)),
+            status: Some(decode(fixture(r#"["pending"]"#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     )
     .expect("list_enterprise_connection_test_runs request failed");
@@ -7693,10 +8357,12 @@ fn list_enterprise_connection_test_runs_list_enterprise_connection_test_runs_402
     };
     let result = enterprise_connections::list_enterprise_connection_test_runs(
         &config,
-        decode(fixture(r#""enterprise_connection-1""#)),
-        Some(decode(fixture(r#"["pending"]"#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        enterprise_connections::ListEnterpriseConnectionTestRunsParams {
+            enterprise_connection_id: decode(fixture(r#""enterprise_connection-1""#)),
+            status: Some(decode(fixture(r#"["pending"]"#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -7816,9 +8482,11 @@ fn list_jwt_templates_list_jwt_templates_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = jwt_templates::list_jwt_templates(
         &config,
-        Some(decode(fixture(r#"false"#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        jwt_templates::ListJwtTemplatesParams {
+            paginated: Some(decode(fixture(r#"false"#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     )
     .expect("list_jwt_templates request failed");
@@ -7840,10 +8508,12 @@ fn list_machines_list_machines_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = machines::list_machines(
         &config,
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
-        Some(decode(fixture(r#""query""#))),
-        Some(decode(fixture(r#""-created_at""#))),
+        machines::ListMachinesParams {
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+            query: Some(decode(fixture(r#""query""#))),
+            order_by: Some(decode(fixture(r#""-created_at""#))),
+        },
         None,
     )
     .expect("list_machines request failed");
@@ -7870,10 +8540,12 @@ fn list_machines_list_machines_400_decodes_declared_error() {
     };
     let result = machines::list_machines(
         &config,
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
-        Some(decode(fixture(r#""query""#))),
-        Some(decode(fixture(r#""-created_at""#))),
+        machines::ListMachinesParams {
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+            query: Some(decode(fixture(r#""query""#))),
+            order_by: Some(decode(fixture(r#""-created_at""#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -7898,10 +8570,12 @@ fn list_oauth_applications_list_oauth_applications_reaches_mock_and_decodes_resp
     let _ = &config;
     let actual = o_auth_applications::list_oauth_applications(
         &config,
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
-        Some(decode(fixture(r#""+created_at""#))),
-        Some(decode(fixture(r#""Example Name""#))),
+        o_auth_applications::ListOauthApplicationsParams {
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+            order_by: Some(decode(fixture(r#""+created_at""#))),
+            name_query: Some(decode(fixture(r#""Example Name""#))),
+        },
         None,
     )
     .expect("list_oauth_applications request failed");
@@ -7928,10 +8602,12 @@ fn list_oauth_applications_list_oauth_applications_400_decodes_declared_error() 
     };
     let result = o_auth_applications::list_oauth_applications(
         &config,
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
-        Some(decode(fixture(r#""+created_at""#))),
-        Some(decode(fixture(r#""Example Name""#))),
+        o_auth_applications::ListOauthApplicationsParams {
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+            order_by: Some(decode(fixture(r#""+created_at""#))),
+            name_query: Some(decode(fixture(r#""Example Name""#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -8179,9 +8855,11 @@ fn list_organization_memberships_all_list_organization_memberships_all_reaches_m
     let _ = &config;
     let actual = organization_memberships::list_organization_memberships_all(
         &config,
-        Some(decode(fixture(r#""order_by""#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        organization_memberships::ListOrganizationMembershipsAllParams {
+            order_by: Some(decode(fixture(r#""order_by""#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     )
     .expect("list_organization_memberships_all request failed");
@@ -8209,9 +8887,11 @@ fn list_organization_memberships_all_list_organization_memberships_all_400_decod
     };
     let result = organization_memberships::list_organization_memberships_all(
         &config,
-        Some(decode(fixture(r#""order_by""#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        organization_memberships::ListOrganizationMembershipsAllParams {
+            order_by: Some(decode(fixture(r#""order_by""#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -8236,10 +8916,12 @@ fn list_organization_permissions_list_organization_permissions_reaches_mock_and_
     let _ = &config;
     let actual = organization_permissions::list_organization_permissions(
         &config,
-        Some(decode(fixture(r#""query""#))),
-        Some(decode(fixture(r#""order_by""#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        organization_permissions::ListOrganizationPermissionsParams {
+            query: Some(decode(fixture(r#""query""#))),
+            order_by: Some(decode(fixture(r#""order_by""#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     )
     .expect("list_organization_permissions request failed");
@@ -8266,10 +8948,12 @@ fn list_organization_permissions_list_organization_permissions_401_decodes_decla
     };
     let result = organization_permissions::list_organization_permissions(
         &config,
-        Some(decode(fixture(r#""query""#))),
-        Some(decode(fixture(r#""order_by""#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        organization_permissions::ListOrganizationPermissionsParams {
+            query: Some(decode(fixture(r#""query""#))),
+            order_by: Some(decode(fixture(r#""order_by""#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -8294,10 +8978,12 @@ fn list_organization_roles_list_organization_roles_reaches_mock_and_decodes_resp
     let _ = &config;
     let actual = organization_roles::list_organization_roles(
         &config,
-        Some(decode(fixture(r#""query""#))),
-        Some(decode(fixture(r#""-created_at""#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        organization_roles::ListOrganizationRolesParams {
+            query: Some(decode(fixture(r#""query""#))),
+            order_by: Some(decode(fixture(r#""-created_at""#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     )
     .expect("list_organization_roles request failed");
@@ -8324,10 +9010,12 @@ fn list_organization_roles_list_organization_roles_400_decodes_declared_error() 
     };
     let result = organization_roles::list_organization_roles(
         &config,
-        Some(decode(fixture(r#""query""#))),
-        Some(decode(fixture(r#""-created_at""#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        organization_roles::ListOrganizationRolesParams {
+            query: Some(decode(fixture(r#""query""#))),
+            order_by: Some(decode(fixture(r#""-created_at""#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -8423,9 +9111,11 @@ fn list_pending_organization_invitations_list_pending_organization_invitations_r
     let _ = &config;
     let actual = organization_invitations::list_pending_organization_invitations(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        organization_invitations::ListPendingOrganizationInvitationsParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     )
     .expect("list_pending_organization_invitations request failed");
@@ -8453,9 +9143,11 @@ fn list_pending_organization_invitations_list_pending_organization_invitations_4
     };
     let result = organization_invitations::list_pending_organization_invitations(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        organization_invitations::ListPendingOrganizationInvitationsParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -8480,9 +9172,11 @@ fn list_redirect_ur_ls_list_redirect_ur_ls_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = redirect_urls::list_redirect_ur_ls(
         &config,
-        Some(decode(fixture(r#"false"#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        redirect_urls::ListRedirectUrLsParams {
+            paginated: Some(decode(fixture(r#"false"#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     )
     .expect("list_redirect_ur_ls request failed");
@@ -8504,10 +9198,12 @@ fn list_role_sets_list_role_sets_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = role_sets::list_role_sets(
         &config,
-        Some(decode(fixture(r#""query""#))),
-        Some(decode(fixture(r#""-created_at""#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        role_sets::ListRoleSetsParams {
+            query: Some(decode(fixture(r#""query""#))),
+            order_by: Some(decode(fixture(r#""-created_at""#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     )
     .expect("list_role_sets request failed");
@@ -8534,10 +9230,12 @@ fn list_role_sets_list_role_sets_400_decodes_declared_error() {
     };
     let result = role_sets::list_role_sets(
         &config,
-        Some(decode(fixture(r#""query""#))),
-        Some(decode(fixture(r#""-created_at""#))),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        role_sets::ListRoleSetsParams {
+            query: Some(decode(fixture(r#""query""#))),
+            order_by: Some(decode(fixture(r#""-created_at""#))),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -8626,8 +9324,10 @@ fn list_scim_directories_list_scim_directories_reaches_mock_and_decodes_response
     let _ = &config;
     let actual = scim_directories::list_scim_directories(
         &config,
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        scim_directories::ListScimDirectoriesParams {
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     )
     .expect("list_scim_directories request failed");
@@ -8654,8 +9354,10 @@ fn list_scim_directories_list_scim_directories_401_decodes_declared_error() {
     };
     let result = scim_directories::list_scim_directories(
         &config,
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        scim_directories::ListScimDirectoriesParams {
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -8680,7 +9382,9 @@ fn list_scim_group_role_mappings_list_scim_group_role_mappings_reaches_mock_and_
     let _ = &config;
     let actual = scim_directories::list_scim_group_role_mappings(
         &config,
-        decode(fixture(r#""scim_directory-1""#)),
+        scim_directories::ListScimGroupRoleMappingsParams {
+            scim_directory_id: decode(fixture(r#""scim_directory-1""#)),
+        },
         None,
     )
     .expect("list_scim_group_role_mappings request failed");
@@ -8707,7 +9411,9 @@ fn list_scim_group_role_mappings_list_scim_group_role_mappings_401_decodes_decla
     };
     let result = scim_directories::list_scim_group_role_mappings(
         &config,
-        decode(fixture(r#""scim_directory-1""#)),
+        scim_directories::ListScimGroupRoleMappingsParams {
+            scim_directory_id: decode(fixture(r#""scim_directory-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -8799,7 +9505,9 @@ fn list_sso_bypass_allowlist_users_list_sso_bypass_allowlist_users_reaches_mock_
     let _ = &config;
     let actual = sso_bypass::list_sso_bypass_allowlist_users(
         &config,
-        Some(decode(fixture(r#""enterprise_connection-1""#))),
+        sso_bypass::ListSsoBypassAllowlistUsersParams {
+            enterprise_connection_id: Some(decode(fixture(r#""enterprise_connection-1""#))),
+        },
         None,
     )
     .expect("list_sso_bypass_allowlist_users request failed");
@@ -8826,7 +9534,9 @@ fn list_sso_bypass_allowlist_users_list_sso_bypass_allowlist_users_403_decodes_d
     };
     let result = sso_bypass::list_sso_bypass_allowlist_users(
         &config,
-        Some(decode(fixture(r#""enterprise_connection-1""#))),
+        sso_bypass::ListSsoBypassAllowlistUsersParams {
+            enterprise_connection_id: Some(decode(fixture(r#""enterprise_connection-1""#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -8850,9 +9560,14 @@ fn list_user_biometric_credentials_list_user_biometric_credentials_reaches_mock_
         return;
     };
     let _ = &config;
-    let actual =
-        users::list_user_biometric_credentials(&config, decode(fixture(r#""user-1""#)), None)
-            .expect("list_user_biometric_credentials request failed");
+    let actual = users::list_user_biometric_credentials(
+        &config,
+        users::ListUserBiometricCredentialsParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    )
+    .expect("list_user_biometric_credentials request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"data":[{"object":"trusted_device","id":"id-1","platform":"ios","app_identifier":"app_identifier","name":"Example Name","algorithm":"ES256","status":"active","created_at":1,"updated_at":1,"last_used_at":1,"revoked_at":1}],"total_count":100}"#,
@@ -8874,8 +9589,13 @@ fn list_user_biometric_credentials_list_user_biometric_credentials_403_decodes_d
             .map(|base_url| format!("{base_url}/__mockStatus/403")),
         ..config
     };
-    let result =
-        users::list_user_biometric_credentials(&config, decode(fixture(r#""user-1""#)), None);
+    let result = users::list_user_biometric_credentials(
+        &config,
+        users::ListUserBiometricCredentialsParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("list_user_biometric_credentials did not fail with SdkError::Http on 403");
     };
@@ -9002,8 +9722,14 @@ fn list_user_trusted_devices_list_user_trusted_devices_reaches_mock_and_decodes_
         return;
     };
     let _ = &config;
-    let actual = users::list_user_trusted_devices(&config, decode(fixture(r#""user-1""#)), None)
-        .expect("list_user_trusted_devices request failed");
+    let actual = users::list_user_trusted_devices(
+        &config,
+        users::ListUserTrustedDevicesParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    )
+    .expect("list_user_trusted_devices request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"data":[{"object":"trusted_device","id":"id-1","platform":"ios","app_identifier":"app_identifier","name":"Example Name","algorithm":"ES256","status":"active","created_at":1,"updated_at":1,"last_used_at":1,"revoked_at":1}],"total_count":100}"#,
@@ -9025,7 +9751,13 @@ fn list_user_trusted_devices_list_user_trusted_devices_403_decodes_declared_erro
             .map(|base_url| format!("{base_url}/__mockStatus/403")),
         ..config
     };
-    let result = users::list_user_trusted_devices(&config, decode(fixture(r#""user-1""#)), None);
+    let result = users::list_user_trusted_devices(
+        &config,
+        users::ListUserTrustedDevicesParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("list_user_trusted_devices did not fail with SdkError::Http on 403");
     };
@@ -9074,8 +9806,14 @@ fn lock_user_lock_user_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = users::lock_user(&config, decode(fixture(r#""user-1""#)), None)
-        .expect("lock_user request failed");
+    let actual = users::lock_user(
+        &config,
+        users::LockUserParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    )
+    .expect("lock_user request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"id":"id-1","object":"user","external_id":"external-1","primary_email_address_id":"primary_email_address-1","primary_phone_number_id":"primary_phone_number-1","primary_web3_wallet_id":"primary_web3_wallet-1","username":"Example Name","first_name":"Example Name","last_name":"Example Name","locale":"locale","timezone":"2024-01-01T00:00:00Z","profile_image_url":"https://example.com","image_url":"https://example.com","has_image":false,"public_metadata":{},"private_metadata":{},"unsafe_metadata":{},"email_addresses":[{"id":"id-1","object":"email_address","email_address":"user@example.com","reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"matches_sso_connection":false,"created_at":1,"updated_at":1}],"phone_numbers":[{"id":"id-1","object":"phone_number","phone_number":"+15555550100","reserved_for_second_factor":false,"default_second_factor":false,"reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"backup_codes":["backup_codes"],"created_at":1,"updated_at":1}],"web3_wallets":[{"id":"id-1","object":"web3_wallet","web3_wallet":"web3_wallet","verification":{"object":"verification_web3","status":"unverified","strategy":"web3_metamask_signature","nonce":"nonce","message":"example text","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"},"created_at":1,"updated_at":1}],"passkeys":[{"id":"id-1","object":"passkey","name":"Example Name","last_used_at":1,"verification":{"object":"verification_passkey","status":"verified","strategy":"passkey","nonce":"nonce","message":"example text","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"}}],"password_enabled":false,"two_factor_enabled":false,"totp_enabled":false,"backup_code_enabled":false,"mfa_enabled_at":1,"mfa_disabled_at":1,"password_last_updated_at":1,"external_accounts":[{"object":"external_account","id":"id-1","provider":"provider","identification_id":"identification-1","provider_user_id":"provider_user-1","approved_scopes":"approved_scopes","email_address":"user@example.com","email_address_verified":false,"first_name":"Example Name","last_name":"Example Name","avatar_url":"https://example.com","image_url":"https://example.com","username":"Example Name","phone_number":"+15555550100","public_metadata":{},"label":"label","created_at":1,"updated_at":1,"verification":{"object":"verification_oauth","status":"unverified","strategy":"oauth_a","external_verification_redirect_url":"https://example.com","error":{"message":"example text","long_message":"example text","code":"code","meta":{}},"expire_at":1,"attempts":1,"verified_at_client":"verified_at_client"}}],"saml_accounts":[{"id":"id-1","object":"saml_account","provider":"provider","active":false,"email_address":"user@example.com","first_name":"Example Name","last_name":"Example Name","provider_user_id":"provider_user-1","last_authenticated_at":1,"public_metadata":{},"verification":{"object":"verification_saml","status":"unverified","strategy":"saml","external_verification_redirect_url":"https://example.com","error":{"message":"example text","long_message":"example text","code":"code","meta":{}},"expire_at":1,"attempts":1,"verified_at_client":"verified_at_client"},"saml_connection":{"id":"id-1","name":"Example Name","domain":"domain","domains":["domains"],"active":false,"provider":"provider","sync_user_attributes":false,"allow_subdomains":false,"allow_idp_initiated":false,"disable_additional_identifications":false,"created_at":1,"updated_at":1}}],"enterprise_accounts":[{"id":"id-1","object":"enterprise_account","protocol":"oauth","provider":"provider","active":false,"email_address":"user@example.com","first_name":"Example Name","last_name":"Example Name","provider_user_id":"provider_user-1","enterprise_connection_id":"enterprise_connection-1","public_metadata":{},"verification":{"object":"verification_ticket","status":"unverified","strategy":"ticket","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"},"enterprise_connection":{"id":"id-1","protocol":"protocol","provider":"provider","name":"Example Name","logo_public_url":"https://example.com","domain":"domain","domains":["domains"],"active":false,"sync_user_attributes":false,"allow_subdomains":false,"allow_idp_initiated":false,"disable_additional_identifications":false,"created_at":1,"updated_at":1},"last_authenticated_at":1}],"organization_memberships":[{"id":"id-1","object":"organization_membership","role":"role","role_name":"Example Name","permissions":["permissions"],"public_metadata":{},"private_metadata":{},"organization":{"object":"organization","id":"id-1","name":"Example Name","slug":"slug","image_url":"https://example.com","has_image":false,"members_count":1,"missing_member_with_elevated_permissions":false,"pending_invitations_count":1,"max_allowed_memberships":1,"admin_delete_enabled":false,"self_serve_sso_enabled":false,"self_serve_directory_sync_enabled":false,"public_metadata":{},"private_metadata":{},"created_by":"created_by","created_at":1,"updated_at":1,"last_active_at":1,"role_set_key":"role_set_key"},"public_user_data":{"user_id":"user-1","first_name":"Example Name","last_name":"Example Name","profile_image_url":"https://example.com","image_url":"https://example.com","has_image":false,"identifier":"identifier","username":"Example Name","banned":false,"deprovisioned":false},"created_at":1,"updated_at":1}],"last_sign_in_at":1,"banned":false,"locked":false,"deprovisioned":false,"lockout_expires_in_seconds":1,"verification_attempts_remaining":1,"updated_at":1,"created_at":1,"delete_self_enabled":false,"create_organization_enabled":false,"create_organizations_limit":1,"last_active_at":1700690400000,"legal_accepted_at":1700690400000,"bypass_client_trust":false,"directories":[{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"}],"directory":{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"},"scim":{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"}}"#,
@@ -9097,7 +9835,13 @@ fn lock_user_lock_user_403_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/403")),
         ..config
     };
-    let result = users::lock_user(&config, decode(fixture(r#""user-1""#)), None);
+    let result = users::lock_user(
+        &config,
+        users::LockUserParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("lock_user did not fail with SdkError::Http on 403");
     };
@@ -9120,9 +9864,11 @@ fn merge_organization_metadata_merge_organization_metadata_reaches_mock_and_deco
     let _ = &config;
     let actual = organizations::merge_organization_metadata(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        Some(decode(fixture(r#"{}"#))),
-        Some(decode(fixture(r#"{}"#))),
+        organizations::MergeOrganizationMetadataParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            public_metadata: Some(decode(fixture(r#"{}"#))),
+            private_metadata: Some(decode(fixture(r#"{}"#))),
+        },
         None,
     )
     .expect("merge_organization_metadata request failed");
@@ -9149,9 +9895,11 @@ fn merge_organization_metadata_merge_organization_metadata_400_decodes_declared_
     };
     let result = organizations::merge_organization_metadata(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        Some(decode(fixture(r#"{}"#))),
-        Some(decode(fixture(r#"{}"#))),
+        organizations::MergeOrganizationMetadataParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            public_metadata: Some(decode(fixture(r#"{}"#))),
+            private_metadata: Some(decode(fixture(r#"{}"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -9177,7 +9925,9 @@ fn prepare_email_address_verification_prepare_email_address_verification_reaches
     let _ = &config;
     let actual = email_addresses::prepare_email_address_verification(
         &config,
-        decode(fixture(r#""email_address-1""#)),
+        email_addresses::PrepareEmailAddressVerificationParams {
+            email_address_id: decode(fixture(r#""email_address-1""#)),
+        },
         None,
     )
     .expect("prepare_email_address_verification request failed");
@@ -9205,7 +9955,9 @@ fn prepare_email_address_verification_prepare_email_address_verification_400_dec
     };
     let result = email_addresses::prepare_email_address_verification(
         &config,
-        decode(fixture(r#""email_address-1""#)),
+        email_addresses::PrepareEmailAddressVerificationParams {
+            email_address_id: decode(fixture(r#""email_address-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -9231,7 +9983,9 @@ fn prepare_phone_number_verification_prepare_phone_number_verification_reaches_m
     let _ = &config;
     let actual = phone_numbers::prepare_phone_number_verification(
         &config,
-        decode(fixture(r#""phone_number-1""#)),
+        phone_numbers::PreparePhoneNumberVerificationParams {
+            phone_number_id: decode(fixture(r#""phone_number-1""#)),
+        },
         None,
     )
     .expect("prepare_phone_number_verification request failed");
@@ -9259,7 +10013,9 @@ fn prepare_phone_number_verification_prepare_phone_number_verification_400_decod
     };
     let result = phone_numbers::prepare_phone_number_verification(
         &config,
-        decode(fixture(r#""phone_number-1""#)),
+        phone_numbers::PreparePhoneNumberVerificationParams {
+            phone_number_id: decode(fixture(r#""phone_number-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -9414,7 +10170,9 @@ fn reject_waitlist_entry_reject_waitlist_entry_reaches_mock_and_decodes_response
     let _ = &config;
     let actual = waitlist_entries::reject_waitlist_entry(
         &config,
-        decode(fixture(r#""waitlist_entry-1""#)),
+        waitlist_entries::RejectWaitlistEntryParams {
+            waitlist_entry_id: decode(fixture(r#""waitlist_entry-1""#)),
+        },
         None,
     )
     .expect("reject_waitlist_entry request failed");
@@ -9441,7 +10199,9 @@ fn reject_waitlist_entry_reject_waitlist_entry_400_decodes_declared_error() {
     };
     let result = waitlist_entries::reject_waitlist_entry(
         &config,
-        decode(fixture(r#""waitlist_entry-1""#)),
+        waitlist_entries::RejectWaitlistEntryParams {
+            waitlist_entry_id: decode(fixture(r#""waitlist_entry-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -9467,8 +10227,10 @@ fn remove_billing_subscription_item_discount_remove_billing_subscription_item_di
     let _ = &config;
     let actual = billing::remove_billing_subscription_item_discount(
         &config,
-        decode(fixture(r#""subscription_item-1""#)),
-        decode(fixture(r#""discount-1""#)),
+        billing::RemoveBillingSubscriptionItemDiscountParams {
+            subscription_item_id: decode(fixture(r#""subscription_item-1""#)),
+            discount_id: decode(fixture(r#""discount-1""#)),
+        },
         None,
     )
     .expect("remove_billing_subscription_item_discount request failed");
@@ -9496,8 +10258,10 @@ fn remove_billing_subscription_item_discount_remove_billing_subscription_item_di
     };
     let result = billing::remove_billing_subscription_item_discount(
         &config,
-        decode(fixture(r#""subscription_item-1""#)),
-        decode(fixture(r#""discount-1""#)),
+        billing::RemoveBillingSubscriptionItemDiscountParams {
+            subscription_item_id: decode(fixture(r#""subscription_item-1""#)),
+            discount_id: decode(fixture(r#""discount-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -9523,8 +10287,10 @@ fn remove_permission_from_organization_role_remove_permission_from_organization_
     let _ = &config;
     let actual = organization_roles::remove_permission_from_organization_role(
         &config,
-        decode(fixture(r#""organization_role-1""#)),
-        decode(fixture(r#""permission-1""#)),
+        organization_roles::RemovePermissionFromOrganizationRoleParams {
+            organization_role_id: decode(fixture(r#""organization_role-1""#)),
+            permission_id: decode(fixture(r#""permission-1""#)),
+        },
         None,
     )
     .expect("remove_permission_from_organization_role request failed");
@@ -9552,8 +10318,10 @@ fn remove_permission_from_organization_role_remove_permission_from_organization_
     };
     let result = organization_roles::remove_permission_from_organization_role(
         &config,
-        decode(fixture(r#""organization_role-1""#)),
-        decode(fixture(r#""permission-1""#)),
+        organization_roles::RemovePermissionFromOrganizationRoleParams {
+            organization_role_id: decode(fixture(r#""organization_role-1""#)),
+            permission_id: decode(fixture(r#""permission-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -9578,8 +10346,10 @@ fn remove_user_password_remove_user_password_reaches_mock_and_decodes_response()
     let _ = &config;
     let actual = users::remove_user_password(
         &config,
-        decode(fixture(r#""user-1""#)),
-        Some(decode(fixture(r#"false"#))),
+        users::RemoveUserPasswordParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            sign_out_of_other_sessions: Some(decode(fixture(r#"false"#))),
+        },
         None,
     )
     .expect("remove_user_password request failed");
@@ -9606,8 +10376,10 @@ fn remove_user_password_remove_user_password_400_decodes_declared_error() {
     };
     let result = users::remove_user_password(
         &config,
-        decode(fixture(r#""user-1""#)),
-        Some(decode(fixture(r#"false"#))),
+        users::RemoveUserPasswordParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            sign_out_of_other_sessions: Some(decode(fixture(r#"false"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -9633,8 +10405,10 @@ fn replace_directory_group_role_mappings_replace_directory_group_role_mappings_r
     let _ = &config;
     let actual = directories::replace_directory_group_role_mappings(
         &config,
-        decode(fixture(r#""directory-1""#)),
-        decode(fixture(r#"[{"directory_group_id":"directory_group-1","scim_group_id":"scim_group-1","role_id":"role-1"}]"#)),
+        directories::ReplaceDirectoryGroupRoleMappingsParams {
+            directory_id: decode(fixture(r#""directory-1""#)),
+            mappings: decode(fixture(r#"[{"directory_group_id":"directory_group-1","scim_group_id":"scim_group-1","role_id":"role-1"}]"#)),
+        },
         None,
     )
     .expect("replace_directory_group_role_mappings request failed");
@@ -9662,10 +10436,12 @@ fn replace_directory_group_role_mappings_replace_directory_group_role_mappings_4
     };
     let result = directories::replace_directory_group_role_mappings(
         &config,
-        decode(fixture(r#""directory-1""#)),
-        decode(fixture(
-            r#"[{"directory_group_id":"directory_group-1","scim_group_id":"scim_group-1","role_id":"role-1"}]"#,
-        )),
+        directories::ReplaceDirectoryGroupRoleMappingsParams {
+            directory_id: decode(fixture(r#""directory-1""#)),
+            mappings: decode(fixture(
+                r#"[{"directory_group_id":"directory_group-1","scim_group_id":"scim_group-1","role_id":"role-1"}]"#,
+            )),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -9690,9 +10466,11 @@ fn replace_organization_metadata_replace_organization_metadata_reaches_mock_and_
     let _ = &config;
     let actual = organizations::replace_organization_metadata(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        Some(decode(fixture(r#"{}"#))),
-        Some(decode(fixture(r#"{}"#))),
+        organizations::ReplaceOrganizationMetadataParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            public_metadata: Some(decode(fixture(r#"{}"#))),
+            private_metadata: Some(decode(fixture(r#"{}"#))),
+        },
         None,
     )
     .expect("replace_organization_metadata request failed");
@@ -9719,9 +10497,11 @@ fn replace_organization_metadata_replace_organization_metadata_400_decodes_decla
     };
     let result = organizations::replace_organization_metadata(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        Some(decode(fixture(r#"{}"#))),
-        Some(decode(fixture(r#"{}"#))),
+        organizations::ReplaceOrganizationMetadataParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            public_metadata: Some(decode(fixture(r#"{}"#))),
+            private_metadata: Some(decode(fixture(r#"{}"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -9746,9 +10526,11 @@ fn replace_role_in_role_set_replace_role_in_role_set_reaches_mock_and_decodes_re
     let _ = &config;
     let actual = role_sets::replace_role_in_role_set(
         &config,
-        decode(fixture(r#""role_set_key_or-1""#)),
-        decode(fixture(r#""role_key""#)),
-        decode(fixture(r#""to_role_key""#)),
+        role_sets::ReplaceRoleInRoleSetParams {
+            role_set_key_or_id: decode(fixture(r#""role_set_key_or-1""#)),
+            role_key: decode(fixture(r#""role_key""#)),
+            to_role_key: decode(fixture(r#""to_role_key""#)),
+        },
         None,
     )
     .expect("replace_role_in_role_set request failed");
@@ -9775,9 +10557,11 @@ fn replace_role_in_role_set_replace_role_in_role_set_400_decodes_declared_error(
     };
     let result = role_sets::replace_role_in_role_set(
         &config,
-        decode(fixture(r#""role_set_key_or-1""#)),
-        decode(fixture(r#""role_key""#)),
-        decode(fixture(r#""to_role_key""#)),
+        role_sets::ReplaceRoleInRoleSetParams {
+            role_set_key_or_id: decode(fixture(r#""role_set_key_or-1""#)),
+            role_key: decode(fixture(r#""role_key""#)),
+            to_role_key: decode(fixture(r#""to_role_key""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -9802,9 +10586,11 @@ fn replace_role_set_replace_role_set_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = role_sets::replace_role_set(
         &config,
-        decode(fixture(r#""role_set_key_or-1""#)),
-        decode(fixture(r#""dest_role_set_key""#)),
-        Some(decode(fixture(r#"{"key":"key"}"#))),
+        role_sets::ReplaceRoleSetParams {
+            role_set_key_or_id: decode(fixture(r#""role_set_key_or-1""#)),
+            dest_role_set_key: decode(fixture(r#""dest_role_set_key""#)),
+            reassignment_mappings: Some(decode(fixture(r#"{"key":"key"}"#))),
+        },
         None,
     )
     .expect("replace_role_set request failed");
@@ -9831,9 +10617,11 @@ fn replace_role_set_replace_role_set_400_decodes_declared_error() {
     };
     let result = role_sets::replace_role_set(
         &config,
-        decode(fixture(r#""role_set_key_or-1""#)),
-        decode(fixture(r#""dest_role_set_key""#)),
-        Some(decode(fixture(r#"{"key":"key"}"#))),
+        role_sets::ReplaceRoleSetParams {
+            role_set_key_or_id: decode(fixture(r#""role_set_key_or-1""#)),
+            dest_role_set_key: decode(fixture(r#""dest_role_set_key""#)),
+            reassignment_mappings: Some(decode(fixture(r#"{"key":"key"}"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -9859,10 +10647,12 @@ fn replace_scim_group_role_mappings_replace_scim_group_role_mappings_reaches_moc
     let _ = &config;
     let actual = scim_directories::replace_scim_group_role_mappings(
         &config,
-        decode(fixture(r#""scim_directory-1""#)),
-        decode(fixture(
-            r#"[{"scim_group_id":"scim_group-1","role_id":"role-1"}]"#,
-        )),
+        scim_directories::ReplaceScimGroupRoleMappingsParams {
+            scim_directory_id: decode(fixture(r#""scim_directory-1""#)),
+            mappings: decode(fixture(
+                r#"[{"scim_group_id":"scim_group-1","role_id":"role-1"}]"#,
+            )),
+        },
         None,
     )
     .expect("replace_scim_group_role_mappings request failed");
@@ -9889,10 +10679,12 @@ fn replace_scim_group_role_mappings_replace_scim_group_role_mappings_400_decodes
     };
     let result = scim_directories::replace_scim_group_role_mappings(
         &config,
-        decode(fixture(r#""scim_directory-1""#)),
-        decode(fixture(
-            r#"[{"scim_group_id":"scim_group-1","role_id":"role-1"}]"#,
-        )),
+        scim_directories::ReplaceScimGroupRoleMappingsParams {
+            scim_directory_id: decode(fixture(r#""scim_directory-1""#)),
+            mappings: decode(fixture(
+                r#"[{"scim_group_id":"scim_group-1","role_id":"role-1"}]"#,
+            )),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -9917,10 +10709,12 @@ fn replace_user_email_address_replace_user_email_address_reaches_mock_and_decode
     let _ = &config;
     let actual = email_addresses::replace_user_email_address(
         &config,
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#""user@example.com""#)),
-        Some(decode(fixture(r#""verified""#))),
-        Some(Some(decode(fixture(r#"false"#)))),
+        email_addresses::ReplaceUserEmailAddressParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            email_address: decode(fixture(r#""user@example.com""#)),
+            identification_status: Some(decode(fixture(r#""verified""#))),
+            notify_primary_email_address_changed: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     )
     .expect("replace_user_email_address request failed");
@@ -9947,10 +10741,12 @@ fn replace_user_email_address_replace_user_email_address_400_decodes_declared_er
     };
     let result = email_addresses::replace_user_email_address(
         &config,
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#""user@example.com""#)),
-        Some(decode(fixture(r#""verified""#))),
-        Some(Some(decode(fixture(r#"false"#)))),
+        email_addresses::ReplaceUserEmailAddressParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            email_address: decode(fixture(r#""user@example.com""#)),
+            identification_status: Some(decode(fixture(r#""verified""#))),
+            notify_primary_email_address_changed: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -9975,10 +10771,12 @@ fn replace_user_metadata_replace_user_metadata_reaches_mock_and_decodes_response
     let _ = &config;
     let actual = users::replace_user_metadata(
         &config,
-        decode(fixture(r#""user-1""#)),
-        Some(decode(fixture(r#"{}"#))),
-        Some(decode(fixture(r#"{}"#))),
-        Some(decode(fixture(r#"{}"#))),
+        users::ReplaceUserMetadataParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            public_metadata: Some(decode(fixture(r#"{}"#))),
+            private_metadata: Some(decode(fixture(r#"{}"#))),
+            unsafe_metadata: Some(decode(fixture(r#"{}"#))),
+        },
         None,
     )
     .expect("replace_user_metadata request failed");
@@ -10005,10 +10803,12 @@ fn replace_user_metadata_replace_user_metadata_400_decodes_declared_error() {
     };
     let result = users::replace_user_metadata(
         &config,
-        decode(fixture(r#""user-1""#)),
-        Some(decode(fixture(r#"{}"#))),
-        Some(decode(fixture(r#"{}"#))),
-        Some(decode(fixture(r#"{}"#))),
+        users::ReplaceUserMetadataParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            public_metadata: Some(decode(fixture(r#"{}"#))),
+            private_metadata: Some(decode(fixture(r#"{}"#))),
+            unsafe_metadata: Some(decode(fixture(r#"{}"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -10033,9 +10833,11 @@ fn replace_user_phone_number_replace_user_phone_number_reaches_mock_and_decodes_
     let _ = &config;
     let actual = phone_numbers::replace_user_phone_number(
         &config,
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#""+15555550100""#)),
-        Some(decode(fixture(r#""verified""#))),
+        phone_numbers::ReplaceUserPhoneNumberParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            phone_number: decode(fixture(r#""+15555550100""#)),
+            identification_status: Some(decode(fixture(r#""verified""#))),
+        },
         None,
     )
     .expect("replace_user_phone_number request failed");
@@ -10062,9 +10864,11 @@ fn replace_user_phone_number_replace_user_phone_number_400_decodes_declared_erro
     };
     let result = phone_numbers::replace_user_phone_number(
         &config,
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#""+15555550100""#)),
-        Some(decode(fixture(r#""verified""#))),
+        phone_numbers::ReplaceUserPhoneNumberParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            phone_number: decode(fixture(r#""+15555550100""#)),
+            identification_status: Some(decode(fixture(r#""verified""#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -10089,8 +10893,10 @@ fn revert_template_revert_template_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = email_sms_templates::revert_template(
         &config,
-        decode(fixture(r#""email""#)),
-        decode(fixture(r#""slug""#)),
+        email_sms_templates::RevertTemplateParams {
+            template_type: decode(fixture(r#""email""#)),
+            slug: decode(fixture(r#""slug""#)),
+        },
         None,
     )
     .expect("revert_template request failed");
@@ -10117,8 +10923,10 @@ fn revert_template_revert_template_400_decodes_declared_error() {
     };
     let result = email_sms_templates::revert_template(
         &config,
-        decode(fixture(r#""email""#)),
-        decode(fixture(r#""slug""#)),
+        email_sms_templates::RevertTemplateParams {
+            template_type: decode(fixture(r#""email""#)),
+            slug: decode(fixture(r#""slug""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -10141,9 +10949,14 @@ fn revoke_actor_token_revoke_actor_token_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual =
-        actor_tokens::revoke_actor_token(&config, decode(fixture(r#""actor_token-1""#)), None)
-            .expect("revoke_actor_token request failed");
+    let actual = actor_tokens::revoke_actor_token(
+        &config,
+        actor_tokens::RevokeActorTokenParams {
+            actor_token_id: decode(fixture(r#""actor_token-1""#)),
+        },
+        None,
+    )
+    .expect("revoke_actor_token request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"actor_token","id":"id-1","status":"pending","user_id":"user-1","actor":{},"token":"token","url":"https://example.com","created_at":1,"updated_at":1}"#,
@@ -10165,8 +10978,13 @@ fn revoke_actor_token_revoke_actor_token_400_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result =
-        actor_tokens::revoke_actor_token(&config, decode(fixture(r#""actor_token-1""#)), None);
+    let result = actor_tokens::revoke_actor_token(
+        &config,
+        actor_tokens::RevokeActorTokenParams {
+            actor_token_id: decode(fixture(r#""actor_token-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("revoke_actor_token did not fail with SdkError::Http on 400");
     };
@@ -10190,8 +11008,12 @@ fn revoke_admin_portal_link_token_revoke_admin_portal_link_token_reaches_mock_an
     let _ = &config;
     let actual = admin_portal_link_tokens::revoke_admin_portal_link_token(
         &config,
-        decode(fixture(r#""aplt_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa""#)),
-        Some(Some(decode(fixture(r#""revocation_reason""#)))),
+        admin_portal_link_tokens::RevokeAdminPortalLinkTokenParams {
+            admin_portal_link_token_id: decode(fixture(
+                r#""aplt_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa""#,
+            )),
+            revocation_reason: Some(Some(decode(fixture(r#""revocation_reason""#)))),
+        },
         None,
     )
     .expect("revoke_admin_portal_link_token request failed");
@@ -10211,9 +11033,14 @@ fn revoke_agent_task_revoke_agent_task_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual =
-        agent_tasks::revoke_agent_task(&config, decode(fixture(r#""agent_task-1""#)), None)
-            .expect("revoke_agent_task request failed");
+    let actual = agent_tasks::revoke_agent_task(
+        &config,
+        agent_tasks::RevokeAgentTaskParams {
+            agent_task_id: decode(fixture(r#""agent_task-1""#)),
+        },
+        None,
+    )
+    .expect("revoke_agent_task request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"agent_task","agent_id":"agent-1","agent_task_id":"agent_task-1","task_id":"task-1","url":"https://example.com"}"#,
@@ -10235,8 +11062,13 @@ fn revoke_agent_task_revoke_agent_task_400_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result =
-        agent_tasks::revoke_agent_task(&config, decode(fixture(r#""agent_task-1""#)), None);
+    let result = agent_tasks::revoke_agent_task(
+        &config,
+        agent_tasks::RevokeAgentTaskParams {
+            agent_task_id: decode(fixture(r#""agent_task-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("revoke_agent_task did not fail with SdkError::Http on 400");
     };
@@ -10259,8 +11091,10 @@ fn revoke_api_key_revoke_api_key_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = api_keys::revoke_api_key(
         &config,
-        decode(fixture(r#""ak_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa""#)),
-        Some(Some(decode(fixture(r#""revocation_reason""#)))),
+        api_keys::RevokeApiKeyParams {
+            api_key_id: decode(fixture(r#""ak_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa""#)),
+            revocation_reason: Some(Some(decode(fixture(r#""revocation_reason""#)))),
+        },
         None,
     )
     .expect("revoke_api_key request failed");
@@ -10280,9 +11114,14 @@ fn revoke_invitation_revoke_invitation_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual =
-        invitations::revoke_invitation(&config, decode(fixture(r#""invitation-1""#)), None)
-            .expect("revoke_invitation request failed");
+    let actual = invitations::revoke_invitation(
+        &config,
+        invitations::RevokeInvitationParams {
+            invitation_id: decode(fixture(r#""invitation-1""#)),
+        },
+        None,
+    )
+    .expect("revoke_invitation request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"invitation","id":"id-1","email_address":"user@example.com","public_metadata":{},"revoked":true,"status":"revoked","url":"https://example.com","expires_at":1,"created_at":1,"updated_at":1}"#,
@@ -10304,8 +11143,13 @@ fn revoke_invitation_revoke_invitation_400_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result =
-        invitations::revoke_invitation(&config, decode(fixture(r#""invitation-1""#)), None);
+    let result = invitations::revoke_invitation(
+        &config,
+        invitations::RevokeInvitationParams {
+            invitation_id: decode(fixture(r#""invitation-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("revoke_invitation did not fail with SdkError::Http on 400");
     };
@@ -10328,8 +11172,10 @@ fn revoke_m2_mtoken_revoke_m2_mtoken_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = m2_mtokens::revoke_m2_mtoken(
         &config,
-        decode(fixture(r#""mt_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa""#)),
-        Some(Some(decode(fixture(r#""revocation_reason""#)))),
+        m2_mtokens::RevokeM2MtokenParams {
+            m2m_token_id: decode(fixture(r#""mt_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa""#)),
+            revocation_reason: Some(Some(decode(fixture(r#""revocation_reason""#)))),
+        },
         None,
     )
     .expect("revoke_m2_mtoken request failed");
@@ -10352,8 +11198,10 @@ fn revoke_oauth_application_token_revoke_oauth_application_token_reaches_mock_an
     let _ = &config;
     o_auth_applications::revoke_oauth_application_token(
         &config,
-        decode(fixture(r#""oauth_application-1""#)),
-        decode(fixture(r#""token""#)),
+        o_auth_applications::RevokeOauthApplicationTokenParams {
+            oauth_application_id: decode(fixture(r#""oauth_application-1""#)),
+            token: decode(fixture(r#""token""#)),
+        },
         None,
     )
     .expect("revoke_oauth_application_token request failed");
@@ -10372,8 +11220,10 @@ fn revoke_oauth_application_token_revoke_oauth_application_token_400_decodes_dec
     };
     let result = o_auth_applications::revoke_oauth_application_token(
         &config,
-        decode(fixture(r#""oauth_application-1""#)),
-        decode(fixture(r#""token""#)),
+        o_auth_applications::RevokeOauthApplicationTokenParams {
+            oauth_application_id: decode(fixture(r#""oauth_application-1""#)),
+            token: decode(fixture(r#""token""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -10399,9 +11249,11 @@ fn revoke_organization_invitation_revoke_organization_invitation_reaches_mock_an
     let _ = &config;
     let actual = organization_invitations::revoke_organization_invitation(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        decode(fixture(r#""invitation-1""#)),
-        Some(Some(decode(fixture(r#""requesting_user-1""#)))),
+        organization_invitations::RevokeOrganizationInvitationParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            invitation_id: decode(fixture(r#""invitation-1""#)),
+            requesting_user_id: Some(Some(decode(fixture(r#""requesting_user-1""#)))),
+        },
         None,
     )
     .expect("revoke_organization_invitation request failed");
@@ -10428,9 +11280,11 @@ fn revoke_organization_invitation_revoke_organization_invitation_400_decodes_dec
     };
     let result = organization_invitations::revoke_organization_invitation(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        decode(fixture(r#""invitation-1""#)),
-        Some(Some(decode(fixture(r#""requesting_user-1""#)))),
+        organization_invitations::RevokeOrganizationInvitationParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            invitation_id: decode(fixture(r#""invitation-1""#)),
+            requesting_user_id: Some(Some(decode(fixture(r#""requesting_user-1""#)))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -10453,8 +11307,14 @@ fn revoke_session_revoke_session_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = sessions::revoke_session(&config, decode(fixture(r#""session-1""#)), None)
-        .expect("revoke_session request failed");
+    let actual = sessions::revoke_session(
+        &config,
+        sessions::RevokeSessionParams {
+            session_id: decode(fixture(r#""session-1""#)),
+        },
+        None,
+    )
+    .expect("revoke_session request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"session","id":"id-1","user_id":"user-1","client_id":"client-1","actor":{},"status":"active","last_active_organization_id":"last_active_organization-1","last_active_at":1,"latest_activity":{"object":"object","id":"id-1","device_type":"device_type","is_mobile":false,"browser_name":"Example Name","browser_version":"browser_version","ip_address":"ip_address","city":"city","country":"country"},"expire_at":1,"abandon_at":1,"updated_at":1,"created_at":1,"tasks":[{"key":"key"}]}"#,
@@ -10476,7 +11336,13 @@ fn revoke_session_revoke_session_400_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result = sessions::revoke_session(&config, decode(fixture(r#""session-1""#)), None);
+    let result = sessions::revoke_session(
+        &config,
+        sessions::RevokeSessionParams {
+            session_id: decode(fixture(r#""session-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("revoke_session did not fail with SdkError::Http on 400");
     };
@@ -10499,7 +11365,9 @@ fn revoke_sign_in_token_revoke_sign_in_token_reaches_mock_and_decodes_response()
     let _ = &config;
     let actual = sign_in_tokens::revoke_sign_in_token(
         &config,
-        decode(fixture(r#""sign_in_token-1""#)),
+        sign_in_tokens::RevokeSignInTokenParams {
+            sign_in_token_id: decode(fixture(r#""sign_in_token-1""#)),
+        },
         None,
     )
     .expect("revoke_sign_in_token request failed");
@@ -10526,7 +11394,9 @@ fn revoke_sign_in_token_revoke_sign_in_token_400_decodes_declared_error() {
     };
     let result = sign_in_tokens::revoke_sign_in_token(
         &config,
-        decode(fixture(r#""sign_in_token-1""#)),
+        sign_in_tokens::RevokeSignInTokenParams {
+            sign_in_token_id: decode(fixture(r#""sign_in_token-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -10552,8 +11422,10 @@ fn revoke_user_biometric_credential_revoke_user_biometric_credential_reaches_moc
     let _ = &config;
     let actual = users::revoke_user_biometric_credential(
         &config,
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#""biometric_credential-1""#)),
+        users::RevokeUserBiometricCredentialParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            biometric_credential_id: decode(fixture(r#""biometric_credential-1""#)),
+        },
         None,
     )
     .expect("revoke_user_biometric_credential request failed");
@@ -10580,8 +11452,10 @@ fn revoke_user_biometric_credential_revoke_user_biometric_credential_403_decodes
     };
     let result = users::revoke_user_biometric_credential(
         &config,
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#""biometric_credential-1""#)),
+        users::RevokeUserBiometricCredentialParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            biometric_credential_id: decode(fixture(r#""biometric_credential-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -10606,8 +11480,10 @@ fn revoke_user_trusted_device_revoke_user_trusted_device_reaches_mock_and_decode
     let _ = &config;
     let actual = users::revoke_user_trusted_device(
         &config,
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#""trusted_device-1""#)),
+        users::RevokeUserTrustedDeviceParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            trusted_device_id: decode(fixture(r#""trusted_device-1""#)),
+        },
         None,
     )
     .expect("revoke_user_trusted_device request failed");
@@ -10634,8 +11510,10 @@ fn revoke_user_trusted_device_revoke_user_trusted_device_403_decodes_declared_er
     };
     let result = users::revoke_user_trusted_device(
         &config,
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#""trusted_device-1""#)),
+        users::RevokeUserTrustedDeviceParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            trusted_device_id: decode(fixture(r#""trusted_device-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -10658,9 +11536,14 @@ fn rotate_directory_api_key_rotate_directory_api_key_reaches_mock_and_decodes_re
         return;
     };
     let _ = &config;
-    let actual =
-        directories::rotate_directory_api_key(&config, decode(fixture(r#""directory-1""#)), None)
-            .expect("rotate_directory_api_key request failed");
+    let actual = directories::rotate_directory_api_key(
+        &config,
+        directories::RotateDirectoryApiKeyParams {
+            directory_id: decode(fixture(r#""directory-1""#)),
+        },
+        None,
+    )
+    .expect("rotate_directory_api_key request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"directory","id":"id-1","name":"Example Name","enterprise_connection_id":"enterprise_connection-1","endpoint_url":"https://example.com","provider":"provider","enabled":false,"group_role_mapping_enabled":false,"attribute_mapping":{"key":"key"},"custom_attributes":[{"name":"Example Name","key":"key","sso_path":"sso_path","scim_path":"scim_path","directory_path":"directory_path","multi_valued":false}],"api_key":"api_key","created_at":1,"updated_at":1}"#,
@@ -10682,8 +11565,13 @@ fn rotate_directory_api_key_rotate_directory_api_key_401_decodes_declared_error(
             .map(|base_url| format!("{base_url}/__mockStatus/401")),
         ..config
     };
-    let result =
-        directories::rotate_directory_api_key(&config, decode(fixture(r#""directory-1""#)), None);
+    let result = directories::rotate_directory_api_key(
+        &config,
+        directories::RotateDirectoryApiKeyParams {
+            directory_id: decode(fixture(r#""directory-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("rotate_directory_api_key did not fail with SdkError::Http on 401");
     };
@@ -10706,8 +11594,10 @@ fn rotate_machine_secret_key_rotate_machine_secret_key_reaches_mock_and_decodes_
     let _ = &config;
     let actual = machines::rotate_machine_secret_key(
         &config,
-        decode(fixture(r#""machine-1""#)),
-        decode(fixture(r#"0"#)),
+        machines::RotateMachineSecretKeyParams {
+            machine_id: decode(fixture(r#""machine-1""#)),
+            previous_token_ttl: decode(fixture(r#"0"#)),
+        },
         None,
     )
     .expect("rotate_machine_secret_key request failed");
@@ -10732,8 +11622,10 @@ fn rotate_machine_secret_key_rotate_machine_secret_key_400_decodes_declared_erro
     };
     let result = machines::rotate_machine_secret_key(
         &config,
-        decode(fixture(r#""machine-1""#)),
-        decode(fixture(r#"0"#)),
+        machines::RotateMachineSecretKeyParams {
+            machine_id: decode(fixture(r#""machine-1""#)),
+            previous_token_ttl: decode(fixture(r#"0"#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -10759,7 +11651,9 @@ fn rotate_oauth_application_secret_rotate_oauth_application_secret_reaches_mock_
     let _ = &config;
     let actual = o_auth_applications::rotate_oauth_application_secret(
         &config,
-        decode(fixture(r#""oauth_application-1""#)),
+        o_auth_applications::RotateOauthApplicationSecretParams {
+            oauth_application_id: decode(fixture(r#""oauth_application-1""#)),
+        },
         None,
     )
     .expect("rotate_oauth_application_secret request failed");
@@ -10786,7 +11680,9 @@ fn rotate_oauth_application_secret_rotate_oauth_application_secret_403_decodes_d
     };
     let result = o_auth_applications::rotate_oauth_application_secret(
         &config,
-        decode(fixture(r#""oauth_application-1""#)),
+        o_auth_applications::RotateOauthApplicationSecretParams {
+            oauth_application_id: decode(fixture(r#""oauth_application-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -10811,7 +11707,9 @@ fn rotate_scim_directory_api_key_rotate_scim_directory_api_key_reaches_mock_and_
     let _ = &config;
     let actual = scim_directories::rotate_scim_directory_api_key(
         &config,
-        decode(fixture(r#""scim_directory-1""#)),
+        scim_directories::RotateScimDirectoryApiKeyParams {
+            scim_directory_id: decode(fixture(r#""scim_directory-1""#)),
+        },
         None,
     )
     .expect("rotate_scim_directory_api_key request failed");
@@ -10838,7 +11736,9 @@ fn rotate_scim_directory_api_key_rotate_scim_directory_api_key_401_decodes_decla
     };
     let result = scim_directories::rotate_scim_directory_api_key(
         &config,
-        decode(fixture(r#""scim_directory-1""#)),
+        scim_directories::RotateScimDirectoryApiKeyParams {
+            scim_directory_id: decode(fixture(r#""scim_directory-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -10863,8 +11763,10 @@ fn set_user_password_compromised_set_user_password_compromised_reaches_mock_and_
     let _ = &config;
     let actual = users::set_user_password_compromised(
         &config,
-        decode(fixture(r#""user-1""#)),
-        Some(Some(decode(fixture(r#"false"#)))),
+        users::SetUserPasswordCompromisedParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            revoke_all_sessions: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     )
     .expect("set_user_password_compromised request failed");
@@ -10891,8 +11793,10 @@ fn set_user_password_compromised_set_user_password_compromised_400_decodes_decla
     };
     let result = users::set_user_password_compromised(
         &config,
-        decode(fixture(r#""user-1""#)),
-        Some(Some(decode(fixture(r#"false"#)))),
+        users::SetUserPasswordCompromisedParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            revoke_all_sessions: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -10917,12 +11821,14 @@ fn set_user_profile_image_set_user_profile_image_reaches_mock_and_decodes_respon
     let _ = &config;
     let actual = users::set_user_profile_image(
         &config,
-        decode(fixture(r#""user-1""#)),
-        Some(::octridev_clerk::client::UploadFile::new(
-            b"mock upload".to_vec(),
-            "mock.bin",
-            "application/octet-stream",
-        )),
+        users::SetUserProfileImageParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            file: Some(::octridev_clerk::client::UploadFile::new(
+                b"mock upload".to_vec(),
+                "mock.bin",
+                "application/octet-stream",
+            )),
+        },
         None,
     )
     .expect("set_user_profile_image request failed");
@@ -10949,12 +11855,14 @@ fn set_user_profile_image_set_user_profile_image_400_decodes_declared_error() {
     };
     let result = users::set_user_profile_image(
         &config,
-        decode(fixture(r#""user-1""#)),
-        Some(::octridev_clerk::client::UploadFile::new(
-            b"mock upload".to_vec(),
-            "mock.bin",
-            "application/octet-stream",
-        )),
+        users::SetUserProfileImageParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            file: Some(::octridev_clerk::client::UploadFile::new(
+                b"mock upload".to_vec(),
+                "mock.bin",
+                "application/octet-stream",
+            )),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -10979,9 +11887,11 @@ fn toggle_template_delivery_toggle_template_delivery_reaches_mock_and_decodes_re
     let _ = &config;
     let actual = email_sms_templates::toggle_template_delivery(
         &config,
-        decode(fixture(r#""email""#)),
-        decode(fixture(r#""slug""#)),
-        Some(decode(fixture(r#"false"#))),
+        email_sms_templates::ToggleTemplateDeliveryParams {
+            template_type: decode(fixture(r#""email""#)),
+            slug: decode(fixture(r#""slug""#)),
+            delivered_by_clerk: Some(decode(fixture(r#"false"#))),
+        },
         None,
     )
     .expect("toggle_template_delivery request failed");
@@ -11008,9 +11918,11 @@ fn toggle_template_delivery_toggle_template_delivery_400_decodes_declared_error(
     };
     let result = email_sms_templates::toggle_template_delivery(
         &config,
-        decode(fixture(r#""email""#)),
-        decode(fixture(r#""slug""#)),
-        Some(decode(fixture(r#"false"#))),
+        email_sms_templates::ToggleTemplateDeliveryParams {
+            template_type: decode(fixture(r#""email""#)),
+            slug: decode(fixture(r#""slug""#)),
+            delivered_by_clerk: Some(decode(fixture(r#"false"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -11033,8 +11945,14 @@ fn unban_user_unban_user_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = users::unban_user(&config, decode(fixture(r#""user-1""#)), None)
-        .expect("unban_user request failed");
+    let actual = users::unban_user(
+        &config,
+        users::UnbanUserParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    )
+    .expect("unban_user request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"id":"id-1","object":"user","external_id":"external-1","primary_email_address_id":"primary_email_address-1","primary_phone_number_id":"primary_phone_number-1","primary_web3_wallet_id":"primary_web3_wallet-1","username":"Example Name","first_name":"Example Name","last_name":"Example Name","locale":"locale","timezone":"2024-01-01T00:00:00Z","profile_image_url":"https://example.com","image_url":"https://example.com","has_image":false,"public_metadata":{},"private_metadata":{},"unsafe_metadata":{},"email_addresses":[{"id":"id-1","object":"email_address","email_address":"user@example.com","reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"matches_sso_connection":false,"created_at":1,"updated_at":1}],"phone_numbers":[{"id":"id-1","object":"phone_number","phone_number":"+15555550100","reserved_for_second_factor":false,"default_second_factor":false,"reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"backup_codes":["backup_codes"],"created_at":1,"updated_at":1}],"web3_wallets":[{"id":"id-1","object":"web3_wallet","web3_wallet":"web3_wallet","verification":{"object":"verification_web3","status":"unverified","strategy":"web3_metamask_signature","nonce":"nonce","message":"example text","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"},"created_at":1,"updated_at":1}],"passkeys":[{"id":"id-1","object":"passkey","name":"Example Name","last_used_at":1,"verification":{"object":"verification_passkey","status":"verified","strategy":"passkey","nonce":"nonce","message":"example text","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"}}],"password_enabled":false,"two_factor_enabled":false,"totp_enabled":false,"backup_code_enabled":false,"mfa_enabled_at":1,"mfa_disabled_at":1,"password_last_updated_at":1,"external_accounts":[{"object":"external_account","id":"id-1","provider":"provider","identification_id":"identification-1","provider_user_id":"provider_user-1","approved_scopes":"approved_scopes","email_address":"user@example.com","email_address_verified":false,"first_name":"Example Name","last_name":"Example Name","avatar_url":"https://example.com","image_url":"https://example.com","username":"Example Name","phone_number":"+15555550100","public_metadata":{},"label":"label","created_at":1,"updated_at":1,"verification":{"object":"verification_oauth","status":"unverified","strategy":"oauth_a","external_verification_redirect_url":"https://example.com","error":{"message":"example text","long_message":"example text","code":"code","meta":{}},"expire_at":1,"attempts":1,"verified_at_client":"verified_at_client"}}],"saml_accounts":[{"id":"id-1","object":"saml_account","provider":"provider","active":false,"email_address":"user@example.com","first_name":"Example Name","last_name":"Example Name","provider_user_id":"provider_user-1","last_authenticated_at":1,"public_metadata":{},"verification":{"object":"verification_saml","status":"unverified","strategy":"saml","external_verification_redirect_url":"https://example.com","error":{"message":"example text","long_message":"example text","code":"code","meta":{}},"expire_at":1,"attempts":1,"verified_at_client":"verified_at_client"},"saml_connection":{"id":"id-1","name":"Example Name","domain":"domain","domains":["domains"],"active":false,"provider":"provider","sync_user_attributes":false,"allow_subdomains":false,"allow_idp_initiated":false,"disable_additional_identifications":false,"created_at":1,"updated_at":1}}],"enterprise_accounts":[{"id":"id-1","object":"enterprise_account","protocol":"oauth","provider":"provider","active":false,"email_address":"user@example.com","first_name":"Example Name","last_name":"Example Name","provider_user_id":"provider_user-1","enterprise_connection_id":"enterprise_connection-1","public_metadata":{},"verification":{"object":"verification_ticket","status":"unverified","strategy":"ticket","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"},"enterprise_connection":{"id":"id-1","protocol":"protocol","provider":"provider","name":"Example Name","logo_public_url":"https://example.com","domain":"domain","domains":["domains"],"active":false,"sync_user_attributes":false,"allow_subdomains":false,"allow_idp_initiated":false,"disable_additional_identifications":false,"created_at":1,"updated_at":1},"last_authenticated_at":1}],"organization_memberships":[{"id":"id-1","object":"organization_membership","role":"role","role_name":"Example Name","permissions":["permissions"],"public_metadata":{},"private_metadata":{},"organization":{"object":"organization","id":"id-1","name":"Example Name","slug":"slug","image_url":"https://example.com","has_image":false,"members_count":1,"missing_member_with_elevated_permissions":false,"pending_invitations_count":1,"max_allowed_memberships":1,"admin_delete_enabled":false,"self_serve_sso_enabled":false,"self_serve_directory_sync_enabled":false,"public_metadata":{},"private_metadata":{},"created_by":"created_by","created_at":1,"updated_at":1,"last_active_at":1,"role_set_key":"role_set_key"},"public_user_data":{"user_id":"user-1","first_name":"Example Name","last_name":"Example Name","profile_image_url":"https://example.com","image_url":"https://example.com","has_image":false,"identifier":"identifier","username":"Example Name","banned":false,"deprovisioned":false},"created_at":1,"updated_at":1}],"last_sign_in_at":1,"banned":false,"locked":false,"deprovisioned":false,"lockout_expires_in_seconds":1,"verification_attempts_remaining":1,"updated_at":1,"created_at":1,"delete_self_enabled":false,"create_organization_enabled":false,"create_organizations_limit":1,"last_active_at":1700690400000,"legal_accepted_at":1700690400000,"bypass_client_trust":false,"directories":[{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"}],"directory":{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"},"scim":{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"}}"#,
@@ -11056,7 +11974,13 @@ fn unban_user_unban_user_402_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/402")),
         ..config
     };
-    let result = users::unban_user(&config, decode(fixture(r#""user-1""#)), None);
+    let result = users::unban_user(
+        &config,
+        users::UnbanUserParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("unban_user did not fail with SdkError::Http on 402");
     };
@@ -11077,8 +12001,14 @@ fn unban_users_bulk_unban_users_bulk_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = users::unban_users_bulk(&config, decode(fixture(r#"["user_ids"]"#)), None)
-        .expect("unban_users_bulk request failed");
+    let actual = users::unban_users_bulk(
+        &config,
+        users::UnbanUsersBulkParams {
+            user_ids: decode(fixture(r#"["user_ids"]"#)),
+        },
+        None,
+    )
+    .expect("unban_users_bulk request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"[{"id":"id-1","object":"user","external_id":"external-1","primary_email_address_id":"primary_email_address-1","primary_phone_number_id":"primary_phone_number-1","primary_web3_wallet_id":"primary_web3_wallet-1","username":"Example Name","first_name":"Example Name","last_name":"Example Name","locale":"locale","timezone":"2024-01-01T00:00:00Z","profile_image_url":"https://example.com","image_url":"https://example.com","has_image":false,"public_metadata":{},"private_metadata":{},"unsafe_metadata":{},"email_addresses":[{"id":"id-1","object":"email_address","email_address":"user@example.com","reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"matches_sso_connection":false,"created_at":1,"updated_at":1}],"phone_numbers":[{"id":"id-1","object":"phone_number","phone_number":"+15555550100","reserved_for_second_factor":false,"default_second_factor":false,"reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"backup_codes":["backup_codes"],"created_at":1,"updated_at":1}],"web3_wallets":[{"id":"id-1","object":"web3_wallet","web3_wallet":"web3_wallet","verification":{"object":"verification_web3","status":"unverified","strategy":"web3_metamask_signature","nonce":"nonce","message":"example text","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"},"created_at":1,"updated_at":1}],"passkeys":[{"id":"id-1","object":"passkey","name":"Example Name","last_used_at":1,"verification":{"object":"verification_passkey","status":"verified","strategy":"passkey","nonce":"nonce","message":"example text","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"}}],"password_enabled":false,"two_factor_enabled":false,"totp_enabled":false,"backup_code_enabled":false,"mfa_enabled_at":1,"mfa_disabled_at":1,"password_last_updated_at":1,"external_accounts":[{"object":"external_account","id":"id-1","provider":"provider","identification_id":"identification-1","provider_user_id":"provider_user-1","approved_scopes":"approved_scopes","email_address":"user@example.com","email_address_verified":false,"first_name":"Example Name","last_name":"Example Name","avatar_url":"https://example.com","image_url":"https://example.com","username":"Example Name","phone_number":"+15555550100","public_metadata":{},"label":"label","created_at":1,"updated_at":1,"verification":{"object":"verification_oauth","status":"unverified","strategy":"oauth_a","external_verification_redirect_url":"https://example.com","error":{"message":"example text","long_message":"example text","code":"code","meta":{}},"expire_at":1,"attempts":1,"verified_at_client":"verified_at_client"}}],"saml_accounts":[{"id":"id-1","object":"saml_account","provider":"provider","active":false,"email_address":"user@example.com","first_name":"Example Name","last_name":"Example Name","provider_user_id":"provider_user-1","last_authenticated_at":1,"public_metadata":{},"verification":{"object":"verification_saml","status":"unverified","strategy":"saml","external_verification_redirect_url":"https://example.com","error":{"message":"example text","long_message":"example text","code":"code","meta":{}},"expire_at":1,"attempts":1,"verified_at_client":"verified_at_client"},"saml_connection":{"id":"id-1","name":"Example Name","domain":"domain","domains":["domains"],"active":false,"provider":"provider","sync_user_attributes":false,"allow_subdomains":false,"allow_idp_initiated":false,"disable_additional_identifications":false,"created_at":1,"updated_at":1}}],"enterprise_accounts":[{"id":"id-1","object":"enterprise_account","protocol":"oauth","provider":"provider","active":false,"email_address":"user@example.com","first_name":"Example Name","last_name":"Example Name","provider_user_id":"provider_user-1","enterprise_connection_id":"enterprise_connection-1","public_metadata":{},"verification":{"object":"verification_ticket","status":"unverified","strategy":"ticket","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"},"enterprise_connection":{"id":"id-1","protocol":"protocol","provider":"provider","name":"Example Name","logo_public_url":"https://example.com","domain":"domain","domains":["domains"],"active":false,"sync_user_attributes":false,"allow_subdomains":false,"allow_idp_initiated":false,"disable_additional_identifications":false,"created_at":1,"updated_at":1},"last_authenticated_at":1}],"organization_memberships":[{"id":"id-1","object":"organization_membership","role":"role","role_name":"Example Name","permissions":["permissions"],"public_metadata":{},"private_metadata":{},"organization":{"object":"organization","id":"id-1","name":"Example Name","slug":"slug","image_url":"https://example.com","has_image":false,"members_count":1,"missing_member_with_elevated_permissions":false,"pending_invitations_count":1,"max_allowed_memberships":1,"admin_delete_enabled":false,"self_serve_sso_enabled":false,"self_serve_directory_sync_enabled":false,"public_metadata":{},"private_metadata":{},"created_by":"created_by","created_at":1,"updated_at":1,"last_active_at":1,"role_set_key":"role_set_key"},"public_user_data":{"user_id":"user-1","first_name":"Example Name","last_name":"Example Name","profile_image_url":"https://example.com","image_url":"https://example.com","has_image":false,"identifier":"identifier","username":"Example Name","banned":false,"deprovisioned":false},"created_at":1,"updated_at":1}],"last_sign_in_at":1,"banned":false,"locked":false,"deprovisioned":false,"lockout_expires_in_seconds":1,"verification_attempts_remaining":1,"updated_at":1,"created_at":1,"delete_self_enabled":false,"create_organization_enabled":false,"create_organizations_limit":1,"last_active_at":1700690400000,"legal_accepted_at":1700690400000,"bypass_client_trust":false,"directories":[{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"}],"directory":{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"},"scim":{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"}}]"#,
@@ -11100,7 +12030,13 @@ fn unban_users_bulk_unban_users_bulk_400_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result = users::unban_users_bulk(&config, decode(fixture(r#"["user_ids"]"#)), None);
+    let result = users::unban_users_bulk(
+        &config,
+        users::UnbanUsersBulkParams {
+            user_ids: decode(fixture(r#"["user_ids"]"#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("unban_users_bulk did not fail with SdkError::Http on 400");
     };
@@ -11121,8 +12057,14 @@ fn unlock_user_unlock_user_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = users::unlock_user(&config, decode(fixture(r#""user-1""#)), None)
-        .expect("unlock_user request failed");
+    let actual = users::unlock_user(
+        &config,
+        users::UnlockUserParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    )
+    .expect("unlock_user request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"id":"id-1","object":"user","external_id":"external-1","primary_email_address_id":"primary_email_address-1","primary_phone_number_id":"primary_phone_number-1","primary_web3_wallet_id":"primary_web3_wallet-1","username":"Example Name","first_name":"Example Name","last_name":"Example Name","locale":"locale","timezone":"2024-01-01T00:00:00Z","profile_image_url":"https://example.com","image_url":"https://example.com","has_image":false,"public_metadata":{},"private_metadata":{},"unsafe_metadata":{},"email_addresses":[{"id":"id-1","object":"email_address","email_address":"user@example.com","reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"matches_sso_connection":false,"created_at":1,"updated_at":1}],"phone_numbers":[{"id":"id-1","object":"phone_number","phone_number":"+15555550100","reserved_for_second_factor":false,"default_second_factor":false,"reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"backup_codes":["backup_codes"],"created_at":1,"updated_at":1}],"web3_wallets":[{"id":"id-1","object":"web3_wallet","web3_wallet":"web3_wallet","verification":{"object":"verification_web3","status":"unverified","strategy":"web3_metamask_signature","nonce":"nonce","message":"example text","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"},"created_at":1,"updated_at":1}],"passkeys":[{"id":"id-1","object":"passkey","name":"Example Name","last_used_at":1,"verification":{"object":"verification_passkey","status":"verified","strategy":"passkey","nonce":"nonce","message":"example text","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"}}],"password_enabled":false,"two_factor_enabled":false,"totp_enabled":false,"backup_code_enabled":false,"mfa_enabled_at":1,"mfa_disabled_at":1,"password_last_updated_at":1,"external_accounts":[{"object":"external_account","id":"id-1","provider":"provider","identification_id":"identification-1","provider_user_id":"provider_user-1","approved_scopes":"approved_scopes","email_address":"user@example.com","email_address_verified":false,"first_name":"Example Name","last_name":"Example Name","avatar_url":"https://example.com","image_url":"https://example.com","username":"Example Name","phone_number":"+15555550100","public_metadata":{},"label":"label","created_at":1,"updated_at":1,"verification":{"object":"verification_oauth","status":"unverified","strategy":"oauth_a","external_verification_redirect_url":"https://example.com","error":{"message":"example text","long_message":"example text","code":"code","meta":{}},"expire_at":1,"attempts":1,"verified_at_client":"verified_at_client"}}],"saml_accounts":[{"id":"id-1","object":"saml_account","provider":"provider","active":false,"email_address":"user@example.com","first_name":"Example Name","last_name":"Example Name","provider_user_id":"provider_user-1","last_authenticated_at":1,"public_metadata":{},"verification":{"object":"verification_saml","status":"unverified","strategy":"saml","external_verification_redirect_url":"https://example.com","error":{"message":"example text","long_message":"example text","code":"code","meta":{}},"expire_at":1,"attempts":1,"verified_at_client":"verified_at_client"},"saml_connection":{"id":"id-1","name":"Example Name","domain":"domain","domains":["domains"],"active":false,"provider":"provider","sync_user_attributes":false,"allow_subdomains":false,"allow_idp_initiated":false,"disable_additional_identifications":false,"created_at":1,"updated_at":1}}],"enterprise_accounts":[{"id":"id-1","object":"enterprise_account","protocol":"oauth","provider":"provider","active":false,"email_address":"user@example.com","first_name":"Example Name","last_name":"Example Name","provider_user_id":"provider_user-1","enterprise_connection_id":"enterprise_connection-1","public_metadata":{},"verification":{"object":"verification_ticket","status":"unverified","strategy":"ticket","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"},"enterprise_connection":{"id":"id-1","protocol":"protocol","provider":"provider","name":"Example Name","logo_public_url":"https://example.com","domain":"domain","domains":["domains"],"active":false,"sync_user_attributes":false,"allow_subdomains":false,"allow_idp_initiated":false,"disable_additional_identifications":false,"created_at":1,"updated_at":1},"last_authenticated_at":1}],"organization_memberships":[{"id":"id-1","object":"organization_membership","role":"role","role_name":"Example Name","permissions":["permissions"],"public_metadata":{},"private_metadata":{},"organization":{"object":"organization","id":"id-1","name":"Example Name","slug":"slug","image_url":"https://example.com","has_image":false,"members_count":1,"missing_member_with_elevated_permissions":false,"pending_invitations_count":1,"max_allowed_memberships":1,"admin_delete_enabled":false,"self_serve_sso_enabled":false,"self_serve_directory_sync_enabled":false,"public_metadata":{},"private_metadata":{},"created_by":"created_by","created_at":1,"updated_at":1,"last_active_at":1,"role_set_key":"role_set_key"},"public_user_data":{"user_id":"user-1","first_name":"Example Name","last_name":"Example Name","profile_image_url":"https://example.com","image_url":"https://example.com","has_image":false,"identifier":"identifier","username":"Example Name","banned":false,"deprovisioned":false},"created_at":1,"updated_at":1}],"last_sign_in_at":1,"banned":false,"locked":false,"deprovisioned":false,"lockout_expires_in_seconds":1,"verification_attempts_remaining":1,"updated_at":1,"created_at":1,"delete_self_enabled":false,"create_organization_enabled":false,"create_organizations_limit":1,"last_active_at":1700690400000,"legal_accepted_at":1700690400000,"bypass_client_trust":false,"directories":[{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"}],"directory":{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"},"scim":{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"}}"#,
@@ -11144,7 +12086,13 @@ fn unlock_user_unlock_user_403_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/403")),
         ..config
     };
-    let result = users::unlock_user(&config, decode(fixture(r#""user-1""#)), None);
+    let result = users::unlock_user(
+        &config,
+        users::UnlockUserParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("unlock_user did not fail with SdkError::Http on 403");
     };
@@ -11166,9 +12114,14 @@ fn unset_user_password_compromised_unset_user_password_compromised_reaches_mock_
         return;
     };
     let _ = &config;
-    let actual =
-        users::unset_user_password_compromised(&config, decode(fixture(r#""user-1""#)), None)
-            .expect("unset_user_password_compromised request failed");
+    let actual = users::unset_user_password_compromised(
+        &config,
+        users::UnsetUserPasswordCompromisedParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    )
+    .expect("unset_user_password_compromised request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"id":"id-1","object":"user","external_id":"external-1","primary_email_address_id":"primary_email_address-1","primary_phone_number_id":"primary_phone_number-1","primary_web3_wallet_id":"primary_web3_wallet-1","username":"Example Name","first_name":"Example Name","last_name":"Example Name","locale":"locale","timezone":"2024-01-01T00:00:00Z","profile_image_url":"https://example.com","image_url":"https://example.com","has_image":false,"public_metadata":{},"private_metadata":{},"unsafe_metadata":{},"email_addresses":[{"id":"id-1","object":"email_address","email_address":"user@example.com","reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"matches_sso_connection":false,"created_at":1,"updated_at":1}],"phone_numbers":[{"id":"id-1","object":"phone_number","phone_number":"+15555550100","reserved_for_second_factor":false,"default_second_factor":false,"reserved":false,"verification":{"object":"verification_otp","status":"unverified","strategy":"phone_code","attempts":1,"expire_at":1,"channel":"channel","verified_at_client":"verified_at_client"},"linked_to":[{"type":"oauth_a","id":"id-1"}],"backup_codes":["backup_codes"],"created_at":1,"updated_at":1}],"web3_wallets":[{"id":"id-1","object":"web3_wallet","web3_wallet":"web3_wallet","verification":{"object":"verification_web3","status":"unverified","strategy":"web3_metamask_signature","nonce":"nonce","message":"example text","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"},"created_at":1,"updated_at":1}],"passkeys":[{"id":"id-1","object":"passkey","name":"Example Name","last_used_at":1,"verification":{"object":"verification_passkey","status":"verified","strategy":"passkey","nonce":"nonce","message":"example text","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"}}],"password_enabled":false,"two_factor_enabled":false,"totp_enabled":false,"backup_code_enabled":false,"mfa_enabled_at":1,"mfa_disabled_at":1,"password_last_updated_at":1,"external_accounts":[{"object":"external_account","id":"id-1","provider":"provider","identification_id":"identification-1","provider_user_id":"provider_user-1","approved_scopes":"approved_scopes","email_address":"user@example.com","email_address_verified":false,"first_name":"Example Name","last_name":"Example Name","avatar_url":"https://example.com","image_url":"https://example.com","username":"Example Name","phone_number":"+15555550100","public_metadata":{},"label":"label","created_at":1,"updated_at":1,"verification":{"object":"verification_oauth","status":"unverified","strategy":"oauth_a","external_verification_redirect_url":"https://example.com","error":{"message":"example text","long_message":"example text","code":"code","meta":{}},"expire_at":1,"attempts":1,"verified_at_client":"verified_at_client"}}],"saml_accounts":[{"id":"id-1","object":"saml_account","provider":"provider","active":false,"email_address":"user@example.com","first_name":"Example Name","last_name":"Example Name","provider_user_id":"provider_user-1","last_authenticated_at":1,"public_metadata":{},"verification":{"object":"verification_saml","status":"unverified","strategy":"saml","external_verification_redirect_url":"https://example.com","error":{"message":"example text","long_message":"example text","code":"code","meta":{}},"expire_at":1,"attempts":1,"verified_at_client":"verified_at_client"},"saml_connection":{"id":"id-1","name":"Example Name","domain":"domain","domains":["domains"],"active":false,"provider":"provider","sync_user_attributes":false,"allow_subdomains":false,"allow_idp_initiated":false,"disable_additional_identifications":false,"created_at":1,"updated_at":1}}],"enterprise_accounts":[{"id":"id-1","object":"enterprise_account","protocol":"oauth","provider":"provider","active":false,"email_address":"user@example.com","first_name":"Example Name","last_name":"Example Name","provider_user_id":"provider_user-1","enterprise_connection_id":"enterprise_connection-1","public_metadata":{},"verification":{"object":"verification_ticket","status":"unverified","strategy":"ticket","attempts":1,"expire_at":1,"verified_at_client":"verified_at_client"},"enterprise_connection":{"id":"id-1","protocol":"protocol","provider":"provider","name":"Example Name","logo_public_url":"https://example.com","domain":"domain","domains":["domains"],"active":false,"sync_user_attributes":false,"allow_subdomains":false,"allow_idp_initiated":false,"disable_additional_identifications":false,"created_at":1,"updated_at":1},"last_authenticated_at":1}],"organization_memberships":[{"id":"id-1","object":"organization_membership","role":"role","role_name":"Example Name","permissions":["permissions"],"public_metadata":{},"private_metadata":{},"organization":{"object":"organization","id":"id-1","name":"Example Name","slug":"slug","image_url":"https://example.com","has_image":false,"members_count":1,"missing_member_with_elevated_permissions":false,"pending_invitations_count":1,"max_allowed_memberships":1,"admin_delete_enabled":false,"self_serve_sso_enabled":false,"self_serve_directory_sync_enabled":false,"public_metadata":{},"private_metadata":{},"created_by":"created_by","created_at":1,"updated_at":1,"last_active_at":1,"role_set_key":"role_set_key"},"public_user_data":{"user_id":"user-1","first_name":"Example Name","last_name":"Example Name","profile_image_url":"https://example.com","image_url":"https://example.com","has_image":false,"identifier":"identifier","username":"Example Name","banned":false,"deprovisioned":false},"created_at":1,"updated_at":1}],"last_sign_in_at":1,"banned":false,"locked":false,"deprovisioned":false,"lockout_expires_in_seconds":1,"verification_attempts_remaining":1,"updated_at":1,"created_at":1,"delete_self_enabled":false,"create_organization_enabled":false,"create_organizations_limit":1,"last_active_at":1700690400000,"legal_accepted_at":1700690400000,"bypass_client_trust":false,"directories":[{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"}],"directory":{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"},"scim":{"id":"id-1","directory_name":"Example Name","provider":"provider","enterprise_connection_id":"enterprise_connection-1","groups":[{"id":"id-1","display_name":"Example Name"}],"directory_id":"directory-1","directory_enabled":false,"external_id":"external-1"}}"#,
@@ -11190,8 +12143,13 @@ fn unset_user_password_compromised_unset_user_password_compromised_400_decodes_d
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result =
-        users::unset_user_password_compromised(&config, decode(fixture(r#""user-1""#)), None);
+    let result = users::unset_user_password_compromised(
+        &config,
+        users::UnsetUserPasswordCompromisedParams {
+            user_id: decode(fixture(r#""user-1""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("unset_user_password_compromised did not fail with SdkError::Http on 400");
     };
@@ -11309,10 +12267,12 @@ fn update_domain_update_domain_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = domains::update_domain(
         &config,
-        decode(fixture(r#""domain-1""#)),
-        Some(Some(decode(fixture(r#""Example Name""#)))),
-        Some(Some(decode(fixture(r#""https://example.com""#)))),
-        Some(Some(decode(fixture(r#"false"#)))),
+        domains::UpdateDomainParams {
+            domain_id: decode(fixture(r#""domain-1""#)),
+            name: Some(Some(decode(fixture(r#""Example Name""#)))),
+            proxy_url: Some(Some(decode(fixture(r#""https://example.com""#)))),
+            is_secondary: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     )
     .expect("update_domain request failed");
@@ -11339,10 +12299,12 @@ fn update_domain_update_domain_400_decodes_declared_error() {
     };
     let result = domains::update_domain(
         &config,
-        decode(fixture(r#""domain-1""#)),
-        Some(Some(decode(fixture(r#""Example Name""#)))),
-        Some(Some(decode(fixture(r#""https://example.com""#)))),
-        Some(Some(decode(fixture(r#"false"#)))),
+        domains::UpdateDomainParams {
+            domain_id: decode(fixture(r#""domain-1""#)),
+            name: Some(Some(decode(fixture(r#""Example Name""#)))),
+            proxy_url: Some(Some(decode(fixture(r#""https://example.com""#)))),
+            is_secondary: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -11367,10 +12329,12 @@ fn update_email_address_update_email_address_reaches_mock_and_decodes_response()
     let _ = &config;
     let actual = email_addresses::update_email_address(
         &config,
-        decode(fixture(r#""email_address-1""#)),
-        Some(Some(decode(fixture(r#"false"#)))),
-        Some(Some(decode(fixture(r#"false"#)))),
-        Some(Some(decode(fixture(r#"false"#)))),
+        email_addresses::UpdateEmailAddressParams {
+            email_address_id: decode(fixture(r#""email_address-1""#)),
+            verified: Some(Some(decode(fixture(r#"false"#)))),
+            primary: Some(Some(decode(fixture(r#"false"#)))),
+            notify_primary_email_address_changed: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     )
     .expect("update_email_address request failed");
@@ -11397,10 +12361,12 @@ fn update_email_address_update_email_address_400_decodes_declared_error() {
     };
     let result = email_addresses::update_email_address(
         &config,
-        decode(fixture(r#""email_address-1""#)),
-        Some(Some(decode(fixture(r#"false"#)))),
-        Some(Some(decode(fixture(r#"false"#)))),
-        Some(Some(decode(fixture(r#"false"#)))),
+        email_addresses::UpdateEmailAddressParams {
+            email_address_id: decode(fixture(r#""email_address-1""#)),
+            verified: Some(Some(decode(fixture(r#"false"#)))),
+            primary: Some(Some(decode(fixture(r#"false"#)))),
+            notify_primary_email_address_changed: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -11579,10 +12545,12 @@ fn update_instance_auth_config_update_instance_auth_config_reaches_mock_and_deco
     let _ = &config;
     let actual = beta_features::update_instance_auth_config(
         &config,
-        Some(Some(decode(fixture(r#"false"#)))),
-        Some(Some(decode(fixture(r#""user@example.com""#)))),
-        Some(Some(decode(fixture(r#"false"#)))),
-        Some(Some(decode(fixture(r#"false"#)))),
+        beta_features::UpdateInstanceAuthConfigParams {
+            restricted_to_allowlist: Some(Some(decode(fixture(r#"false"#)))),
+            from_email_address: Some(Some(decode(fixture(r#""user@example.com""#)))),
+            progressive_sign_up: Some(Some(decode(fixture(r#"false"#)))),
+            test_mode: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     )
     .expect("update_instance_auth_config request failed");
@@ -11609,10 +12577,12 @@ fn update_instance_auth_config_update_instance_auth_config_402_decodes_declared_
     };
     let result = beta_features::update_instance_auth_config(
         &config,
-        Some(Some(decode(fixture(r#"false"#)))),
-        Some(Some(decode(fixture(r#""user@example.com""#)))),
-        Some(Some(decode(fixture(r#"false"#)))),
-        Some(Some(decode(fixture(r#"false"#)))),
+        beta_features::UpdateInstanceAuthConfigParams {
+            restricted_to_allowlist: Some(Some(decode(fixture(r#"false"#)))),
+            from_email_address: Some(Some(decode(fixture(r#""user@example.com""#)))),
+            progressive_sign_up: Some(Some(decode(fixture(r#"false"#)))),
+            test_mode: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -11637,7 +12607,9 @@ fn update_instance_communication_update_instance_communication_reaches_mock_and_
     let _ = &config;
     let actual = instance_settings::update_instance_communication(
         &config,
-        Some(Some(decode(fixture(r#"["AA"]"#)))),
+        instance_settings::UpdateInstanceCommunicationParams {
+            blocked_country_codes: Some(Some(decode(fixture(r#"["AA"]"#)))),
+        },
         None,
     )
     .expect("update_instance_communication request failed");
@@ -11664,7 +12636,9 @@ fn update_instance_communication_update_instance_communication_422_decodes_decla
     };
     let result = instance_settings::update_instance_communication(
         &config,
-        Some(Some(decode(fixture(r#"["AA"]"#)))),
+        instance_settings::UpdateInstanceCommunicationParams {
+            blocked_country_codes: Some(Some(decode(fixture(r#"["AA"]"#)))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -11851,7 +12825,9 @@ fn update_instance_protect_update_instance_protect_reaches_mock_and_decodes_resp
     let _ = &config;
     let actual = instance_settings::update_instance_protect(
         &config,
-        Some(Some(decode(fixture(r#"false"#)))),
+        instance_settings::UpdateInstanceProtectParams {
+            rules_enabled: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     )
     .expect("update_instance_protect request failed");
@@ -11878,7 +12854,9 @@ fn update_instance_protect_update_instance_protect_422_decodes_declared_error() 
     };
     let result = instance_settings::update_instance_protect(
         &config,
-        Some(Some(decode(fixture(r#"false"#)))),
+        instance_settings::UpdateInstanceProtectParams {
+            rules_enabled: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -12037,9 +13015,11 @@ fn update_machine_update_machine_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = machines::update_machine(
         &config,
-        decode(fixture(r#""machine-1""#)),
-        Some(decode(fixture(r#""Example Name""#))),
-        Some(decode(fixture(r#"1"#))),
+        machines::UpdateMachineParams {
+            machine_id: decode(fixture(r#""machine-1""#)),
+            name: Some(decode(fixture(r#""Example Name""#))),
+            default_token_ttl: Some(decode(fixture(r#"1"#))),
+        },
         None,
     )
     .expect("update_machine request failed");
@@ -12066,9 +13046,11 @@ fn update_machine_update_machine_400_decodes_declared_error() {
     };
     let result = machines::update_machine(
         &config,
-        decode(fixture(r#""machine-1""#)),
-        Some(decode(fixture(r#""Example Name""#))),
-        Some(decode(fixture(r#"1"#))),
+        machines::UpdateMachineParams {
+            machine_id: decode(fixture(r#""machine-1""#)),
+            name: Some(decode(fixture(r#""Example Name""#))),
+            default_token_ttl: Some(decode(fixture(r#"1"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -12249,10 +13231,12 @@ fn update_organization_domain_update_organization_domain_reaches_mock_and_decode
     let _ = &config;
     let actual = organization_domains::update_organization_domain(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        decode(fixture(r#""domain-1""#)),
-        Some(Some(decode(fixture(r#""enrollment_mode""#)))),
-        Some(Some(decode(fixture(r#"false"#)))),
+        organization_domains::UpdateOrganizationDomainParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            domain_id: decode(fixture(r#""domain-1""#)),
+            enrollment_mode: Some(Some(decode(fixture(r#""enrollment_mode""#)))),
+            verified: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     )
     .expect("update_organization_domain request failed");
@@ -12279,10 +13263,12 @@ fn update_organization_domain_update_organization_domain_400_decodes_declared_er
     };
     let result = organization_domains::update_organization_domain(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        decode(fixture(r#""domain-1""#)),
-        Some(Some(decode(fixture(r#""enrollment_mode""#)))),
-        Some(Some(decode(fixture(r#"false"#)))),
+        organization_domains::UpdateOrganizationDomainParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            domain_id: decode(fixture(r#""domain-1""#)),
+            enrollment_mode: Some(Some(decode(fixture(r#""enrollment_mode""#)))),
+            verified: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -12308,9 +13294,11 @@ fn update_organization_membership_update_organization_membership_reaches_mock_an
     let _ = &config;
     let actual = organization_memberships::update_organization_membership(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#""role""#)),
+        organization_memberships::UpdateOrganizationMembershipParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            user_id: decode(fixture(r#""user-1""#)),
+            role: decode(fixture(r#""role""#)),
+        },
         None,
     )
     .expect("update_organization_membership request failed");
@@ -12337,9 +13325,11 @@ fn update_organization_membership_update_organization_membership_404_decodes_dec
     };
     let result = organization_memberships::update_organization_membership(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#""role""#)),
+        organization_memberships::UpdateOrganizationMembershipParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            user_id: decode(fixture(r#""user-1""#)),
+            role: decode(fixture(r#""role""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -12365,10 +13355,12 @@ fn update_organization_membership_metadata_update_organization_membership_metada
     let _ = &config;
     let actual = organization_memberships::update_organization_membership_metadata(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        decode(fixture(r#""user-1""#)),
-        Some(decode(fixture(r#"{}"#))),
-        Some(decode(fixture(r#"{}"#))),
+        organization_memberships::UpdateOrganizationMembershipMetadataParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            user_id: decode(fixture(r#""user-1""#)),
+            public_metadata: Some(decode(fixture(r#"{}"#))),
+            private_metadata: Some(decode(fixture(r#"{}"#))),
+        },
         None,
     )
     .expect("update_organization_membership_metadata request failed");
@@ -12396,10 +13388,12 @@ fn update_organization_membership_metadata_update_organization_membership_metada
     };
     let result = organization_memberships::update_organization_membership_metadata(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        decode(fixture(r#""user-1""#)),
-        Some(decode(fixture(r#"{}"#))),
-        Some(decode(fixture(r#"{}"#))),
+        organization_memberships::UpdateOrganizationMembershipMetadataParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            user_id: decode(fixture(r#""user-1""#)),
+            public_metadata: Some(decode(fixture(r#"{}"#))),
+            private_metadata: Some(decode(fixture(r#"{}"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -12425,10 +13419,12 @@ fn update_organization_permission_update_organization_permission_reaches_mock_an
     let _ = &config;
     let actual = organization_permissions::update_organization_permission(
         &config,
-        decode(fixture(r#""permission-1""#)),
-        Some(decode(fixture(r#""Example Name""#))),
-        Some(decode(fixture(r#""key""#))),
-        Some(decode(fixture(r#""example text""#))),
+        organization_permissions::UpdateOrganizationPermissionParams {
+            permission_id: decode(fixture(r#""permission-1""#)),
+            name: Some(decode(fixture(r#""Example Name""#))),
+            key: Some(decode(fixture(r#""key""#))),
+            description: Some(decode(fixture(r#""example text""#))),
+        },
         None,
     )
     .expect("update_organization_permission request failed");
@@ -12455,10 +13451,12 @@ fn update_organization_permission_update_organization_permission_400_decodes_dec
     };
     let result = organization_permissions::update_organization_permission(
         &config,
-        decode(fixture(r#""permission-1""#)),
-        Some(decode(fixture(r#""Example Name""#))),
-        Some(decode(fixture(r#""key""#))),
-        Some(decode(fixture(r#""example text""#))),
+        organization_permissions::UpdateOrganizationPermissionParams {
+            permission_id: decode(fixture(r#""permission-1""#)),
+            name: Some(decode(fixture(r#""Example Name""#))),
+            key: Some(decode(fixture(r#""key""#))),
+            description: Some(decode(fixture(r#""example text""#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -12547,10 +13545,12 @@ fn update_phone_number_update_phone_number_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = phone_numbers::update_phone_number(
         &config,
-        decode(fixture(r#""phone_number-1""#)),
-        Some(Some(decode(fixture(r#"false"#)))),
-        Some(Some(decode(fixture(r#"false"#)))),
-        Some(Some(decode(fixture(r#"false"#)))),
+        phone_numbers::UpdatePhoneNumberParams {
+            phone_number_id: decode(fixture(r#""phone_number-1""#)),
+            verified: Some(Some(decode(fixture(r#"false"#)))),
+            primary: Some(Some(decode(fixture(r#"false"#)))),
+            reserved_for_second_factor: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     )
     .expect("update_phone_number request failed");
@@ -12577,10 +13577,12 @@ fn update_phone_number_update_phone_number_400_decodes_declared_error() {
     };
     let result = phone_numbers::update_phone_number(
         &config,
-        decode(fixture(r#""phone_number-1""#)),
-        Some(Some(decode(fixture(r#"false"#)))),
-        Some(Some(decode(fixture(r#"false"#)))),
-        Some(Some(decode(fixture(r#"false"#)))),
+        phone_numbers::UpdatePhoneNumberParams {
+            phone_number_id: decode(fixture(r#""phone_number-1""#)),
+            verified: Some(Some(decode(fixture(r#"false"#)))),
+            primary: Some(Some(decode(fixture(r#"false"#)))),
+            reserved_for_second_factor: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -12606,8 +13608,10 @@ fn update_production_instance_domain_update_production_instance_domain_reaches_m
     let _ = &config;
     beta_features::update_production_instance_domain(
         &config,
-        Some(decode(fixture(r#""https://example.com""#))),
-        Some(decode(fixture(r#"false"#))),
+        beta_features::UpdateProductionInstanceDomainParams {
+            home_url: Some(decode(fixture(r#""https://example.com""#))),
+            is_secondary: Some(decode(fixture(r#"false"#))),
+        },
         None,
     )
     .expect("update_production_instance_domain request failed");
@@ -12627,8 +13631,10 @@ fn update_production_instance_domain_update_production_instance_domain_400_decod
     };
     let result = beta_features::update_production_instance_domain(
         &config,
-        Some(decode(fixture(r#""https://example.com""#))),
-        Some(decode(fixture(r#"false"#))),
+        beta_features::UpdateProductionInstanceDomainParams {
+            home_url: Some(decode(fixture(r#""https://example.com""#))),
+            is_secondary: Some(decode(fixture(r#"false"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -12887,9 +13893,11 @@ fn update_sign_up_update_sign_up_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = sign_ups::update_sign_up(
         &config,
-        decode(fixture(r#""id-1""#)),
-        Some(Some(decode(fixture(r#""external-1""#)))),
-        Some(Some(decode(fixture(r#"false"#)))),
+        sign_ups::UpdateSignUpParams {
+            id: decode(fixture(r#""id-1""#)),
+            external_id: Some(Some(decode(fixture(r#""external-1""#)))),
+            custom_action: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     )
     .expect("update_sign_up request failed");
@@ -12916,9 +13924,11 @@ fn update_sign_up_update_sign_up_403_decodes_declared_error() {
     };
     let result = sign_ups::update_sign_up(
         &config,
-        decode(fixture(r#""id-1""#)),
-        Some(Some(decode(fixture(r#""external-1""#)))),
-        Some(Some(decode(fixture(r#"false"#)))),
+        sign_ups::UpdateSignUpParams {
+            id: decode(fixture(r#""id-1""#)),
+            external_id: Some(Some(decode(fixture(r#""external-1""#)))),
+            custom_action: Some(Some(decode(fixture(r#"false"#)))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -13049,10 +14059,12 @@ fn update_user_metadata_update_user_metadata_reaches_mock_and_decodes_response()
     let _ = &config;
     let actual = users::update_user_metadata(
         &config,
-        decode(fixture(r#""user-1""#)),
-        Some(decode(fixture(r#"{}"#))),
-        Some(decode(fixture(r#"{}"#))),
-        Some(decode(fixture(r#"{}"#))),
+        users::UpdateUserMetadataParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            public_metadata: Some(decode(fixture(r#"{}"#))),
+            private_metadata: Some(decode(fixture(r#"{}"#))),
+            unsafe_metadata: Some(decode(fixture(r#"{}"#))),
+        },
         None,
     )
     .expect("update_user_metadata request failed");
@@ -13079,10 +14091,12 @@ fn update_user_metadata_update_user_metadata_400_decodes_declared_error() {
     };
     let result = users::update_user_metadata(
         &config,
-        decode(fixture(r#""user-1""#)),
-        Some(decode(fixture(r#"{}"#))),
-        Some(decode(fixture(r#"{}"#))),
-        Some(decode(fixture(r#"{}"#))),
+        users::UpdateUserMetadataParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            public_metadata: Some(decode(fixture(r#"{}"#))),
+            private_metadata: Some(decode(fixture(r#"{}"#))),
+            unsafe_metadata: Some(decode(fixture(r#"{}"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -13107,13 +14121,15 @@ fn upload_oauth_application_logo_upload_oauth_application_logo_reaches_mock_and_
     let _ = &config;
     let actual = o_auth_applications::upload_oauth_application_logo(
         &config,
-        decode(fixture(r#""oauth_application-1""#)),
-        ::octridev_clerk::client::UploadFile::new(
-            b"mock upload".to_vec(),
-            "mock.bin",
-            "application/octet-stream",
-        ),
-        Some(decode(fixture(r#""uploader_user-1""#))),
+        o_auth_applications::UploadOauthApplicationLogoParams {
+            oauth_application_id: decode(fixture(r#""oauth_application-1""#)),
+            file: ::octridev_clerk::client::UploadFile::new(
+                b"mock upload".to_vec(),
+                "mock.bin",
+                "application/octet-stream",
+            ),
+            uploader_user_id: Some(decode(fixture(r#""uploader_user-1""#))),
+        },
         None,
     )
     .expect("upload_oauth_application_logo request failed");
@@ -13140,13 +14156,15 @@ fn upload_oauth_application_logo_upload_oauth_application_logo_400_decodes_decla
     };
     let result = o_auth_applications::upload_oauth_application_logo(
         &config,
-        decode(fixture(r#""oauth_application-1""#)),
-        ::octridev_clerk::client::UploadFile::new(
-            b"mock upload".to_vec(),
-            "mock.bin",
-            "application/octet-stream",
-        ),
-        Some(decode(fixture(r#""uploader_user-1""#))),
+        o_auth_applications::UploadOauthApplicationLogoParams {
+            oauth_application_id: decode(fixture(r#""oauth_application-1""#)),
+            file: ::octridev_clerk::client::UploadFile::new(
+                b"mock upload".to_vec(),
+                "mock.bin",
+                "application/octet-stream",
+            ),
+            uploader_user_id: Some(decode(fixture(r#""uploader_user-1""#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -13171,13 +14189,15 @@ fn upload_organization_logo_upload_organization_logo_reaches_mock_and_decodes_re
     let _ = &config;
     let actual = organizations::upload_organization_logo(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        ::octridev_clerk::client::UploadFile::new(
-            b"mock upload".to_vec(),
-            "mock.bin",
-            "application/octet-stream",
-        ),
-        Some(decode(fixture(r#""uploader_user-1""#))),
+        organizations::UploadOrganizationLogoParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            file: ::octridev_clerk::client::UploadFile::new(
+                b"mock upload".to_vec(),
+                "mock.bin",
+                "application/octet-stream",
+            ),
+            uploader_user_id: Some(decode(fixture(r#""uploader_user-1""#))),
+        },
         None,
     )
     .expect("upload_organization_logo request failed");
@@ -13204,13 +14224,15 @@ fn upload_organization_logo_upload_organization_logo_400_decodes_declared_error(
     };
     let result = organizations::upload_organization_logo(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        ::octridev_clerk::client::UploadFile::new(
-            b"mock upload".to_vec(),
-            "mock.bin",
-            "application/octet-stream",
-        ),
-        Some(decode(fixture(r#""uploader_user-1""#))),
+        organizations::UploadOrganizationLogoParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            file: ::octridev_clerk::client::UploadFile::new(
+                b"mock upload".to_vec(),
+                "mock.bin",
+                "application/octet-stream",
+            ),
+            uploader_user_id: Some(decode(fixture(r#""uploader_user-1""#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -13308,10 +14330,12 @@ fn users_get_organization_invitations_users_get_organization_invitations_reaches
     let _ = &config;
     let actual = users::users_get_organization_invitations(
         &config,
-        decode(fixture(r#""user-1""#)),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
-        Some(decode(fixture(r#""pending""#))),
+        users::UsersGetOrganizationInvitationsParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+            status: Some(decode(fixture(r#""pending""#))),
+        },
         None,
     )
     .expect("users_get_organization_invitations request failed");
@@ -13339,10 +14363,12 @@ fn users_get_organization_invitations_users_get_organization_invitations_400_dec
     };
     let result = users::users_get_organization_invitations(
         &config,
-        decode(fixture(r#""user-1""#)),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
-        Some(decode(fixture(r#""pending""#))),
+        users::UsersGetOrganizationInvitationsParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+            status: Some(decode(fixture(r#""pending""#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -13368,9 +14394,11 @@ fn users_get_organization_memberships_users_get_organization_memberships_reaches
     let _ = &config;
     let actual = users::users_get_organization_memberships(
         &config,
-        decode(fixture(r#""user-1""#)),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        users::UsersGetOrganizationMembershipsParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     )
     .expect("users_get_organization_memberships request failed");
@@ -13398,9 +14426,11 @@ fn users_get_organization_memberships_users_get_organization_memberships_403_dec
     };
     let result = users::users_get_organization_memberships(
         &config,
-        decode(fixture(r#""user-1""#)),
-        Some(decode(fixture(r#"10"#))),
-        Some(decode(fixture(r#"0"#))),
+        users::UsersGetOrganizationMembershipsParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            limit: Some(decode(fixture(r#"10"#))),
+            offset: Some(decode(fixture(r#"0"#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -13423,8 +14453,14 @@ fn verify_api_key_verify_api_key_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = api_keys::verify_api_key(&config, decode(fixture(r#""secret""#)), None)
-        .expect("verify_api_key request failed");
+    let actual = api_keys::verify_api_key(
+        &config,
+        api_keys::VerifyApiKeyParams {
+            secret: decode(fixture(r#""secret""#)),
+        },
+        None,
+    )
+    .expect("verify_api_key request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"api_key","id":"ak_3beecc9c60adb5f9b850e91a8ee1e992","type":"api_key","subject":"user_2xhFjEI5X2qWRvtV13BzSj8H6Dk","name":"MY_SERVICE_API_KEY","description":"This is my API Key","claims":{"foo":"bar"},"scopes":["read","write"],"revoked":false,"revocation_reason":"Revoked by user","expired":false,"expiration":1716883200,"created_by":"user_2xhFjEI5X2qWRvtV13BzSj8H6Dk","last_used_at":1716883200,"created_at":1716883200,"updated_at":1716883200}"#,
@@ -13441,8 +14477,14 @@ fn verify_client_verify_client_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = clients::verify_client(&config, decode(fixture(r#""token""#)), None)
-        .expect("verify_client request failed");
+    let actual = clients::verify_client(
+        &config,
+        clients::VerifyClientParams {
+            token: decode(fixture(r#""token""#)),
+        },
+        None,
+    )
+    .expect("verify_client request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"client","id":"id-1","session_ids":["session_ids"],"sessions":[{"object":"session","id":"id-1","user_id":"user-1","client_id":"client-1","actor":{},"status":"active","last_active_organization_id":"last_active_organization-1","last_active_at":1,"latest_activity":{"object":"object","id":"id-1","device_type":"device_type","is_mobile":false,"browser_name":"Example Name","browser_version":"browser_version","ip_address":"ip_address","city":"city","country":"country"},"expire_at":1,"abandon_at":1,"updated_at":1,"created_at":1,"tasks":[{"key":"key"}]}],"sign_in_id":"sign_in-1","sign_up_id":"sign_up-1","last_active_session_id":"last_active_session-1","last_authentication_strategy":"last_authentication_strategy","updated_at":1,"created_at":1}"#,
@@ -13464,7 +14506,13 @@ fn verify_client_verify_client_400_decodes_declared_error() {
             .map(|base_url| format!("{base_url}/__mockStatus/400")),
         ..config
     };
-    let result = clients::verify_client(&config, decode(fixture(r#""token""#)), None);
+    let result = clients::verify_client(
+        &config,
+        clients::VerifyClientParams {
+            token: decode(fixture(r#""token""#)),
+        },
+        None,
+    );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
         panic!("verify_client did not fail with SdkError::Http on 400");
     };
@@ -13487,8 +14535,10 @@ fn verify_domain_proxy_verify_domain_proxy_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = proxy_checks::verify_domain_proxy(
         &config,
-        Some(decode(fixture(r#""domain-1""#))),
-        Some(decode(fixture(r#""https://example.com""#))),
+        proxy_checks::VerifyDomainProxyParams {
+            domain_id: Some(decode(fixture(r#""domain-1""#))),
+            proxy_url: Some(decode(fixture(r#""https://example.com""#))),
+        },
         None,
     )
     .expect("verify_domain_proxy request failed");
@@ -13515,8 +14565,10 @@ fn verify_domain_proxy_verify_domain_proxy_400_decodes_declared_error() {
     };
     let result = proxy_checks::verify_domain_proxy(
         &config,
-        Some(decode(fixture(r#""domain-1""#))),
-        Some(decode(fixture(r#""https://example.com""#))),
+        proxy_checks::VerifyDomainProxyParams {
+            domain_id: Some(decode(fixture(r#""domain-1""#))),
+            proxy_url: Some(decode(fixture(r#""https://example.com""#))),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -13539,8 +14591,14 @@ fn verify_m2_mtoken_verify_m2_mtoken_reaches_mock_and_decodes_response() {
         return;
     };
     let _ = &config;
-    let actual = m2_mtokens::verify_m2_mtoken(&config, decode(fixture(r#""token""#)), None)
-        .expect("verify_m2_mtoken request failed");
+    let actual = m2_mtokens::verify_m2_mtoken(
+        &config,
+        m2_mtokens::VerifyM2MtokenParams {
+            token: decode(fixture(r#""token""#)),
+        },
+        None,
+    )
+    .expect("verify_m2_mtoken request failed");
     let actual = serde_json::to_value(actual).expect("serialize generated response");
     let expected = fixture(
         r#"{"object":"machine_to_machine_token","id":"mt_f7f0ba8c3b4843ce7d85fcdd5e71853e","subject":"mch_2xhFjEI5X2qWRvtV13BzSj8H6Dk","claims":{"important_metadata":"Some useful data"},"scopes":["mch_2xhFjEI5X2qWRvtV13BzSj8H6Dk","mch_2yGkLpQ7Y3rXSwtU24CzTk9I7Em"],"revoked":false,"revocation_reason":"Revoked by user","expired":false,"expiration":1716883200000,"last_used_at":1716883200000,"created_at":1716883200000,"updated_at":1716883200000}"#,
@@ -13559,8 +14617,10 @@ fn verify_oauth_access_token_verify_oauth_access_token_reaches_mock_and_decodes_
     let _ = &config;
     let actual = o_auth_access_tokens::verify_oauth_access_token(
         &config,
-        Some(decode(fixture(r#""XXXXXXXXXXXXXX""#))),
-        Some(decode(fixture(r#""XXXXXXXXXXXXXX""#))),
+        o_auth_access_tokens::VerifyOauthAccessTokenParams {
+            access_token: Some(decode(fixture(r#""XXXXXXXXXXXXXX""#))),
+            secret: Some(decode(fixture(r#""XXXXXXXXXXXXXX""#))),
+        },
         None,
     )
     .expect("verify_oauth_access_token request failed");
@@ -13583,8 +14643,10 @@ fn verify_organization_domain_ownership_verify_organization_domain_ownership_rea
     let _ = &config;
     let actual = organization_domains::verify_organization_domain_ownership(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        decode(fixture(r#""domain-1""#)),
+        organization_domains::VerifyOrganizationDomainOwnershipParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            domain_id: decode(fixture(r#""domain-1""#)),
+        },
         None,
     )
     .expect("verify_organization_domain_ownership request failed");
@@ -13612,8 +14674,10 @@ fn verify_organization_domain_ownership_verify_organization_domain_ownership_401
     };
     let result = organization_domains::verify_organization_domain_ownership(
         &config,
-        decode(fixture(r#""organization-1""#)),
-        decode(fixture(r#""domain-1""#)),
+        organization_domains::VerifyOrganizationDomainOwnershipParams {
+            organization_id: decode(fixture(r#""organization-1""#)),
+            domain_id: decode(fixture(r#""domain-1""#)),
+        },
         None,
     );
     let Err(::octridev_clerk::errors::SdkError::Http(error)) = result else {
@@ -13638,8 +14702,10 @@ fn verify_password_verify_password_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = users::verify_password(
         &config,
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#""password""#)),
+        users::VerifyPasswordParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            password: decode(fixture(r#""password""#)),
+        },
         None,
     )
     .expect("verify_password request failed");
@@ -13659,8 +14725,10 @@ fn verify_totp_verify_totp_reaches_mock_and_decodes_response() {
     let _ = &config;
     let actual = users::verify_totp(
         &config,
-        decode(fixture(r#""user-1""#)),
-        decode(fixture(r#""code""#)),
+        users::VerifyTotpParams {
+            user_id: decode(fixture(r#""user-1""#)),
+            code: decode(fixture(r#""code""#)),
+        },
         None,
     )
     .expect("verify_totp request failed");

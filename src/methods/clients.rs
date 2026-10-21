@@ -7,6 +7,13 @@ use crate::errors::{SdkError, SdkNetworkError};
 use crate::types::Client;
 use crate::validation::{validate_range, RangeOpts};
 
+#[derive(Debug, Clone, Default)]
+pub struct ListClientsParams {
+    pub paginated: Option<bool>,
+    pub limit: Option<i64>,
+    pub offset: Option<i64>,
+}
+
 /// Returns a list of all clients. The clients are returned sorted by creation date, with the newest clients appearing first. Warning: the endpoint is being deprecated and will be removed in future versions.
 ///
 /// # Arguments
@@ -23,11 +30,14 @@ use crate::validation::{validate_range, RangeOpts};
 /// This operation is deprecated and may be removed in a future release.
 pub fn list_clients(
     config: &ClientConfig,
-    paginated: Option<bool>,
-    limit: Option<i64>,
-    offset: Option<i64>,
+    params: ListClientsParams,
     options: Option<&RequestOptions>,
 ) -> Result<Vec<Client>, SdkError> {
+    let ListClientsParams {
+        paginated,
+        limit,
+        offset,
+    } = params;
     if let Some(ref limit_v) = limit {
         validate_range(
             "limit",
@@ -82,6 +92,11 @@ pub fn list_clients(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct VerifyClientParams {
+    pub token: String,
+}
+
 /// Verifies a client by validating the JWT supplied in the request body. Send the token for the active client to retrieve the associated client and session details.
 ///
 /// Verifies the client in the provided token
@@ -91,9 +106,10 @@ pub fn list_clients(
 /// * `token` - A JWT that represents the active client.
 pub fn verify_client(
     config: &ClientConfig,
-    token: String,
+    params: VerifyClientParams,
     options: Option<&RequestOptions>,
 ) -> Result<Client, SdkError> {
+    let VerifyClientParams { token } = params;
     let mut __body_map = serde_json::Map::new();
     __body_map.insert(
         "token".to_string(),
@@ -126,6 +142,11 @@ pub fn verify_client(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct GetClientParams {
+    pub client_id: String,
+}
+
 /// Retrieves the details of a client and its associated session information. Use `client_id` to look up the client whose sessions and authentication state you need to inspect.
 ///
 /// Returns the details of a client.
@@ -135,9 +156,10 @@ pub fn verify_client(
 /// * `client_id` - Client ID.
 pub fn get_client(
     config: &ClientConfig,
-    client_id: String,
+    params: GetClientParams,
     options: Option<&RequestOptions>,
 ) -> Result<Client, SdkError> {
+    let GetClientParams { client_id } = params;
     Ok(sdk_request::<Client>(
         "GET",
         &format!(

@@ -10,6 +10,14 @@ use crate::types::{
 };
 use crate::validation::{validate_items, validate_length, validate_range, LengthOpts, RangeOpts};
 
+#[derive(Debug, Clone, Default)]
+pub struct ListMachinesParams {
+    pub limit: Option<i64>,
+    pub offset: Option<i64>,
+    pub query: Option<String>,
+    pub order_by: Option<String>,
+}
+
 /// This request returns the list of machines for an instance. The machines are ordered by descending creation date (i.e. most recent machines will be returned first)
 ///
 /// # Arguments
@@ -28,12 +36,15 @@ use crate::validation::{validate_items, validate_length, validate_range, LengthO
 ///   to `-created_at`.
 pub fn list_machines(
     config: &ClientConfig,
-    limit: Option<i64>,
-    offset: Option<i64>,
-    query: Option<String>,
-    order_by: Option<String>,
+    params: ListMachinesParams,
     options: Option<&RequestOptions>,
 ) -> Result<MachineList, SdkError> {
+    let ListMachinesParams {
+        limit,
+        offset,
+        query,
+        order_by,
+    } = params;
     if let Some(ref limit_v) = limit {
         validate_range(
             "limit",
@@ -91,6 +102,13 @@ pub fn list_machines(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct CreateMachineParams {
+    pub name: String,
+    pub scoped_machines: Option<Vec<String>>,
+    pub default_token_ttl: Option<i64>,
+}
+
 /// Creates a new machine. Provide a `name` and optionally configure its machine scopes and default token TTL. The response includes the machine's secret key, so store it securely.
 ///
 /// Creates a new machine.
@@ -104,11 +122,14 @@ pub fn list_machines(
 ///   created by this machine. Must be at least 1 second.
 pub fn create_machine(
     config: &ClientConfig,
-    name: String,
-    scoped_machines: Option<Vec<String>>,
-    default_token_ttl: Option<i64>,
+    params: CreateMachineParams,
     options: Option<&RequestOptions>,
 ) -> Result<MachineCreated, SdkError> {
+    let CreateMachineParams {
+        name,
+        scoped_machines,
+        default_token_ttl,
+    } = params;
     validate_length(
         "name",
         &name,
@@ -194,6 +215,11 @@ pub fn create_machine(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct GetMachineParams {
+    pub machine_id: String,
+}
+
 /// Retrieves the details of a machine. Use its `machine_id` to identify the machine whose configuration and scopes you need to inspect.
 ///
 /// Returns the details of a machine.
@@ -203,9 +229,10 @@ pub fn create_machine(
 /// * `machine_id` - The ID of the machine to retrieve
 pub fn get_machine(
     config: &ClientConfig,
-    machine_id: String,
+    params: GetMachineParams,
     options: Option<&RequestOptions>,
 ) -> Result<Machine, SdkError> {
+    let GetMachineParams { machine_id } = params;
     Ok(sdk_request::<Machine>(
         "GET",
         &format!(
@@ -230,6 +257,13 @@ pub fn get_machine(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct UpdateMachineParams {
+    pub machine_id: String,
+    pub name: Option<String>,
+    pub default_token_ttl: Option<i64>,
+}
+
 /// Updates an existing machine. Only the provided fields will be updated.
 ///
 /// # Arguments
@@ -240,11 +274,14 @@ pub fn get_machine(
 ///   created by this machine. Must be at least 1 second.
 pub fn update_machine(
     config: &ClientConfig,
-    machine_id: String,
-    name: Option<String>,
-    default_token_ttl: Option<i64>,
+    params: UpdateMachineParams,
     options: Option<&RequestOptions>,
 ) -> Result<Machine, SdkError> {
+    let UpdateMachineParams {
+        machine_id,
+        name,
+        default_token_ttl,
+    } = params;
     if let Some(ref name_v) = name {
         validate_length(
             "name",
@@ -317,6 +354,11 @@ pub fn update_machine(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct DeleteMachineParams {
+    pub machine_id: String,
+}
+
 /// Deletes a machine. Use its `machine_id` to identify the machine you want to remove. The response confirms deletion with the machine ID and a `deleted` value.
 ///
 /// Deletes a machine.
@@ -326,9 +368,10 @@ pub fn update_machine(
 /// * `machine_id` - The ID of the machine to delete
 pub fn delete_machine(
     config: &ClientConfig,
-    machine_id: String,
+    params: DeleteMachineParams,
     options: Option<&RequestOptions>,
 ) -> Result<MachineDeleted, SdkError> {
+    let DeleteMachineParams { machine_id } = params;
     Ok(sdk_request::<MachineDeleted>(
         "DELETE",
         &format!(
@@ -353,6 +396,11 @@ pub fn delete_machine(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct GetMachineSecretKeyParams {
+    pub machine_id: String,
+}
+
 /// Retrieves the secret key for a machine. Use the `machine_id` to identify which machine's key you need.
 ///
 /// Returns the secret key for a machine.
@@ -362,9 +410,10 @@ pub fn delete_machine(
 /// * `machine_id` - The ID of the machine to retrieve the secret key for
 pub fn get_machine_secret_key(
     config: &ClientConfig,
-    machine_id: String,
+    params: GetMachineSecretKeyParams,
     options: Option<&RequestOptions>,
 ) -> Result<MachineSecretKey, SdkError> {
+    let GetMachineSecretKeyParams { machine_id } = params;
     Ok(sdk_request::<MachineSecretKey>(
         "GET",
         &format!(
@@ -388,6 +437,12 @@ pub fn get_machine_secret_key(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct RotateMachineSecretKeyParams {
+    pub machine_id: String,
+    pub previous_token_ttl: i64,
+}
+
 /// Rotates the machine's secret key. When the secret key is rotated, make sure to update it in your machine/application. The previous secret key will remain valid for the duration specified by the previous_token_ttl parameter.
 ///
 /// # Arguments
@@ -399,10 +454,13 @@ pub fn get_machine_secret_key(
 ///   expire the previous key. Maximum value is 8 hours (28800 seconds).
 pub fn rotate_machine_secret_key(
     config: &ClientConfig,
-    machine_id: String,
-    previous_token_ttl: i64,
+    params: RotateMachineSecretKeyParams,
     options: Option<&RequestOptions>,
 ) -> Result<MachineSecretKey, SdkError> {
+    let RotateMachineSecretKeyParams {
+        machine_id,
+        previous_token_ttl,
+    } = params;
     validate_range(
         "previous_token_ttl",
         previous_token_ttl as f64,
@@ -450,6 +508,12 @@ pub fn rotate_machine_secret_key(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct CreateMachineScopeParams {
+    pub machine_id: String,
+    pub to_machine_id: String,
+}
+
 /// Creates a new machine scope, allowing the specified machine to access another machine. Maximum of 150 scopes per machine.
 ///
 /// # Arguments
@@ -460,10 +524,13 @@ pub fn rotate_machine_secret_key(
 ///   machine
 pub fn create_machine_scope(
     config: &ClientConfig,
-    machine_id: String,
-    to_machine_id: String,
+    params: CreateMachineScopeParams,
     options: Option<&RequestOptions>,
 ) -> Result<MachineScope, SdkError> {
+    let CreateMachineScopeParams {
+        machine_id,
+        to_machine_id,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     __body_map.insert(
         "to_machine_id".to_string(),
@@ -502,6 +569,12 @@ pub fn create_machine_scope(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct DeleteMachineScopeParams {
+    pub machine_id: String,
+    pub other_machine_id: String,
+}
+
 /// Deletes a machine scope, removing access from one machine to another.
 ///
 /// # Arguments
@@ -510,10 +583,13 @@ pub fn create_machine_scope(
 /// * `other_machine_id` - The ID of the machine that is being accessed
 pub fn delete_machine_scope(
     config: &ClientConfig,
-    machine_id: String,
-    other_machine_id: String,
+    params: DeleteMachineScopeParams,
     options: Option<&RequestOptions>,
 ) -> Result<MachineScopeDeleted, SdkError> {
+    let DeleteMachineScopeParams {
+        machine_id,
+        other_machine_id,
+    } = params;
     Ok(sdk_request::<MachineScopeDeleted>(
         "DELETE",
         &format!(

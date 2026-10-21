@@ -6,6 +6,11 @@ use crate::client::{sdk_request, RequestOptions, RequestOpts};
 use crate::errors::{SdkError, SdkNetworkError};
 use crate::types::SignUp;
 
+#[derive(Debug, Clone, Default)]
+pub struct GetSignUpParams {
+    pub id: String,
+}
+
 /// Retrieve the details of the sign-up with the given ID
 ///
 /// # Arguments
@@ -13,9 +18,10 @@ use crate::types::SignUp;
 /// * `id` - The ID of the sign-up to retrieve
 pub fn get_sign_up(
     config: &ClientConfig,
-    id: String,
+    params: GetSignUpParams,
     options: Option<&RequestOptions>,
 ) -> Result<SignUp, SdkError> {
+    let GetSignUpParams { id } = params;
     Ok(sdk_request::<SignUp>(
         "GET",
         &format!("/sign_ups/{}", crate::client::encode_path_segment(&id)),
@@ -31,6 +37,13 @@ pub fn get_sign_up(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct UpdateSignUpParams {
+    pub id: String,
+    pub external_id: Option<Option<String>>,
+    pub custom_action: Option<Option<bool>>,
+}
+
 /// Updates an existing sign-up with the fields you provide. Use `external_id` to associate the sign-up with an identifier from your external system, or set `custom_action` to mark it as a custom action. The response includes the sign-up's current status and verification details.
 ///
 /// Update the sign-up with the given ID
@@ -44,11 +57,14 @@ pub fn get_sign_up(
 /// * `custom_action` - If true, the sign-up will be marked as a custom action.
 pub fn update_sign_up(
     config: &ClientConfig,
-    id: String,
-    external_id: Option<Option<String>>,
-    custom_action: Option<Option<bool>>,
+    params: UpdateSignUpParams,
     options: Option<&RequestOptions>,
 ) -> Result<SignUp, SdkError> {
+    let UpdateSignUpParams {
+        id,
+        external_id,
+        custom_action,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     if let Some(ref value) = external_id {
         __body_map.insert(

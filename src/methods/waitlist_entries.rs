@@ -178,6 +178,12 @@ pub fn list_waitlist_entries(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct CreateWaitlistEntryParams {
+    pub email_address: String,
+    pub notify: Option<Option<bool>>,
+}
+
 /// Creates a new waitlist entry for the given email address. If the email address is already on the waitlist, no new entry will be created and the existing waitlist entry will be returned.
 ///
 /// # Arguments
@@ -187,10 +193,13 @@ pub fn list_waitlist_entries(
 ///   be sent to the given email address. Defaults to `true`.
 pub fn create_waitlist_entry(
     config: &ClientConfig,
-    email_address: String,
-    notify: Option<Option<bool>>,
+    params: CreateWaitlistEntryParams,
     options: Option<&RequestOptions>,
 ) -> Result<WaitlistEntry, SdkError> {
+    let CreateWaitlistEntryParams {
+        email_address,
+        notify,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     __body_map.insert(
         "email_address".to_string(),
@@ -230,14 +239,20 @@ pub fn create_waitlist_entry(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct CreateBulkWaitlistEntriesParams {
+    pub body: Option<Vec<CreateBulkWaitlistEntriesItem>>,
+}
+
 /// Creates multiple waitlist entries from email addresses in a single request. Each entry requires `email_address`; `notify` defaults to true when omitted. You can submit 1 to 50 entries per request, but duplicate email addresses within the request are not allowed, and existing waitlist entries are returned without creating new entries.
 ///
 /// Creates multiple waitlist entries for the provided email addresses. You can choose whether to send confirmation emails by setting the `notify` parameter to `true` or `false` for each entry. If the `notify` parameter is omitted, it defaults to `true`. If an email address is already on the waitlist, no new entry will be created and the existing waitlist entry will be returned. Duplicate email addresses within the same request are not allowed. This endpoint is limited to a maximum of 50 entries per API call. If you need to add more entries, please make multiple requests.
 pub fn create_bulk_waitlist_entries(
     config: &ClientConfig,
-    body: Option<Vec<CreateBulkWaitlistEntriesItem>>,
+    params: CreateBulkWaitlistEntriesParams,
     options: Option<&RequestOptions>,
 ) -> Result<Vec<WaitlistEntry>, SdkError> {
+    let CreateBulkWaitlistEntriesParams { body } = params;
     if let Some(ref body_v) = body {
         validate_items(
             "body",
@@ -272,6 +287,11 @@ pub fn create_bulk_waitlist_entries(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct DeleteWaitlistEntryParams {
+    pub waitlist_entry_id: String,
+}
+
 /// Deletes a pending waitlist entry. Use the `waitlist_entry_id` path parameter to identify the entry to delete. Entries locked while a batch action is processing are unavailable for other actions.
 ///
 /// Delete a pending waitlist entry.
@@ -281,9 +301,10 @@ pub fn create_bulk_waitlist_entries(
 /// * `waitlist_entry_id` - The ID of the waitlist entry to delete
 pub fn delete_waitlist_entry(
     config: &ClientConfig,
-    waitlist_entry_id: String,
+    params: DeleteWaitlistEntryParams,
     options: Option<&RequestOptions>,
 ) -> Result<DeletedObject, SdkError> {
+    let DeleteWaitlistEntryParams { waitlist_entry_id } = params;
     Ok(sdk_request::<DeletedObject>(
         "DELETE",
         &format!(
@@ -307,6 +328,12 @@ pub fn delete_waitlist_entry(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct InviteWaitlistEntryParams {
+    pub waitlist_entry_id: String,
+    pub ignore_existing: Option<Option<bool>>,
+}
+
 /// Send an invite to the email address in a waitlist entry.
 ///
 /// # Arguments
@@ -317,10 +344,13 @@ pub fn delete_waitlist_entry(
 ///   another user.
 pub fn invite_waitlist_entry(
     config: &ClientConfig,
-    waitlist_entry_id: String,
-    ignore_existing: Option<Option<bool>>,
+    params: InviteWaitlistEntryParams,
     options: Option<&RequestOptions>,
 ) -> Result<WaitlistEntry, SdkError> {
+    let InviteWaitlistEntryParams {
+        waitlist_entry_id,
+        ignore_existing,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     if let Some(ref value) = ignore_existing {
         __body_map.insert(
@@ -359,6 +389,11 @@ pub fn invite_waitlist_entry(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct RejectWaitlistEntryParams {
+    pub waitlist_entry_id: String,
+}
+
 /// Rejects a waitlist entry and returns the resulting entry. Use the `waitlist_entry_id` path parameter to identify the entry to reject. Entries locked while a batch action is processing are unavailable for other actions.
 ///
 /// Reject a waitlist entry.
@@ -368,9 +403,10 @@ pub fn invite_waitlist_entry(
 /// * `waitlist_entry_id` - The ID of the waitlist entry to reject
 pub fn reject_waitlist_entry(
     config: &ClientConfig,
-    waitlist_entry_id: String,
+    params: RejectWaitlistEntryParams,
     options: Option<&RequestOptions>,
 ) -> Result<WaitlistEntry, SdkError> {
+    let RejectWaitlistEntryParams { waitlist_entry_id } = params;
     Ok(sdk_request::<WaitlistEntry>(
         "POST",
         &format!(

@@ -7,6 +7,13 @@ use crate::errors::{SdkError, SdkNetworkError};
 use crate::types::{AllowlistIdentifier, BlocklistIdentifier, BlocklistIdentifiers, DeletedObject};
 use crate::validation::{validate_range, RangeOpts};
 
+#[derive(Debug, Clone, Default)]
+pub struct ListAllowlistIdentifiersParams {
+    pub paginated: Option<bool>,
+    pub limit: Option<i64>,
+    pub offset: Option<i64>,
+}
+
 /// Get a list of all identifiers allowed to sign up to an instance
 ///
 /// # Arguments
@@ -19,11 +26,14 @@ use crate::validation::{validate_range, RangeOpts};
 ///   integer greater or equal to zero. To be used in conjunction with `limit`.
 pub fn list_allowlist_identifiers(
     config: &ClientConfig,
-    paginated: Option<bool>,
-    limit: Option<i64>,
-    offset: Option<i64>,
+    params: ListAllowlistIdentifiersParams,
     options: Option<&RequestOptions>,
 ) -> Result<Vec<AllowlistIdentifier>, SdkError> {
+    let ListAllowlistIdentifiersParams {
+        paginated,
+        limit,
+        offset,
+    } = params;
     if let Some(ref limit_v) = limit {
         validate_range(
             "limit",
@@ -73,6 +83,12 @@ pub fn list_allowlist_identifiers(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct CreateAllowlistIdentifierParams {
+    pub identifier: String,
+    pub notify: Option<bool>,
+}
+
 /// Create an identifier allowed to sign up to an instance
 ///
 /// # Arguments
@@ -84,10 +100,10 @@ pub fn list_allowlist_identifiers(
 ///   address and phone number identifiers.
 pub fn create_allowlist_identifier(
     config: &ClientConfig,
-    identifier: String,
-    notify: Option<bool>,
+    params: CreateAllowlistIdentifierParams,
     options: Option<&RequestOptions>,
 ) -> Result<AllowlistIdentifier, SdkError> {
+    let CreateAllowlistIdentifierParams { identifier, notify } = params;
     let mut __body_map = serde_json::Map::new();
     __body_map.insert(
         "identifier".to_string(),
@@ -131,6 +147,11 @@ pub fn create_allowlist_identifier(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct DeleteAllowlistIdentifierParams {
+    pub identifier_id: String,
+}
+
 /// Deletes an identifier from the instance allow-list. Use the `identifier_id` path parameter to select the entry to remove. The response confirms whether the object was deleted.
 ///
 /// Delete an identifier from the instance allow-list
@@ -140,9 +161,10 @@ pub fn create_allowlist_identifier(
 /// * `identifier_id` - The ID of the identifier to delete from the allow-list
 pub fn delete_allowlist_identifier(
     config: &ClientConfig,
-    identifier_id: String,
+    params: DeleteAllowlistIdentifierParams,
     options: Option<&RequestOptions>,
 ) -> Result<DeletedObject, SdkError> {
+    let DeleteAllowlistIdentifierParams { identifier_id } = params;
     Ok(sdk_request::<DeletedObject>(
         "DELETE",
         &format!(
@@ -181,6 +203,11 @@ pub fn list_blocklist_identifiers(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct CreateBlocklistIdentifierParams {
+    pub identifier: String,
+}
+
 /// Create an identifier that is blocked from accessing an instance
 ///
 /// # Arguments
@@ -189,9 +216,10 @@ pub fn list_blocklist_identifiers(
 ///   an email address, a phone number, or a web3 wallet.
 pub fn create_blocklist_identifier(
     config: &ClientConfig,
-    identifier: String,
+    params: CreateBlocklistIdentifierParams,
     options: Option<&RequestOptions>,
 ) -> Result<BlocklistIdentifier, SdkError> {
+    let CreateBlocklistIdentifierParams { identifier } = params;
     let mut __body_map = serde_json::Map::new();
     __body_map.insert(
         "identifier".to_string(),
@@ -224,6 +252,11 @@ pub fn create_blocklist_identifier(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct DeleteBlocklistIdentifierParams {
+    pub identifier_id: String,
+}
+
 /// Deletes an identifier from the instance block-list. Supply `identifier_id` to select the block-list identifier; a successful response indicates whether the object was deleted.
 ///
 /// Delete an identifier from the instance block-list
@@ -233,9 +266,10 @@ pub fn create_blocklist_identifier(
 /// * `identifier_id` - The ID of the identifier to delete from the block-list
 pub fn delete_blocklist_identifier(
     config: &ClientConfig,
-    identifier_id: String,
+    params: DeleteBlocklistIdentifierParams,
     options: Option<&RequestOptions>,
 ) -> Result<DeletedObject, SdkError> {
+    let DeleteBlocklistIdentifierParams { identifier_id } = params;
     Ok(sdk_request::<DeletedObject>(
         "DELETE",
         &format!(

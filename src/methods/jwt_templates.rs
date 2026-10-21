@@ -7,6 +7,13 @@ use crate::errors::{SdkError, SdkNetworkError};
 use crate::types::{DeletedObject, JWTTemplate};
 use crate::validation::{validate_range, RangeOpts};
 
+#[derive(Debug, Clone, Default)]
+pub struct ListJwtTemplatesParams {
+    pub paginated: Option<bool>,
+    pub limit: Option<i64>,
+    pub offset: Option<i64>,
+}
+
 /// Lists JWT templates, with an option to return paginated or unpaginated results. Use `limit` and `offset` to control the number of templates returned and the starting position.
 ///
 /// # Arguments
@@ -19,11 +26,14 @@ use crate::validation::{validate_range, RangeOpts};
 ///   integer greater or equal to zero. To be used in conjunction with `limit`.
 pub fn list_jwt_templates(
     config: &ClientConfig,
-    paginated: Option<bool>,
-    limit: Option<i64>,
-    offset: Option<i64>,
+    params: ListJwtTemplatesParams,
     options: Option<&RequestOptions>,
 ) -> Result<Vec<JWTTemplate>, SdkError> {
+    let ListJwtTemplatesParams {
+        paginated,
+        limit,
+        offset,
+    } = params;
     if let Some(ref limit_v) = limit {
         validate_range(
             "limit",
@@ -232,6 +242,11 @@ pub fn create_jwt_template(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct GetJwtTemplateParams {
+    pub template_id: String,
+}
+
 /// Retrieves the details of a JWT template by its identifier. Use `template_id` to select the template whose claims, lifetime, and signing configuration you need.
 ///
 /// Retrieve the details of a given JWT template
@@ -241,9 +256,10 @@ pub fn create_jwt_template(
 /// * `template_id` - JWT Template ID
 pub fn get_jwt_template(
     config: &ClientConfig,
-    template_id: String,
+    params: GetJwtTemplateParams,
     options: Option<&RequestOptions>,
 ) -> Result<JWTTemplate, SdkError> {
+    let GetJwtTemplateParams { template_id } = params;
     Ok(sdk_request::<JWTTemplate>(
         "GET",
         &format!(
@@ -428,6 +444,11 @@ pub fn update_jwt_template(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct DeleteJwtTemplateParams {
+    pub template_id: String,
+}
+
 /// Deletes a JWT template by its identifier. Use `template_id` to select the template to remove. The response indicates whether the template was deleted.
 ///
 /// # Arguments
@@ -435,9 +456,10 @@ pub fn update_jwt_template(
 /// * `template_id` - JWT Template ID
 pub fn delete_jwt_template(
     config: &ClientConfig,
-    template_id: String,
+    params: DeleteJwtTemplateParams,
     options: Option<&RequestOptions>,
 ) -> Result<DeletedObject, SdkError> {
+    let DeleteJwtTemplateParams { template_id } = params;
     Ok(sdk_request::<DeletedObject>(
         "DELETE",
         &format!(

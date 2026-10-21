@@ -6,6 +6,12 @@ use crate::client::{sdk_request, RequestOptions, RequestOpts};
 use crate::errors::{SdkError, SdkNetworkError};
 use crate::types::ProxyCheck;
 
+#[derive(Debug, Clone, Default)]
+pub struct VerifyDomainProxyParams {
+    pub domain_id: Option<String>,
+    pub proxy_url: Option<String>,
+}
+
 /// This endpoint can be used to validate that a proxy-enabled domain is operational. It tries to verify that the proxy URL provided in the parameters maps to a functional proxy that can reach the Clerk Frontend API. You can use this endpoint before you set a proxy URL for a domain. This way you can ensure that switching to proxy-based configuration will not lead to downtime for your instance. The `proxy_url` parameter allows for testing proxy configurations for domains that don't have a proxy URL yet, or operate on a different proxy URL than the one provided. It can also be used to re-validate a domain that is already configured to work with a proxy.
 ///
 /// # Arguments
@@ -15,10 +21,13 @@ use crate::types::ProxyCheck;
 ///   Clerk Frontend API for this domain. e.g. https://example.com/__clerk
 pub fn verify_domain_proxy(
     config: &ClientConfig,
-    domain_id: Option<String>,
-    proxy_url: Option<String>,
+    params: VerifyDomainProxyParams,
     options: Option<&RequestOptions>,
 ) -> Result<ProxyCheck, SdkError> {
+    let VerifyDomainProxyParams {
+        domain_id,
+        proxy_url,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     if let Some(ref value) = domain_id {
         __body_map.insert(

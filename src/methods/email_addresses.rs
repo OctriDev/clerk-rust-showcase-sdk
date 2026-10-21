@@ -169,6 +169,11 @@ pub fn create_email_address(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct GetEmailAddressParams {
+    pub email_address_id: String,
+}
+
 /// Retrieves an email address and its verification and association details. Use `email_address_id` to identify the address to inspect.
 ///
 /// Returns the details of an email address.
@@ -178,9 +183,10 @@ pub fn create_email_address(
 /// * `email_address_id` - The ID of the email address to retrieve
 pub fn get_email_address(
     config: &ClientConfig,
-    email_address_id: String,
+    params: GetEmailAddressParams,
     options: Option<&RequestOptions>,
 ) -> Result<EmailAddress, SdkError> {
+    let GetEmailAddressParams { email_address_id } = params;
     Ok(sdk_request::<EmailAddress>(
         "GET",
         &format!(
@@ -204,6 +210,11 @@ pub fn get_email_address(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct DeleteEmailAddressParams {
+    pub email_address_id: String,
+}
+
 /// Deletes an email address by its identifier. Use `email_address_id` to select the address to remove. The response confirms the deletion and identifies the deleted object.
 ///
 /// Delete the email address with the given ID
@@ -213,9 +224,10 @@ pub fn get_email_address(
 /// * `email_address_id` - The ID of the email address to delete
 pub fn delete_email_address(
     config: &ClientConfig,
-    email_address_id: String,
+    params: DeleteEmailAddressParams,
     options: Option<&RequestOptions>,
 ) -> Result<DeletedObject, SdkError> {
+    let DeleteEmailAddressParams { email_address_id } = params;
     Ok(sdk_request::<DeletedObject>(
         "DELETE",
         &format!(
@@ -240,6 +252,14 @@ pub fn delete_email_address(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct UpdateEmailAddressParams {
+    pub email_address_id: String,
+    pub verified: Option<Option<bool>>,
+    pub primary: Option<Option<bool>>,
+    pub notify_primary_email_address_changed: Option<Option<bool>>,
+}
+
 /// Updates an existing email address's verification or primary status, or its notification behavior. Supply any of `verified`, `primary`, or `notify_primary_email_address_changed` to change that setting. The notification option applies when the update makes this address the user's new primary address.
 ///
 /// Updates an email address.
@@ -255,12 +275,15 @@ pub fn delete_email_address(
 ///   address is notified of the change. By default, no notification is sent.
 pub fn update_email_address(
     config: &ClientConfig,
-    email_address_id: String,
-    verified: Option<Option<bool>>,
-    primary: Option<Option<bool>>,
-    notify_primary_email_address_changed: Option<Option<bool>>,
+    params: UpdateEmailAddressParams,
     options: Option<&RequestOptions>,
 ) -> Result<EmailAddress, SdkError> {
+    let UpdateEmailAddressParams {
+        email_address_id,
+        verified,
+        primary,
+        notify_primary_email_address_changed,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     if let Some(ref value) = verified {
         __body_map.insert(
@@ -322,6 +345,11 @@ pub fn update_email_address(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct PrepareEmailAddressVerificationParams {
+    pub email_address_id: String,
+}
+
 /// Sends a one-time code to the given email address so that a backend can verify the user controls it (for example, in a custom, backend-driven sign-in flow). The code is tracked on its own verification; confirm it with attempt_verification.
 ///
 /// # Arguments
@@ -330,9 +358,10 @@ pub fn update_email_address(
 ///   code to
 pub fn prepare_email_address_verification(
     config: &ClientConfig,
-    email_address_id: String,
+    params: PrepareEmailAddressVerificationParams,
     options: Option<&RequestOptions>,
 ) -> Result<VerificationResponse, SdkError> {
+    let PrepareEmailAddressVerificationParams { email_address_id } = params;
     Ok(sdk_request::<VerificationResponse>(
         "POST",
         &format!(
@@ -358,6 +387,13 @@ pub fn prepare_email_address_verification(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct AttemptEmailAddressVerificationParams {
+    pub email_address_id: String,
+    pub verification_id: String,
+    pub code: String,
+}
+
 /// Checks a one-time code against the verification identified by verification_id, and returns the verification with its updated status (`verified`, `unverified`, `expired`, or `failed`) and attempt count, so a backend driving its own frontend can react on every attempt — an incorrect or expired code is reported through the status, not as an error. Resubmitting a verification whose code was already accepted is rejected with a `verification_already_verified` error. If the code is correct and the email address is not already verified, it is also marked as verified as a side effect (just as it would be in a frontend verification flow); an already verified email address is left unchanged. It never creates a session; to sign the user in afterwards, mint a sign-in token.
 ///
 /// # Arguments
@@ -369,11 +405,14 @@ pub fn prepare_email_address_verification(
 /// * `code` - The verification code that was sent to the email address
 pub fn attempt_email_address_verification(
     config: &ClientConfig,
-    email_address_id: String,
-    verification_id: String,
-    code: String,
+    params: AttemptEmailAddressVerificationParams,
     options: Option<&RequestOptions>,
 ) -> Result<VerificationResponse, SdkError> {
+    let AttemptEmailAddressVerificationParams {
+        email_address_id,
+        verification_id,
+        code,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     __body_map.insert(
         "verification_id".to_string(),
@@ -420,6 +459,14 @@ pub fn attempt_email_address_verification(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct ReplaceUserEmailAddressParams {
+    pub user_id: String,
+    pub email_address: String,
+    pub identification_status: Option<ReplaceUserEmailAddressIdentificationStatusEnum>,
+    pub notify_primary_email_address_changed: Option<Option<bool>>,
+}
+
 /// Replaces all of the user's email addresses with a single primary email address. By default the new email address is created verified, with the admin verification strategy. When `identification_status` is `reserved` it is created reserved instead: unverified but usable for sign-in and locked so no other user can claim it. When it is `unverified` the address is neither usable for sign-in nor locked. Any existing email addresses are deleted. If an existing email address is linked to a connected account, the request is rejected; remove the connected account first. \*\*Warning:\*\* `identification_status: unverified` can lock the user out of their account. An unverified email address cannot be used to sign in, so if the user has no other verified or reserved identifier, deleting their existing email addresses leaves them unable to authenticate — and unable to verify the new address, since that requires signing in. Recovery then requires another admin API call.
 ///
 /// # Arguments
@@ -443,12 +490,15 @@ pub fn attempt_email_address_verification(
 ///   current primary email address. By default, no notification is sent.
 pub fn replace_user_email_address(
     config: &ClientConfig,
-    user_id: String,
-    email_address: String,
-    identification_status: Option<ReplaceUserEmailAddressIdentificationStatusEnum>,
-    notify_primary_email_address_changed: Option<Option<bool>>,
+    params: ReplaceUserEmailAddressParams,
     options: Option<&RequestOptions>,
 ) -> Result<EmailAddress, SdkError> {
+    let ReplaceUserEmailAddressParams {
+        user_id,
+        email_address,
+        identification_status,
+        notify_primary_email_address_changed,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     __body_map.insert(
         "email_address".to_string(),

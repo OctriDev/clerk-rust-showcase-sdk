@@ -6,6 +6,12 @@ use crate::client::{sdk_request, RequestOptions, RequestOpts};
 use crate::errors::{SdkError, SdkNetworkError};
 use crate::types::VerifyOAuthAccessTokenResponse;
 
+#[derive(Debug, Clone, Default)]
+pub struct VerifyOauthAccessTokenParams {
+    pub access_token: Option<String>,
+    pub secret: Option<String>,
+}
+
 /// Verifies an OAuth access token and returns its token details or active status. Supply the token in `access_token`; the legacy `secret` field is deprecated. Use this endpoint to check whether an access token is active and retrieve its associated client, subject, and scopes when available.
 ///
 /// # Arguments
@@ -15,10 +21,13 @@ use crate::types::VerifyOAuthAccessTokenResponse;
 ///   `access_token` instead.
 pub fn verify_oauth_access_token(
     config: &ClientConfig,
-    access_token: Option<String>,
-    secret: Option<String>,
+    params: VerifyOauthAccessTokenParams,
     options: Option<&RequestOptions>,
 ) -> Result<VerifyOAuthAccessTokenResponse, SdkError> {
+    let VerifyOauthAccessTokenParams {
+        access_token,
+        secret,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     if let Some(ref value) = access_token {
         __body_map.insert(
