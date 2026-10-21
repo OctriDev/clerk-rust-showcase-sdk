@@ -34,7 +34,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         ..Default::default()
     };
     let client = ClerkBackend::new(config);
-    let result = client.m2_mtokens.get(octridev_clerk::methods::m2_mtokens::GetM2MtokensParams { subject: "mch_aaaaaaaaaaaaaaaaaaaaaaaaaaa".to_string(), revoked: None, expired: None, limit: None, offset: None }, None)?;
+    let result = client.m2_mtokens.get(octridev_clerk::methods::m2_mtokens::GetM2MtokensParams { subject: "mch_aaaaaaaaaaaaaaaaaaaaaaaaaaa".to_string(), ..Default::default() }, None)?;
     println!("{result:#?}");
     Ok(())
 }

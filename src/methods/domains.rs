@@ -25,6 +25,13 @@ pub fn list_domains(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct AddDomainParams {
+    pub name: String,
+    pub is_satellite: bool,
+    pub proxy_url: Option<Option<String>>,
+}
+
 /// Add a new domain for your instance. Useful in the case of multi-domain instances, allows adding satellite domains to an instance. The new domain must have a `name`. The domain name can contain the port for development instances, like `localhost:3000`. Set `is_satellite` to `true` to add a satellite domain. To migrate a production instance from an active provider domain to its first custom primary domain, set `is_satellite` to `false`. The custom domain becomes active and the provider domain stays attached. Additional custom primary domains are not supported. If you're planning to configure the new satellite domain to run behind a proxy, pass the `proxy_url` parameter accordingly. Adding a custom primary domain returns 403 `domain_managed_by_integration` for applications in a Vercel-managed workspace; change the domain from the Vercel integration instead.
 ///
 /// # Arguments
@@ -38,11 +45,14 @@ pub fn list_domains(
 ///   Clerk Frontend API for this domain. Applicable only to production instances.
 pub fn add_domain(
     config: &ClientConfig,
-    name: String,
-    is_satellite: bool,
-    proxy_url: Option<Option<String>>,
+    params: AddDomainParams,
     options: Option<&RequestOptions>,
 ) -> Result<Domain, SdkError> {
+    let AddDomainParams {
+        name,
+        is_satellite,
+        proxy_url,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     __body_map.insert(
         "name".to_string(),
@@ -96,6 +106,11 @@ pub fn add_domain(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct DeleteDomainParams {
+    pub domain_id: String,
+}
+
 /// Deletes a domain for the instance. The instance's active domain cannot be deleted. Deleting a non-satellite domain returns 403 `domain_managed_by_integration` for applications in a Vercel-managed workspace; change the domain from the Vercel integration instead.
 ///
 /// # Arguments
@@ -103,9 +118,10 @@ pub fn add_domain(
 /// * `domain_id` - The ID of the domain that will be deleted.
 pub fn delete_domain(
     config: &ClientConfig,
-    domain_id: String,
+    params: DeleteDomainParams,
     options: Option<&RequestOptions>,
 ) -> Result<DeletedObject, SdkError> {
+    let DeleteDomainParams { domain_id } = params;
     Ok(sdk_request::<DeletedObject>(
         "DELETE",
         &format!(
@@ -124,6 +140,14 @@ pub fn delete_domain(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct UpdateDomainParams {
+    pub domain_id: String,
+    pub name: Option<Option<String>>,
+    pub proxy_url: Option<Option<String>>,
+    pub is_secondary: Option<Option<bool>>,
+}
+
 /// The `proxy_url` can be updated only for production instances. Update one of the instance's domains. Both primary and satellite domains can be updated. If you choose to use Clerk via proxy, use this endpoint to specify the `proxy_url`. Whenever you decide you'd rather switch to DNS setup for Clerk, simply set `proxy_url` to `null` for the domain. When you update a production instance's primary domain name, you have to make sure that you've completed all the necessary setup steps for DNS and emails to work. Expect downtime otherwise. Updating a primary domain's name will also update the instance's home origin, affecting the default application paths. Updating the `name` or `is_secondary` of a primary domain returns 403 `domain_managed_by_integration` for applications in a Vercel-managed workspace; change the domain from the Vercel integration instead.
 ///
 /// # Arguments
@@ -140,12 +164,15 @@ pub fn delete_domain(
 ///   multiple secondaries) on the same root domain (eTLD\+1).
 pub fn update_domain(
     config: &ClientConfig,
-    domain_id: String,
-    name: Option<Option<String>>,
-    proxy_url: Option<Option<String>>,
-    is_secondary: Option<Option<bool>>,
+    params: UpdateDomainParams,
     options: Option<&RequestOptions>,
 ) -> Result<Domain, SdkError> {
+    let UpdateDomainParams {
+        domain_id,
+        name,
+        proxy_url,
+        is_secondary,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     if let Some(ref value) = name {
         __body_map.insert(

@@ -6,6 +6,11 @@ use crate::client::{sdk_request, RequestOptions, RequestOpts};
 use crate::errors::{SdkError, SdkNetworkError};
 use crate::types::{DeletedObject, SSOBypassAllowlistUser, SSOBypassAllowlistUsers};
 
+#[derive(Debug, Clone, Default)]
+pub struct ListSsoBypassAllowlistUsersParams {
+    pub enterprise_connection_id: Option<String>,
+}
+
 /// Returns the users who may verify an email code instead of reaching their identity provider when enterprise SSO is unreachable.
 ///
 /// # Arguments
@@ -14,9 +19,12 @@ use crate::types::{DeletedObject, SSOBypassAllowlistUser, SSOBypassAllowlistUser
 ///   enterprise connection serves.
 pub fn list_sso_bypass_allowlist_users(
     config: &ClientConfig,
-    enterprise_connection_id: Option<String>,
+    params: ListSsoBypassAllowlistUsersParams,
     options: Option<&RequestOptions>,
 ) -> Result<SSOBypassAllowlistUsers, SdkError> {
+    let ListSsoBypassAllowlistUsersParams {
+        enterprise_connection_id,
+    } = params;
     let mut __query: Vec<(&str, String)> = Vec::with_capacity(1);
     if let Some(ref v) = enterprise_connection_id {
         __query.push(("enterprise_connection_id", crate::client::query_value(v)));
@@ -38,6 +46,11 @@ pub fn list_sso_bypass_allowlist_users(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct CreateSsoBypassAllowlistUserParams {
+    pub user_id: String,
+}
+
 /// Puts a user on the allowlist. The request is rejected unless the user holds a verified email address on a domain one of the instance's enterprise connections serves.
 ///
 /// # Arguments
@@ -45,9 +58,10 @@ pub fn list_sso_bypass_allowlist_users(
 /// * `user_id` - The ID of the user to allowlist.
 pub fn create_sso_bypass_allowlist_user(
     config: &ClientConfig,
-    user_id: String,
+    params: CreateSsoBypassAllowlistUserParams,
     options: Option<&RequestOptions>,
 ) -> Result<SSOBypassAllowlistUser, SdkError> {
+    let CreateSsoBypassAllowlistUserParams { user_id } = params;
     let mut __body_map = serde_json::Map::new();
     __body_map.insert(
         "user_id".to_string(),
@@ -81,6 +95,11 @@ pub fn create_sso_bypass_allowlist_user(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct DeleteSsoBypassAllowlistUserParams {
+    pub user_id: String,
+}
+
 /// Removes the user from the allowlist, across every enterprise connection that serves them.
 ///
 /// # Arguments
@@ -88,9 +107,10 @@ pub fn create_sso_bypass_allowlist_user(
 /// * `user_id` - The ID of the allowlisted user
 pub fn delete_sso_bypass_allowlist_user(
     config: &ClientConfig,
-    user_id: String,
+    params: DeleteSsoBypassAllowlistUserParams,
     options: Option<&RequestOptions>,
 ) -> Result<DeletedObject, SdkError> {
+    let DeleteSsoBypassAllowlistUserParams { user_id } = params;
     Ok(sdk_request::<DeletedObject>(
         "DELETE",
         &format!(

@@ -25,6 +25,14 @@ impl CreateActorTokenActor {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct CreateActorTokenParams {
+    pub user_id: String,
+    pub actor: CreateActorTokenActor,
+    pub expires_in_seconds: Option<i64>,
+    pub session_max_duration_in_seconds: Option<i64>,
+}
+
 /// Create an actor token that can be used to impersonate the given user. The `actor` parameter needs to include at least a "sub" key whose value is the ID of the actor (impersonating) user.
 ///
 /// # Arguments
@@ -40,12 +48,15 @@ impl CreateActorTokenActor {
 ///   the duration of a session created via an actor token, lasts 30 minutes.
 pub fn create_actor_token(
     config: &ClientConfig,
-    user_id: String,
-    actor: CreateActorTokenActor,
-    expires_in_seconds: Option<i64>,
-    session_max_duration_in_seconds: Option<i64>,
+    params: CreateActorTokenParams,
     options: Option<&RequestOptions>,
 ) -> Result<ActorToken, SdkError> {
+    let CreateActorTokenParams {
+        user_id,
+        actor,
+        expires_in_seconds,
+        session_max_duration_in_seconds,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     __body_map.insert(
         "user_id".to_string(),
@@ -110,6 +121,11 @@ pub fn create_actor_token(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct RevokeActorTokenParams {
+    pub actor_token_id: String,
+}
+
 /// Revokes a pending actor token, changing its status to revoked. Use `actor_token_id` to identify the token; the response includes its resulting status and associated actor and user details.
 ///
 /// Revokes a pending actor token.
@@ -119,9 +135,10 @@ pub fn create_actor_token(
 /// * `actor_token_id` - The ID of the actor token to be revoked.
 pub fn revoke_actor_token(
     config: &ClientConfig,
-    actor_token_id: String,
+    params: RevokeActorTokenParams,
     options: Option<&RequestOptions>,
 ) -> Result<ActorToken, SdkError> {
+    let RevokeActorTokenParams { actor_token_id } = params;
     Ok(sdk_request::<ActorToken>(
         "POST",
         &format!(

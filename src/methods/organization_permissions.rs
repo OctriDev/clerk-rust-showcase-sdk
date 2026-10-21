@@ -7,6 +7,14 @@ use crate::errors::{SdkError, SdkNetworkError};
 use crate::types::{DeletedObject, Permission, Permissions};
 use crate::validation::{validate_range, RangeOpts};
 
+#[derive(Debug, Clone, Default)]
+pub struct ListOrganizationPermissionsParams {
+    pub query: Option<String>,
+    pub order_by: Option<String>,
+    pub limit: Option<i64>,
+    pub offset: Option<i64>,
+}
+
 /// Retrieves all organization permissions for the given instance.
 ///
 /// # Arguments
@@ -26,12 +34,15 @@ use crate::validation::{validate_range, RangeOpts};
 ///   integer greater or equal to zero. To be used in conjunction with `limit`.
 pub fn list_organization_permissions(
     config: &ClientConfig,
-    query: Option<String>,
-    order_by: Option<String>,
-    limit: Option<i64>,
-    offset: Option<i64>,
+    params: ListOrganizationPermissionsParams,
     options: Option<&RequestOptions>,
 ) -> Result<Permissions, SdkError> {
+    let ListOrganizationPermissionsParams {
+        query,
+        order_by,
+        limit,
+        offset,
+    } = params;
     if let Some(ref limit_v) = limit {
         validate_range(
             "limit",
@@ -84,6 +95,13 @@ pub fn list_organization_permissions(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct CreateOrganizationPermissionParams {
+    pub name: String,
+    pub key: String,
+    pub description: Option<String>,
+}
+
 /// Creates a new organization permission for the given instance.
 ///
 /// # Arguments
@@ -97,11 +115,14 @@ pub fn list_organization_permissions(
 /// * `description` - A description of the permission.
 pub fn create_organization_permission(
     config: &ClientConfig,
-    name: String,
-    key: String,
-    description: Option<String>,
+    params: CreateOrganizationPermissionParams,
     options: Option<&RequestOptions>,
 ) -> Result<Permission, SdkError> {
+    let CreateOrganizationPermissionParams {
+        name,
+        key,
+        description,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     __body_map.insert(
         "name".to_string(),
@@ -156,6 +177,11 @@ pub fn create_organization_permission(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct GetOrganizationPermissionParams {
+    pub permission_id: String,
+}
+
 /// Retrieves the details of an organization permission.
 ///
 /// # Arguments
@@ -163,9 +189,10 @@ pub fn create_organization_permission(
 /// * `permission_id` - The ID of the permission to retrieve
 pub fn get_organization_permission(
     config: &ClientConfig,
-    permission_id: String,
+    params: GetOrganizationPermissionParams,
     options: Option<&RequestOptions>,
 ) -> Result<Permission, SdkError> {
+    let GetOrganizationPermissionParams { permission_id } = params;
     Ok(sdk_request::<Permission>(
         "GET",
         &format!(
@@ -184,6 +211,14 @@ pub fn get_organization_permission(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct UpdateOrganizationPermissionParams {
+    pub permission_id: String,
+    pub name: Option<String>,
+    pub key: Option<String>,
+    pub description: Option<String>,
+}
+
 /// Updates the properties of an existing organization permission. System permissions cannot be updated.
 ///
 /// # Arguments
@@ -197,12 +232,15 @@ pub fn get_organization_permission(
 /// * `description` - A description of the permission.
 pub fn update_organization_permission(
     config: &ClientConfig,
-    permission_id: String,
-    name: Option<String>,
-    key: Option<String>,
-    description: Option<String>,
+    params: UpdateOrganizationPermissionParams,
     options: Option<&RequestOptions>,
 ) -> Result<Permission, SdkError> {
+    let UpdateOrganizationPermissionParams {
+        permission_id,
+        name,
+        key,
+        description,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     if let Some(ref value) = name {
         __body_map.insert(
@@ -264,6 +302,11 @@ pub fn update_organization_permission(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct DeleteOrganizationPermissionParams {
+    pub permission_id: String,
+}
+
 /// Deletes an organization permission. System permissions cannot be deleted.
 ///
 /// # Arguments
@@ -271,9 +314,10 @@ pub fn update_organization_permission(
 /// * `permission_id` - The ID of the permission to delete
 pub fn delete_organization_permission(
     config: &ClientConfig,
-    permission_id: String,
+    params: DeleteOrganizationPermissionParams,
     options: Option<&RequestOptions>,
 ) -> Result<DeletedObject, SdkError> {
+    let DeleteOrganizationPermissionParams { permission_id } = params;
     Ok(sdk_request::<DeletedObject>(
         "DELETE",
         &format!(

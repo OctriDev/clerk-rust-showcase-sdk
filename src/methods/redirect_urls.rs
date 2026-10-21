@@ -7,6 +7,13 @@ use crate::errors::{SdkError, SdkNetworkError};
 use crate::types::{DeletedObject, RedirectURL};
 use crate::validation::{validate_range, RangeOpts};
 
+#[derive(Debug, Clone, Default)]
+pub struct ListRedirectUrLsParams {
+    pub paginated: Option<bool>,
+    pub limit: Option<i64>,
+    pub offset: Option<i64>,
+}
+
 /// Lists all whitelisted redirect_urls for the instance
 ///
 /// # Arguments
@@ -19,11 +26,14 @@ use crate::validation::{validate_range, RangeOpts};
 ///   integer greater or equal to zero. To be used in conjunction with `limit`.
 pub fn list_redirect_ur_ls(
     config: &ClientConfig,
-    paginated: Option<bool>,
-    limit: Option<i64>,
-    offset: Option<i64>,
+    params: ListRedirectUrLsParams,
     options: Option<&RequestOptions>,
 ) -> Result<Vec<RedirectURL>, SdkError> {
+    let ListRedirectUrLsParams {
+        paginated,
+        limit,
+        offset,
+    } = params;
     if let Some(ref limit_v) = limit {
         validate_range(
             "limit",
@@ -72,6 +82,11 @@ pub fn list_redirect_ur_ls(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct CreateRedirectUrlParams {
+    pub url: String,
+}
+
 /// Creates a redirect URL. When you provide a request body, include `url` as a full URL prefixed with `https://` or a URL using a custom scheme. The response includes the created redirect URL and its timestamps.
 ///
 /// Create a redirect URL
@@ -82,9 +97,10 @@ pub fn list_redirect_ur_ls(
 ///   e.g. `"https://my-app.com/oauth-callback"` or `"my-app://oauth-callback"`
 pub fn create_redirect_url(
     config: &ClientConfig,
-    url: String,
+    params: CreateRedirectUrlParams,
     options: Option<&RequestOptions>,
 ) -> Result<RedirectURL, SdkError> {
+    let CreateRedirectUrlParams { url } = params;
     let mut __body_map = serde_json::Map::new();
     __body_map.insert(
         "url".to_string(),
@@ -113,6 +129,11 @@ pub fn create_redirect_url(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct GetRedirectUrlParams {
+    pub id: String,
+}
+
 /// Retrieve the details of the redirect URL with the given ID
 ///
 /// # Arguments
@@ -120,9 +141,10 @@ pub fn create_redirect_url(
 /// * `id` - The ID of the redirect URL
 pub fn get_redirect_url(
     config: &ClientConfig,
-    id: String,
+    params: GetRedirectUrlParams,
     options: Option<&RequestOptions>,
 ) -> Result<RedirectURL, SdkError> {
+    let GetRedirectUrlParams { id } = params;
     Ok(sdk_request::<RedirectURL>(
         "GET",
         &format!("/redirect_urls/{}", crate::client::encode_path_segment(&id)),
@@ -138,6 +160,11 @@ pub fn get_redirect_url(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct DeleteRedirectUrlParams {
+    pub id: String,
+}
+
 /// Remove the selected redirect URL from the whitelist of the instance
 ///
 /// # Arguments
@@ -145,9 +172,10 @@ pub fn get_redirect_url(
 /// * `id` - The ID of the redirect URL
 pub fn delete_redirect_url(
     config: &ClientConfig,
-    id: String,
+    params: DeleteRedirectUrlParams,
     options: Option<&RequestOptions>,
 ) -> Result<DeletedObject, SdkError> {
+    let DeleteRedirectUrlParams { id } = params;
     Ok(sdk_request::<DeletedObject>(
         "DELETE",
         &format!("/redirect_urls/{}", crate::client::encode_path_segment(&id)),

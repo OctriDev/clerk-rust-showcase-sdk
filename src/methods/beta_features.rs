@@ -6,6 +6,14 @@ use crate::client::{sdk_request, RequestOptions, RequestOpts};
 use crate::errors::{SdkError, SdkNetworkError};
 use crate::types::InstanceSettings;
 
+#[derive(Debug, Clone, Default)]
+pub struct UpdateInstanceAuthConfigParams {
+    pub restricted_to_allowlist: Option<Option<bool>>,
+    pub from_email_address: Option<Option<String>>,
+    pub progressive_sign_up: Option<Option<bool>>,
+    pub test_mode: Option<Option<bool>>,
+}
+
 /// Updates instance authentication settings, including allowlist restrictions, the sender address for authentication emails, progressive sign-up, and test mode. Set `from_email_address` to an alphanumeric local part only; `restricted_to_allowlist` defaults to false when omitted, and test mode defaults to true for development instances.
 ///
 /// Updates the settings of an instance
@@ -25,12 +33,15 @@ use crate::types::InstanceSettings;
 ///   instances.
 pub fn update_instance_auth_config(
     config: &ClientConfig,
-    restricted_to_allowlist: Option<Option<bool>>,
-    from_email_address: Option<Option<String>>,
-    progressive_sign_up: Option<Option<bool>>,
-    test_mode: Option<Option<bool>>,
+    params: UpdateInstanceAuthConfigParams,
     options: Option<&RequestOptions>,
 ) -> Result<InstanceSettings, SdkError> {
+    let UpdateInstanceAuthConfigParams {
+        restricted_to_allowlist,
+        from_email_address,
+        progressive_sign_up,
+        test_mode,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     if let Some(ref value) = restricted_to_allowlist {
         __body_map.insert(
@@ -94,6 +105,12 @@ pub fn update_instance_auth_config(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct UpdateProductionInstanceDomainParams {
+    pub home_url: Option<String>,
+    pub is_secondary: Option<bool>,
+}
+
 /// Change the domain of a production instance. Changing the domain requires updating the [DNS records](https://clerk.com/docs/deployments/overview#dns-records) accordingly, deploying new [SSL certificates](https://clerk.com/docs/deployments/overview#deploy-certificates), updating your Social Connection's redirect URLs and setting the new keys in your code. WARNING: Changing your domain will invalidate all current user sessions (i.e. users will be logged out). Also, while your application is being deployed, a small downtime is expected to occur. Returns 403 `domain_managed_by_integration` for applications in a Vercel-managed workspace; change the domain from the Vercel integration instead.
 ///
 /// # Arguments
@@ -107,10 +124,13 @@ pub fn update_instance_auth_config(
 /// This operation is deprecated and may be removed in a future release.
 pub fn update_production_instance_domain(
     config: &ClientConfig,
-    home_url: Option<String>,
-    is_secondary: Option<bool>,
+    params: UpdateProductionInstanceDomainParams,
     options: Option<&RequestOptions>,
 ) -> Result<serde_json::Value, SdkError> {
+    let UpdateProductionInstanceDomainParams {
+        home_url,
+        is_secondary,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     if let Some(ref value) = home_url {
         __body_map.insert(
@@ -156,6 +176,12 @@ pub fn update_production_instance_domain(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct ChangeProductionInstanceDomainParams {
+    pub home_url: Option<String>,
+    pub is_secondary: Option<bool>,
+}
+
 /// Change the domain of a production instance. Changing the domain requires updating the [DNS records](https://clerk.com/docs/deployments/overview#dns-records) accordingly, deploying new [SSL certificates](https://clerk.com/docs/deployments/overview#deploy-certificates), updating your Social Connection's redirect URLs and setting the new keys in your code. WARNING: Changing your domain will invalidate all current user sessions (i.e. users will be logged out). Also, while your application is being deployed, a small downtime is expected to occur. Returns 403 `domain_managed_by_integration` for applications in a Vercel-managed workspace; change the domain from the Vercel integration instead.
 ///
 /// # Arguments
@@ -168,10 +194,13 @@ pub fn update_production_instance_domain(
 ///   multiple secondaries) on the same root domain (eTLD\+1).
 pub fn change_production_instance_domain(
     config: &ClientConfig,
-    home_url: Option<String>,
-    is_secondary: Option<bool>,
+    params: ChangeProductionInstanceDomainParams,
     options: Option<&RequestOptions>,
 ) -> Result<serde_json::Value, SdkError> {
+    let ChangeProductionInstanceDomainParams {
+        home_url,
+        is_secondary,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     if let Some(ref value) = home_url {
         __body_map.insert(

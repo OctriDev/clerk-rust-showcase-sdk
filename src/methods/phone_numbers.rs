@@ -169,6 +169,11 @@ pub fn create_phone_number(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct GetPhoneNumberParams {
+    pub phone_number_id: String,
+}
+
 /// Retrieves the details of a phone number. Use its identifier to get the phone number, verification details, linked resources, and reservation status.
 ///
 /// Returns the details of a phone number
@@ -178,9 +183,10 @@ pub fn create_phone_number(
 /// * `phone_number_id` - The ID of the phone number to retrieve
 pub fn get_phone_number(
     config: &ClientConfig,
-    phone_number_id: String,
+    params: GetPhoneNumberParams,
     options: Option<&RequestOptions>,
 ) -> Result<PhoneNumber, SdkError> {
+    let GetPhoneNumberParams { phone_number_id } = params;
     Ok(sdk_request::<PhoneNumber>(
         "GET",
         &format!(
@@ -204,6 +210,11 @@ pub fn get_phone_number(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct DeletePhoneNumberParams {
+    pub phone_number_id: String,
+}
+
 /// Deletes a phone number by its identifier. Use this operation to remove a phone number you no longer need; the response confirms whether it was deleted.
 ///
 /// Delete the phone number with the given ID
@@ -213,9 +224,10 @@ pub fn get_phone_number(
 /// * `phone_number_id` - The ID of the phone number to delete
 pub fn delete_phone_number(
     config: &ClientConfig,
-    phone_number_id: String,
+    params: DeletePhoneNumberParams,
     options: Option<&RequestOptions>,
 ) -> Result<DeletedObject, SdkError> {
+    let DeletePhoneNumberParams { phone_number_id } = params;
     Ok(sdk_request::<DeletedObject>(
         "DELETE",
         &format!(
@@ -239,6 +251,14 @@ pub fn delete_phone_number(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct UpdatePhoneNumberParams {
+    pub phone_number_id: String,
+    pub verified: Option<Option<bool>>,
+    pub primary: Option<Option<bool>>,
+    pub reserved_for_second_factor: Option<Option<bool>>,
+}
+
 /// Updates verification, primary-phone, or multi-factor authentication reservation settings for a phone number. Supply only the fields you want to change; reserving the number for multi-factor authentication requires it to be verified.
 ///
 /// Updates a phone number
@@ -255,12 +275,15 @@ pub fn delete_phone_number(
 ///   the default second factor.
 pub fn update_phone_number(
     config: &ClientConfig,
-    phone_number_id: String,
-    verified: Option<Option<bool>>,
-    primary: Option<Option<bool>>,
-    reserved_for_second_factor: Option<Option<bool>>,
+    params: UpdatePhoneNumberParams,
     options: Option<&RequestOptions>,
 ) -> Result<PhoneNumber, SdkError> {
+    let UpdatePhoneNumberParams {
+        phone_number_id,
+        verified,
+        primary,
+        reserved_for_second_factor,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     if let Some(ref value) = verified {
         __body_map.insert(
@@ -321,6 +344,11 @@ pub fn update_phone_number(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct PreparePhoneNumberVerificationParams {
+    pub phone_number_id: String,
+}
+
 /// Sends a one-time code to the given phone number so that a backend can verify the user controls it (for example, in a custom, backend-driven sign-in flow). The code is tracked on its own verification; confirm it with attempt_verification.
 ///
 /// # Arguments
@@ -329,9 +357,10 @@ pub fn update_phone_number(
 ///   code to
 pub fn prepare_phone_number_verification(
     config: &ClientConfig,
-    phone_number_id: String,
+    params: PreparePhoneNumberVerificationParams,
     options: Option<&RequestOptions>,
 ) -> Result<VerificationResponse, SdkError> {
+    let PreparePhoneNumberVerificationParams { phone_number_id } = params;
     Ok(sdk_request::<VerificationResponse>(
         "POST",
         &format!(
@@ -357,6 +386,13 @@ pub fn prepare_phone_number_verification(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct AttemptPhoneNumberVerificationParams {
+    pub phone_number_id: String,
+    pub verification_id: String,
+    pub code: String,
+}
+
 /// Checks a one-time code against the verification identified by verification_id, and returns the verification with its updated status (`verified`, `unverified`, `expired`, or `failed`) and attempt count, so a backend driving its own frontend can react on every attempt — an incorrect or expired code is reported through the status, not as an error. Resubmitting a verification whose code was already accepted is rejected with a `verification_already_verified` error. If the code for this verification could not be sent (the SMS provider refused or failed the send after prepare_verification had returned), the attempt is rejected with a `verification_code_not_sent` error and no attempt is counted; call prepare_verification again to send a new code. If too many codes have been checked for this phone number recently, the attempt is rejected with a `verification_code_too_many_attempts` error and no attempt is counted; the limit is per phone number, so wait for the `Retry-After` period rather than sending a new code. If the code is correct and the phone number is not already verified, it is also marked as verified as a side effect (just as it would be in a frontend verification flow); an already verified phone number is left unchanged. It never creates a session; to sign the user in afterwards, mint a sign-in token.
 ///
 /// # Arguments
@@ -368,11 +404,14 @@ pub fn prepare_phone_number_verification(
 /// * `code` - The verification code that was sent to the phone number
 pub fn attempt_phone_number_verification(
     config: &ClientConfig,
-    phone_number_id: String,
-    verification_id: String,
-    code: String,
+    params: AttemptPhoneNumberVerificationParams,
     options: Option<&RequestOptions>,
 ) -> Result<VerificationResponse, SdkError> {
+    let AttemptPhoneNumberVerificationParams {
+        phone_number_id,
+        verification_id,
+        code,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     __body_map.insert(
         "verification_id".to_string(),
@@ -421,6 +460,13 @@ pub fn attempt_phone_number_verification(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct ReplaceUserPhoneNumberParams {
+    pub user_id: String,
+    pub phone_number: String,
+    pub identification_status: Option<ReplaceUserPhoneNumberIdentificationStatusEnum>,
+}
+
 /// Replaces all of the user's phone numbers with a single primary phone number. By default the new phone number is created verified, with the admin verification strategy. When `identification_status` is `reserved` it is created reserved instead: unverified but usable for sign-in and locked so no other user can claim it. When it is `unverified` the phone number is neither usable for sign-in nor locked. The new phone number is never reserved for second factor. Any existing phone numbers are deleted; replacing a phone number that is reserved for second factor disables the user's MFA. \*\*Warning:\*\* `identification_status: unverified` can lock the user out of their account. An unverified phone number cannot be used to sign in, so if the user has no other verified or reserved identifier, deleting their existing phone numbers leaves them unable to authenticate — and unable to verify the new number, since that requires signing in. Recovery then requires another admin API call.
 ///
 /// # Arguments
@@ -440,11 +486,14 @@ pub fn attempt_phone_number_verification(
 ///   hold it until one of them verifies it.
 pub fn replace_user_phone_number(
     config: &ClientConfig,
-    user_id: String,
-    phone_number: String,
-    identification_status: Option<ReplaceUserPhoneNumberIdentificationStatusEnum>,
+    params: ReplaceUserPhoneNumberParams,
     options: Option<&RequestOptions>,
 ) -> Result<PhoneNumber, SdkError> {
+    let ReplaceUserPhoneNumberParams {
+        user_id,
+        phone_number,
+        identification_status,
+    } = params;
     let mut __body_map = serde_json::Map::new();
     __body_map.insert(
         "phone_number".to_string(),

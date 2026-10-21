@@ -54,6 +54,14 @@ impl std::fmt::Display for CreateSignInTokenSecondFactorVerificationEnum {
     }
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct CreateSignInTokenParams {
+    pub user_id: String,
+    pub org_id: Option<Option<String>>,
+    pub expires_in_seconds: Option<Option<i64>>,
+    pub second_factor_verification: Option<Option<CreateSignInTokenSecondFactorVerificationEnum>>,
+}
+
 /// Creates a new sign-in token and associates it with the given user. By default, sign-in tokens expire in 30 days. You can optionally supply a different duration in seconds using the `expires_in_seconds` property.
 ///
 /// # Arguments
@@ -80,12 +88,15 @@ impl std::fmt::Display for CreateSignInTokenSecondFactorVerificationEnum {
 ///   defaults to 10 minutes. We recommend keeping it short.
 pub fn create_sign_in_token(
     config: &ClientConfig,
-    user_id: String,
-    org_id: Option<Option<String>>,
-    expires_in_seconds: Option<Option<i64>>,
-    second_factor_verification: Option<Option<CreateSignInTokenSecondFactorVerificationEnum>>,
+    params: CreateSignInTokenParams,
     options: Option<&RequestOptions>,
 ) -> Result<SignInToken, SdkError> {
+    let CreateSignInTokenParams {
+        user_id,
+        org_id,
+        expires_in_seconds,
+        second_factor_verification,
+    } = params;
     if let Some(Some(ref expires_in_seconds_v)) = &expires_in_seconds {
         validate_range(
             "expires_in_seconds",
@@ -162,6 +173,11 @@ pub fn create_sign_in_token(
     .data)
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct RevokeSignInTokenParams {
+    pub sign_in_token_id: String,
+}
+
 /// Revokes a pending sign-in token. Use the `sign_in_token_id` path parameter to identify the token; a successful response returns the token with its updated status.
 ///
 /// Revokes a pending sign-in token
@@ -171,9 +187,10 @@ pub fn create_sign_in_token(
 /// * `sign_in_token_id` - The ID of the sign-in token to be revoked
 pub fn revoke_sign_in_token(
     config: &ClientConfig,
-    sign_in_token_id: String,
+    params: RevokeSignInTokenParams,
     options: Option<&RequestOptions>,
 ) -> Result<SignInToken, SdkError> {
+    let RevokeSignInTokenParams { sign_in_token_id } = params;
     Ok(sdk_request::<SignInToken>(
         "POST",
         &format!(
